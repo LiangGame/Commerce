@@ -39,7 +39,7 @@
         }
         .id{
           font-weight: 600;
-          font-size: 20px;
+          font-size: 1.5rem;
           color: #56abf2;
         }
       }

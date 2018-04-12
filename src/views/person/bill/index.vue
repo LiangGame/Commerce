@@ -98,11 +98,11 @@
                     }
                     .mint-cell-text{
                         color: #666;
-                        font-size: 18px;
+                        font-size: 1.2rem;
                     }
                     .mint-cell-value{
                         color: #333;
-                        font-size: 21px;
+                        font-size: 1.8rem;
                     }
                 }
                 li{

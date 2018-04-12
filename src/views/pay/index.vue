@@ -36,7 +36,7 @@
           margin-bottom: 15px;
           .price{
             color: #e93b3b;
-            font-size: 16px;
+            font-size: 1rem;
           }
         }
       }
@@ -45,7 +45,7 @@
         background: #de181b;
         padding: 10px;
         .mint-tab-item-label{
-          font-size: 16px;
+          font-size: 1rem;
           color: #fff;
         }
       }

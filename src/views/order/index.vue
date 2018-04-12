@@ -76,7 +76,7 @@
           background: #fff url('../../assets/pic/order_border.png') -7px bottom repeat-x;
           background-size: 60px;
           h2{
-            font-size: 16px;
+            font-size: 1.2rem;
           }
           .address{
             padding: 8px 20px 8px 0;
@@ -89,7 +89,7 @@
           position: relative;
           min-height: 75px;
           padding: 0;
-          font-size: 12px;
+          font-size: 0.8rem;
           padding-top: 15px;
           .shopImg_container{
             width: 75px;
@@ -105,7 +105,7 @@
               color: #333;
               line-height: 20px;
               margin-bottom: 5px;
-              font-size: 14px;
+              font-size: 1rem;
               overflow: hidden;
               text-overflow: ellipsis;
             }
@@ -119,7 +119,7 @@
                 display: inline-block;
                 padding-right: 10px;
                 .big_price{
-                  font-size: 18px;
+                  font-size: 1.6rem;
                 }
               }
               label{
@@ -135,7 +135,7 @@
                 line-height: 25px;
                 border: solid 1px #CBCBCB;
                 text-align: center;
-                font-size: 25px;
+                font-size: 2rem;
                 color: #333;
               }
               #number{
@@ -162,21 +162,21 @@
           }
           .label{
             float: left;
-            font-size: 16px;
+            font-size: 1rem;
           }
           .price{
             float: right;
-            font-size: 16px;
+            font-size: 1rem;
             color: #e93b3b;
           }
           .count_price{
             float: right;
             .label{
-              font-size: 16px;
+              font-size: 1rem;
               font-weight: 600;
             }
             .big_price{
-              font-size: 17px;
+              font-size: 1.6rem;
               color: #e93b3b;
               font-weight: 600;
             }

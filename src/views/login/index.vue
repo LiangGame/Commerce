@@ -37,7 +37,7 @@
           phone: '',
           password: ''
         }
-        
+
       }
     },
     methods: {
@@ -108,11 +108,11 @@
         a{
           color:#666;
           text-decoration: none;
-          font-size: 14px;
+          font-size: 1rem;
         }
       }
       .error {
-        font-size: 14px;
+        font-size: 1rem;
         color: #ff1c13;
       }
     }

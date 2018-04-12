@@ -97,12 +97,12 @@
       .mint-swipe-item {
         img {
           width: 100%;
-          height: 210px;
+          height: 300px;
         }
       }
       .mint-swipe {
-        height: 210px;
-        max-height: 210px;
+        height: 300px;
+        max-height: 300px;
         background: #f7f7f7;
         overflow: hidden;
       }
@@ -122,7 +122,7 @@
           color: #f23030;
           text-align: center;
           font-weight: normal;
-          font-size: 20px;
+          font-size: 1.8rem;
           background: #fff;
           padding: 8px;
           margin: 5px 0;
@@ -147,7 +147,7 @@
               background: #fff;
               .goodTitle {
                 color: #666;
-                font-size: 14px;
+                font-size: 1rem;
                 text-overflow: -o-ellipsis-lastline;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -158,7 +158,7 @@
               .price {
                 color: #f23030;
                 .big_price {
-                  font-size: 18px;
+                  font-size: 1.6rem;
                 }
               }
             }

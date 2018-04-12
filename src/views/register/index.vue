@@ -22,7 +22,7 @@
       <mt-field label="邀请码" placeholder="邀请码" type="text" v-model="user.chief"></mt-field>
       <span v-show="errors.has('chief')" class="error">{{ errors.first('chief') }}</span>
       <mt-button size="large" type="danger">注册</mt-button>
-    </form>  
+    </form>
       <div class="bottom">
         <span class="toRegister">
           <router-link to="/login">已有账号,前往登陆</router-link>
@@ -143,12 +143,12 @@
         a {
           color: #666;
           text-decoration: none;
-          font-size: 14px;
+          font-size: 1rem;
         }
       }
     }
     .error {
-      font-size: 14px;
+      font-size: 1rem;
       color: #ff1c13;
     }
   }

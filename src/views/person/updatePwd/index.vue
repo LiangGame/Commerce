@@ -113,7 +113,7 @@
           margin-top: 25px;
         }
         .error {
-          font-size: 14px;
+          font-size: 1rem;
           color: #ff1c13;
         }
       }

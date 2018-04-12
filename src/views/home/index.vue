@@ -137,13 +137,13 @@ import myHeader from '@/components/header'
       .shopTitle {
         padding: 10px 10px 0 10px;
         .title_text {
-          font-size: 16px;
+          font-size: 1rem;
           line-height: 20px;
           color: #232326;
         }
         .act {
           margin: 11px 10px 0 0;
-          font-size: 13px;
+          font-size: 0.8rem;
           line-height: 17px;
           text-align: justify;
           color: #81838e;
@@ -155,23 +155,23 @@ import myHeader from '@/components/header'
             float: left;
             margin-top: 7px;
             font-family: Helvetica;
-            font-size: 23px;
+            font-size: 1.6rem;
             font-weight: 700;
             line-height: 23px;
             color: #f23030;
             .big_price {
               display: inline-block;
-              font-size: 23px;
+              font-size: 1.6rem;
               line-height: 23px;
             }
             .small_price {
               display: inline-block;
-              font-size: 17px;
+              font-size: 1.2rem;
               line-height: 17px;
             }
             .after_price {
               font-weight: 200;
-              font-size: 14px;
+              font-size: 1rem;
               line-height: 14px;
               color: #666;
             }
@@ -239,7 +239,7 @@ import myHeader from '@/components/header'
             display: inline-block;
             position: relative;
             top: -26px;
-            font-size: 15px;
+            font-size: 1rem;
             font-weight: 700;
             line-height: 15px;
             color: #f23030;
@@ -262,7 +262,7 @@ import myHeader from '@/components/header'
             line-height: 25px;
             border: solid 1px #CBCBCB;
             text-align: center;
-            font-size: 25px;
+            font-size: 1.2rem;
             color: #333;
           }
           #number{
@@ -281,7 +281,7 @@ import myHeader from '@/components/header'
       }
       .shopInfo{
         .s_header{
-          font-size: 16px;
+          font-size: 1rem;
           color: #666;
           text-align: center;
           padding-bottom: 15px;
@@ -296,7 +296,7 @@ import myHeader from '@/components/header'
       background: #de181b;
       padding: 10px;
       .mint-tab-item-label{
-        font-size: 16px;
+        font-size: 1rem;
       }
       a{
         color: #fff;

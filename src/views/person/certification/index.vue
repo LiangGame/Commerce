@@ -97,7 +97,7 @@
       }
     }
     .error {
-      font-size: 14px;
+      font-size: 1rem;
       color: #ff1c13;
       padding: 0 2em;
     }

@@ -16,7 +16,15 @@ export default {
 
   body{
     font-family: 'Microsoft YaHei';
+    max-width: 640px;
+    margin: 0 auto;
   }
+  .mint-tabbar{
+    max-width: 620px;
+    box-sizing: border-box;
+    margin: 0 auto;
+  }
+
 /*#app {*/
   /*font-family: 'Avenir', Helvetica, Arial, sans-serif;*/
   /*-webkit-font-smoothing: antialiased;*/
