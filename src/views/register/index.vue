@@ -3,26 +3,30 @@
     <my-header title="注册"/>
 
     <div class="main">
-    <form @submit.prevent="applyCoupon" class="">
-      <mt-field label="手机号" placeholder="手机号" v-model="user.phone"></mt-field>
-      <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
-      <mt-field label="图形验证码" placeholder="图形验证码" v-model="captcha">
-        <!--<img src="" height="45px" width="100px">-->
-        <div class="code" @click="refreshCode">
-          <set-code :identifyCode="identifyCode"/>
-        </div>
-      </mt-field>
-      <span v-show="errors.has('captcha')" class="error">{{ errors.first('captcha') }}</span>
-      <mt-field label="手机验证码" placeholder="手机验证码" type="text" v-model="user.vertifyCode"></mt-field>
-      <span v-show="errors.has('vertifyCode')" class="error">{{ errors.first('vertifyCode') }}</span>
-      <mt-field label="密码" placeholder="密码" type="password" v-model="user.password"></mt-field>
-      <span v-show="errors.has('password')" class="error">{{ errors.first('password') }}</span>
-      <mt-field label="确认密码" placeholder="确认密码" type="password" v-model="passwords"></mt-field>
-      <span v-show="errors.has('passwords')" class="error">{{ errors.first('passwords') }}</span>
-      <mt-field label="邀请码" placeholder="邀请码" type="text" v-model="user.chief"></mt-field>
-      <span v-show="errors.has('chief')" class="error">{{ errors.first('chief') }}</span>
-      <mt-button size="large" type="danger">注册</mt-button>
-    </form>
+      <!--<form @submit.prevent="applyCoupon" class="">-->
+        <mt-field label="手机号" placeholder="手机号" v-model="user.phone"></mt-field>
+        <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
+        <mt-field label="图形验证码" placeholder="图形验证码" v-model="captcha">
+          <!--<img src="" height="45px" width="100px">-->
+          <div class="code" @click="refreshCode">
+            <set-code :identifyCode="identifyCode"/>
+          </div>
+        </mt-field>
+        <span v-show="errors.has('captcha')" class="error">{{ errors.first('captcha') }}</span>
+        <mt-field label="手机验证码" placeholder="手机验证码" type="text" v-model="user.vertifyCode">
+          <div>
+            <mt-button size="small" type="danger" :disabled="isphoneCode" @click="sendCode">{{get}}<span v-if="one">({{s}}秒后)</span></mt-button>
+          </div>
+        </mt-field>
+        <span v-show="errors.has('vertifyCode')" class="error">{{ errors.first('vertifyCode') }}</span>
+        <mt-field label="密码" placeholder="密码" type="password" v-model="user.password"></mt-field>
+        <span v-show="errors.has('password')" class="error">{{ errors.first('password') }}</span>
+        <mt-field label="确认密码" placeholder="确认密码" type="password" v-model="passwords"></mt-field>
+        <span v-show="errors.has('passwords')" class="error">{{ errors.first('passwords') }}</span>
+        <mt-field label="邀请码" placeholder="邀请码" type="text" v-model="user.chief"></mt-field>
+        <span v-show="errors.has('chief')" class="error">{{ errors.first('chief') }}</span>
+        <mt-button class="confirm" size="large" @click="applyCoupon" type="danger">注册</mt-button>
+      <!--</form>-->
       <div class="bottom">
         <span class="toRegister">
           <router-link to="/login">已有账号,前往登陆</router-link>
@@ -39,62 +43,78 @@
 
   export default {
     name: "index",
-    components:{setCode,myHeader},
-    data(){
-      return{
+    components: {setCode, myHeader},
+    data() {
+      return {
         validator: null,
         errors: null,
-        user:{
+        user: {
           phone: '',
           password: '',
-          chief:'',
-          vertifyCode:''
+          chief: '',
+          vertifyCode: ''
         },
-        passwords:'',
-        captcha:'',
+        passwords: '',
+        captcha: '',
         identifyCodes: "1234567890",
-        identifyCode: "1234"
+        identifyCode: "1234",
+        // 验证码btn
+        get:'发送验证码',
+        s: 60,
+        one: false,
+        isphoneCode: false
       }
     },
-    // mounted() {
+    mounted() {
     //   this.identifyCode = "";
     //   this.makeCode(this.identifyCodes, 4);
-    // },
+    },
     methods: {
       applyCoupon() {  // 提交执行函数
         this.validator.validateAll({
-          phone:this.user.phone,
-          password:this.user.password,
-          chief:this.user.chief,
-          vertifyCode:this.user.vertifyCode,
-          passwords:this.passwords,
-          captcha:this.captcha
-        }).then( result => {
-         if(result){
-           var formData = JSON.stringify(this.user); // 这里才是你的表单数据
-           console.log(JSON.parse(formData));
+          phone: this.user.phone,
+          password: this.user.password,
+          chief: this.user.chief,
+          vertifyCode: this.user.vertifyCode,
+          passwords: this.passwords,
+          captcha: this.captcha
+        }).then(result => {
+          if (result) {
+            var formData = JSON.stringify(this.user); // 这里才是你的表单数据
+            console.log(JSON.parse(formData));
 //           localStorage.setItem('user',formData);
 //           this.$http.get(url,formData).then( result => console.log(result) ).catch(error => console.log(error)); // http请求
-         }
+          }
         });
       },
-    //   randomNum(min, max) {
-    //     return Math.floor(Math.random() * (max - min) + min);
-    //   },
       refreshCode() {
-    //     this.identifyCode = "";
-    //     this.makeCode(this.identifyCodes, 4);
+
+      },
+      sendCode() {
+        this.validator.validateAll({
+          phone: this.user.phone,
+          captcha: this.captcha
+        }).then(result => {
+          if (result) {
+            let _this = this;
+            this.get = '重新发送';
+            this.one = true
+            this.isphoneCode = true;
+            var Interval = setInterval(function () {
+              _this.s -= 1;
+              if (_this.s == 0) {
+                _this.one = false;
+                _this.s = 60;
+                _this.isphoneCode = false;
+                clearInterval(Interval);
+                return;
+              }
+            }, 1000);
+          }
+        });
       }
-    //   makeCode(o, l) {
-    //     for (let i = 0; i < l; i++) {
-    //       this.identifyCode += this.identifyCodes[
-    //         this.randomNum(0, this.identifyCodes.length)
-    //         ];
-    //     }
-    //     console.log(this.identifyCode);
-    //   }
     },
-    created(){
+    created() {
       this.validator = new Validator({});  // 初始化Validator对象
 
       Validator.extend('mobile', {
@@ -115,6 +135,9 @@
       this.validator.attach({name: 'captcha', rules: 'required', alias: '图形验证码'});
 
       this.$set(this, 'errors', this.validator.errors);
+    },
+    watch : {
+
     }
   }
 </script>
@@ -122,17 +145,17 @@
 <style lang="less">
   .register_container {
     .main {
-      .code{
+      .code {
         width: 112px;
         height: 38px;
         border: 1px solid red;
       }
       padding: 0 15px;
       .mint-cell-wrapper {
-        background:none;
+        background: none;
         border-bottom: solid 1px #e6e6e6;
       }
-      .mint-button {
+      .confirm {
         margin-top: 25px;
       }
       .bottom {
