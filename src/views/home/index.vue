@@ -82,7 +82,7 @@ import myHeader from '@/components/header'
       }
     },
     mounted() {
-      
+
     },
     methods: {
       takePhoto() {
@@ -269,7 +269,9 @@ import myHeader from '@/components/header'
             float: left;
             width: 80px;
             height: 25px;
-            border: solid 1px #CBCBCB;
+            border: none;
+            border-top: solid 1px #CBCBCB;
+            border-bottom: solid 1px #CBCBCB;
             text-align: center;
             &{
               outline: none;

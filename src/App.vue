@@ -13,6 +13,7 @@ export default {
 <style lang="less">
   @import "./style/normalize.css";
   @import "./style/common.less";
+
   body{
     font-family: 'Microsoft YaHei';
   }
