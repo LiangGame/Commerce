@@ -4,11 +4,12 @@
 
     <div class="main">
       <!--<form @submit.prevent="applyCoupon" class="">-->
-        <mt-field label="手机号" placeholder="手机号" v-model="user.phone"></mt-field>
+        <mt-field label="手机号" placeholder="手机号" name="phone" v-lfcous v-model="user.phone"></mt-field>
         <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
-        <mt-field label="图形验证码" placeholder="图形验证码" v-model="captcha">
+        <span v-if="err_phone" class="error">手机号已注册</span>
+        <mt-field label="图形验证码" placeholder="图形验证码" name="captcha" v-model="captcha" v-lfcous>
           <!--<img src="" height="45px" width="100px">-->
-          <div class="code" @click="refreshCode">
+          <div class="code" @click="getVertifyCode">
             <set-code :identifyCode="identifyCode"/>
           </div>
         </mt-field>
@@ -37,9 +38,11 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import setCode from '@/components/setCode'
   import myHeader from '@/components/header'
   import {Validator} from 'vee-validate';
+  import Qs from 'qs';
 
   export default {
     name: "index",
@@ -56,7 +59,7 @@
         },
         passwords: '',
         captcha: '',
-        identifyCodes: "1234567890",
+        err_phone:false,
         identifyCode: "1234",
         // 验证码btn
         get:'发送验证码',
@@ -66,8 +69,25 @@
       }
     },
     mounted() {
+      let _this = this;
     //   this.identifyCode = "";
     //   this.makeCode(this.identifyCodes, 4);
+      //自定义指令
+      Vue.directive('lfcous', function(el, pra, a) {
+          let oInput = el.querySelector('input');         
+          oInput.onfocus = function() {
+                //创建focus的事件
+          };
+          oInput.onblur = function() {
+            if(el.name == 'phone'){
+                _this.checkPhone();
+            }else if(el.name == 'captcha'){
+              _this.validator.validateAll({
+                captcha: _this.captcha
+              }).then(result => {console.log(result)})
+            }
+          };
+      })
     },
     methods: {
       applyCoupon() {  // 提交执行函数
@@ -81,15 +101,60 @@
         }).then(result => {
           if (result) {
             var formData = JSON.stringify(this.user); // 这里才是你的表单数据
-            console.log(JSON.parse(formData));
-//           localStorage.setItem('user',formData);
-//           this.$http.get(url,formData).then( result => console.log(result) ).catch(error => console.log(error)); // http请求
+            console.log(formData);
+            this.$http({
+                url: "/user/regist",
+                method: "POST",
+                data: this.user,
+                headers: {
+                  'Content-Type': 'application/json;charset=UTF-8'
+                },
+                transformRequest: [function (data) {
+                    let json = JSON.stringify(Qs.parse(data));
+                    return json;
+                }]
+            }).then(data => {
+              console.log(data)
+            }).catch(error => {
+
+            })
           }
         });
       },
-      refreshCode() {
-
+      //获取图片验证码
+      getVertifyCode() {
+        this.$http({
+            url: "/user/getVertifyCode",
+            method: "get",
+            data: this.user
+        }).then(data => {
+          this.identifyCode = data.code;
+        }).catch(error => {
+          console.log(error)
+        })
       },
+      //验证手机号是否注册
+      checkPhone(){
+        console.log('here')
+        this.validator.validateAll({
+          phone: this.user.phone
+        }).then(result => {
+          if (result) {
+            this.$http({
+                url: "/user/checkPhone",
+                method: "GET",
+                params: {phone:this.user.phone}
+            }).then(data => {
+              if(data.errCode != 0){
+                this.err_phone = true;
+              }
+            }).catch(error => {
+
+            })
+          }
+        });
+      },
+      //发送手机验证码
       sendCode() {
         this.validator.validateAll({
           phone: this.user.phone,
@@ -110,11 +175,28 @@
                 return;
               }
             }, 1000);
+             this.$http({
+                url: "/user/sendVertifyMSG",
+                method: "GET",
+                params: {phone:this.user.phone,code:this.identifyCode},
+                // headers: {
+                //   'Content-Type': 'application/json;charset=UTF-8'
+                // },
+                // transformRequest: [function (data) {
+                //     let json = JSON.stringify(Qs.parse(data));
+                //     return json;
+                // }]
+            }).then(data => {
+              console.log(data)
+            }).catch(error => {
+
+            })
           }
         });
       }
     },
     created() {
+      this.getVertifyCode();
       this.validator = new Validator({});  // 初始化Validator对象
 
       Validator.extend('mobile', {
@@ -125,6 +207,10 @@
         getMessage: field => "两次密码不一致!", //错误提示
         validate: value => this.user.password === this.passwords // 验证条件
       });
+       Validator.extend('captcha', {
+        getMessage: field => "验证码错误!", //错误提示
+        validate: value => this.captcha === this.identifyCode // 验证条件
+      });
 
       //this.validator.attach({name: 'name', rules: 'required|name|alpha_num', alias: '姓名'}); //name添加验证规则
       this.validator.attach({name: 'phone', rules: 'required|mobile|decimal', alias: '手机号'}); //phone添加验证规则
@@ -132,13 +218,14 @@
       this.validator.attach({name: 'passwords', rules: 'required|min:6|max:16|verify', alias: '确认密码'}); //pwds添加验证规则
       this.validator.attach({name: 'chief', rules: 'required', alias: '邀请码'});
       this.validator.attach({name: 'vertifyCode', rules: 'required', alias: '手机验证码'});
-      this.validator.attach({name: 'captcha', rules: 'required', alias: '图形验证码'});
+      this.validator.attach({name: 'captcha', rules: 'required|captcha', alias: '图形验证码'});
 
       this.$set(this, 'errors', this.validator.errors);
     },
     watch : {
 
     }
+    
   }
 </script>
 
