@@ -24,6 +24,12 @@ export default {
     box-sizing: border-box;
     margin: 0 auto;
   }
+  .mint-button{
+    font-size: 1rem;
+  }
+  .mint-cell-wrapper{
+    font-size: 0.8rem;
+  }
 
 /*#app {*/
   /*font-family: 'Avenir', Helvetica, Arial, sans-serif;*/

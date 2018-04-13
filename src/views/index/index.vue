@@ -122,7 +122,7 @@
           color: #f23030;
           text-align: center;
           font-weight: normal;
-          font-size: 1.8rem;
+          font-size: 1.2rem;
           background: #fff;
           padding: 8px;
           margin: 5px 0;
@@ -147,7 +147,7 @@
               background: #fff;
               .goodTitle {
                 color: #666;
-                font-size: 1rem;
+                font-size: 0.8rem;
                 text-overflow: -o-ellipsis-lastline;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -157,8 +157,9 @@
               }
               .price {
                 color: #f23030;
+                padding: 8px 0;
                 .big_price {
-                  font-size: 1.6rem;
+                  font-size: 1.2rem;
                 }
               }
             }

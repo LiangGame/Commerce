@@ -2,7 +2,7 @@
   <div class="mfindpwd_container">
     <my-header title="忘记密码"/>
     <div class="main">
-      <form @submit.prevent="applyCoupon" class="">
+      <!-- <form @submit.prevent="applyCoupon" class=""> -->
         <mt-field label="手机号" placeholder="手机号" v-model="user.phone"></mt-field>
         <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
         <mt-field label="图形验证码" placeholder="图形验证码" v-model="captcha">
@@ -12,8 +12,8 @@
         </mt-field>
         <span v-show="errors.has('captcha')" class="error">{{ errors.first('captcha') }}</span>
         <mt-field label="手机验证码" placeholder="手机验证码" type="text" v-model="user.vertifyCode">
-          <div>
-            <mt-button size="small" type="danger" disabled>发送验证码</mt-button>
+          <div class="sendCode">
+            <mt-button size="small" type="danger" :disabled="isphoneCode" @click="sendCode">{{get}}<span v-if="one">({{s}}秒后)</span></mt-button>
           </div>
         </mt-field>
         <span v-show="errors.has('vertifyCode')" class="error">{{ errors.first('vertifyCode') }}</span>
@@ -21,8 +21,8 @@
         <span v-show="errors.has('password')" class="error">{{ errors.first('password') }}</span>
         <mt-field label="确认密码" placeholder="确认密码" type="password" v-model="passwords"></mt-field>
         <span v-show="errors.has('passwords')" class="error">{{ errors.first('passwords') }}</span>
-        <mt-button class="confirm" size="large" type="danger">找回密码</mt-button>
-      </form>
+        <mt-button class="confirm" size="large" type="danger" @click="applyCoupon">找回密码</mt-button>
+      <!-- </form> -->
     </div>
   </div>
 </template>
@@ -46,7 +46,12 @@
         },
         passwords:'',
         captcha:'',
-        identifyCode: "1234"
+        identifyCode: "1234",
+        // 验证码btn
+        get:'发送验证码',
+        s: 60,
+        one: false,
+        isphoneCode: false
       }
     },
     methods: {
@@ -69,6 +74,29 @@
          }
         });
       },
+      sendCode() {
+        this.validator.validateAll({
+          phone: this.user.phone,
+          captcha: this.captcha
+        }).then(result => {
+          if (result) {
+            let _this = this;
+            this.get = '重新发送';
+            this.one = true
+            this.isphoneCode = true;
+            var Interval = setInterval(function () {
+              _this.s -= 1;
+              if (_this.s == 0) {
+                _this.one = false;
+                _this.s = 60;
+                _this.isphoneCode = false;
+                clearInterval(Interval);
+                return;
+              }
+            }, 1000);
+          }
+        });
+      }
     },
     created(){
       this.validator = new Validator({});  // 初始化Validator对象
@@ -101,11 +129,16 @@
         background:none;
         border-bottom: solid 1px #e6e6e6;
       }
+      .sendCode{
+        .mint-button{
+          font-size: 0.6rem;
+        }
+      }
       .confirm {
         margin-top: 25px;
       }
       .error {
-        font-size: 1rem;
+        font-size: 0.6rem;
         color: #ff1c13;
       }
     }

@@ -119,7 +119,7 @@
                 display: inline-block;
                 padding-right: 10px;
                 .big_price{
-                  font-size: 1.6rem;
+                  font-size: 1.3rem;
                 }
               }
               label{
@@ -135,7 +135,7 @@
                 line-height: 25px;
                 border: solid 1px #CBCBCB;
                 text-align: center;
-                font-size: 2rem;
+                font-size: 1.2rem;
                 color: #333;
               }
               #number{
@@ -174,9 +174,10 @@
             .label{
               font-size: 1rem;
               font-weight: 600;
+              line-height: 1.9rem;
             }
             .big_price{
-              font-size: 1.6rem;
+              font-size: 1.3rem;
               color: #e93b3b;
               font-weight: 600;
             }

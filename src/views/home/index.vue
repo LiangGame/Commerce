@@ -155,13 +155,13 @@ import myHeader from '@/components/header'
             float: left;
             margin-top: 7px;
             font-family: Helvetica;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 700;
             line-height: 23px;
             color: #f23030;
             .big_price {
               display: inline-block;
-              font-size: 1.6rem;
+              font-size: 1.4rem;
               line-height: 23px;
             }
             .small_price {
@@ -171,12 +171,13 @@ import myHeader from '@/components/header'
             }
             .after_price {
               font-weight: 200;
-              font-size: 1rem;
+              font-size: 0.8rem;
               line-height: 14px;
               color: #666;
             }
           }
           .carriage {
+            font-size: 0.8rem;            
             display: inline-block;
             width: 33.33%;
             margin-top: 27px;
@@ -185,6 +186,7 @@ import myHeader from '@/components/header'
             text-align: center;
           }
           .after_address {
+            font-size: 0.8rem;            
             width: 33.33%;
             float: right;
             margin-top: 27px;

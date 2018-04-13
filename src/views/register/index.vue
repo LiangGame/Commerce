@@ -14,7 +14,7 @@
         </mt-field>
         <span v-show="errors.has('captcha')" class="error">{{ errors.first('captcha') }}</span>
         <mt-field label="手机验证码" placeholder="手机验证码" type="text" v-model="user.vertifyCode">
-          <div>
+          <div class="sendCode">
             <mt-button size="small" type="danger" :disabled="isphoneCode" @click="sendCode">{{get}}<span v-if="one">({{s}}秒后)</span></mt-button>
           </div>
         </mt-field>
@@ -166,12 +166,17 @@
         a {
           color: #666;
           text-decoration: none;
-          font-size: 1rem;
+          font-size: 0.8rem;
+        }
+      }
+      .sendCode{
+        .mint-button{
+          font-size: 0.6rem;
         }
       }
     }
     .error {
-      font-size: 1rem;
+      font-size: 0.6rem;
       color: #ff1c13;
     }
   }
