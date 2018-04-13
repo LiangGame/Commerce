@@ -4,8 +4,11 @@
       <router-link to="/" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
-      <router-link to="/login" slot="right">
+      <router-link to="/login" slot="right" v-if="!isLogin">
         <mt-button>登录</mt-button>
+      </router-link>
+      <router-link to="/person" slot="right" v-if="isLogin">
+        <mt-button>个人中心</mt-button>
       </router-link>
     </mt-header>
     <div class="main">
@@ -26,7 +29,8 @@
                 src="https://m.360buyimg.com//mobilecms/s636x636_jfs/t148/3/276621205/370727/4f218479/538615f8N48880623.jpg!q70.jpg.dpg.webp"
                 width="100%" alt="">
               <div class="goodInfo">
-                <p class="goodTitle" style="-webkit-box-orient: vertical">艾璐歌 摩托车 迷你小跑车 四冲程 手拉启动雷鹰三代 纯汽油版跑车可选前后减震真空胎 黑色小轮子</p>
+                <p class="goodTitle" style="-webkit-box-orient: vertical">艾璐歌 摩托车 迷你小跑车 四冲程 手拉启动雷鹰三代 纯汽油版跑车可选前后减震真空胎
+                  黑色小轮子</p>
                 <div class="price"><span class="big_price">￥950</span>.00</div>
               </div>
             </router-link>
@@ -81,6 +85,30 @@
           href: 'http://baidu.com',
           url: 'https://m.360buyimg.com//mobilecms/s636x636_jfs/t148/3/276621205/370727/4f218479/538615f8N48880623.jpg!q70.jpg.dpg.webp'
         }],
+        isLogin: false
+      }
+    },
+    created() {
+      //验证是否登录
+      let userInfo = this.Cookie.get('user');
+      if (userInfo) {
+        this.isLogin = true;
+      }
+      this.loadData();
+    },
+    methods:{
+      //获取商品列表
+      loadData(){
+        this.$http({
+          url: "/goods",
+          method: "GET"
+        }).then(data => {
+          if(data.errCode == 0){
+
+          }
+        }).catch(error => {
+
+        })
       }
     }
 
@@ -148,14 +176,14 @@
               .goodTitle {
                 color: #666;
                 font-size: 0.8rem;
-                word-break:break-all;
+                word-break: break-all;
                 display: -webkit-box;
                 /* autoprefixer: off */
                 -webkit-box-orient: vertical;
-                -webkit-line-clamp:2;
+                -webkit-line-clamp: 2;
                 /* autoprefixer: on */
-                text-overflow:ellipsis;                                                
-                overflow:hidden;
+                text-overflow: ellipsis;
+                overflow: hidden;
               }
               .price {
                 color: #f23030;

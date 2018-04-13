@@ -47,10 +47,10 @@ export const vue = new Vue({
   }
 })
 // cookie失效重新登陆
-// router.beforeResolve((to, from, next) => {
-//   if( to.path.indexOf('/login')==-1 && vue.Cookie.get('Ticket')==undefined){
-//       next({ path: '/login/'+localStorage.PlatformCode })
-//   }else{
-//       next();
-//   }
-// })
+router.beforeResolve((to, from, next) => {
+  if( to.path.indexOf('/')==-1 && vue.Cookie.get('user')==undefined){
+      next({ path: '/'})
+  }else{
+      next();
+  }
+})

@@ -4,29 +4,30 @@
 
     <div class="main">
       <!--<form @submit.prevent="applyCoupon" class="">-->
-        <mt-field label="手机号" placeholder="手机号" name="phone" v-lfcous v-model="user.phone"></mt-field>
-        <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
-        <span v-if="err_phone" class="error">手机号已注册</span>
-        <mt-field label="图形验证码" placeholder="图形验证码" name="captcha" v-model="captcha" v-lfcous>
-          <!--<img src="" height="45px" width="100px">-->
-          <div class="code" @click="getVertifyCode">
-            <set-code :identifyCode="identifyCode"/>
-          </div>
-        </mt-field>
-        <span v-show="errors.has('captcha')" class="error">{{ errors.first('captcha') }}</span>
-        <mt-field label="手机验证码" placeholder="手机验证码" type="text" v-model="user.vertifyCode">
-          <div class="sendCode">
-            <mt-button size="small" type="danger" :disabled="isphoneCode" @click="sendCode">{{get}}<span v-if="one">({{s}}秒后)</span></mt-button>
-          </div>
-        </mt-field>
-        <span v-show="errors.has('vertifyCode')" class="error">{{ errors.first('vertifyCode') }}</span>
-        <mt-field label="密码" placeholder="密码" type="password" v-model="user.password"></mt-field>
-        <span v-show="errors.has('password')" class="error">{{ errors.first('password') }}</span>
-        <mt-field label="确认密码" placeholder="确认密码" type="password" v-model="passwords"></mt-field>
-        <span v-show="errors.has('passwords')" class="error">{{ errors.first('passwords') }}</span>
-        <mt-field label="邀请码" placeholder="邀请码" type="text" v-model="user.chief"></mt-field>
-        <span v-show="errors.has('chief')" class="error">{{ errors.first('chief') }}</span>
-        <mt-button class="confirm" size="large" @click="applyCoupon" type="danger">注册</mt-button>
+      <mt-field label="手机号" placeholder="手机号" name="phone" v-focus="{checkPhone:checkPhone}" v-model="user.phone"></mt-field>
+      <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
+      <span v-if="err_phone" class="error">手机号已注册</span>
+      <mt-field label="图形验证码" placeholder="图形验证码" name="captcha" v-model="captcha" v-focus="{checkCaptcha:checkCaptcha}">
+        <!--<img src="" height="45px" width="100px">-->
+        <div class="code" @click="getVertifyCode">
+          <set-code :identifyCode="identifyCode"/>
+        </div>
+      </mt-field>
+      <span v-show="errors.has('captcha')" class="error">{{ errors.first('captcha') }}</span>
+      <mt-field label="手机验证码" placeholder="手机验证码" type="text" v-model="user.vertifyCode">
+        <div class="sendCode">
+          <mt-button size="small" type="danger" :disabled="isphoneCode" @click="sendCode">{{get}}<span v-if="one">({{s}}秒后)</span>
+          </mt-button>
+        </div>
+      </mt-field>
+      <span v-show="errors.has('vertifyCode')" class="error">{{ errors.first('vertifyCode') }}</span>
+      <mt-field label="密码" placeholder="密码" type="password" v-model="user.password"></mt-field>
+      <span v-show="errors.has('password')" class="error">{{ errors.first('password') }}</span>
+      <mt-field label="确认密码" placeholder="确认密码" type="password" v-model="passwords"></mt-field>
+      <span v-show="errors.has('passwords')" class="error">{{ errors.first('passwords') }}</span>
+      <mt-field label="邀请码" placeholder="邀请码" type="text" v-model="user.chief"></mt-field>
+      <span v-show="errors.has('chief')" class="error">{{ errors.first('chief') }}</span>
+      <mt-button class="confirm" size="large" @click="applyCoupon" type="danger">注册</mt-button>
       <!--</form>-->
       <div class="bottom">
         <span class="toRegister">
@@ -38,7 +39,6 @@
 </template>
 
 <script>
-  import Vue from 'vue'
   import setCode from '@/components/setCode'
   import myHeader from '@/components/header'
   import {Validator} from 'vee-validate';
@@ -59,35 +59,18 @@
         },
         passwords: '',
         captcha: '',
-        err_phone:false,
+        err_phone: false,
         identifyCode: "1234",
         // 验证码btn
-        get:'发送验证码',
+        get: '发送验证码',
         s: 60,
         one: false,
         isphoneCode: false
       }
     },
     mounted() {
-      let _this = this;
-    //   this.identifyCode = "";
-    //   this.makeCode(this.identifyCodes, 4);
-      //自定义指令
-      Vue.directive('lfcous', function(el, pra, a) {
-          let oInput = el.querySelector('input');         
-          oInput.onfocus = function() {
-                //创建focus的事件
-          };
-          oInput.onblur = function() {
-            if(el.name == 'phone'){
-                _this.checkPhone();
-            }else if(el.name == 'captcha'){
-              _this.validator.validateAll({
-                captcha: _this.captcha
-              }).then(result => {console.log(result)})
-            }
-          };
-      })
+      //   this.identifyCode = "";
+      //   this.makeCode(this.identifyCodes, 4);
     },
     methods: {
       applyCoupon() {  // 提交执行函数
@@ -103,16 +86,16 @@
             var formData = JSON.stringify(this.user); // 这里才是你的表单数据
             console.log(formData);
             this.$http({
-                url: "/user/regist",
-                method: "POST",
-                data: this.user,
-                headers: {
-                  'Content-Type': 'application/json;charset=UTF-8'
-                },
-                transformRequest: [function (data) {
-                    let json = JSON.stringify(Qs.parse(data));
-                    return json;
-                }]
+              url: "/user/regist",
+              method: "POST",
+              data: this.user,
+              headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+              },
+              transformRequest: [function (data) {
+                let json = JSON.stringify(Qs.parse(data));
+                return json;
+              }]
             }).then(data => {
               console.log(data)
             }).catch(error => {
@@ -124,9 +107,9 @@
       //获取图片验证码
       getVertifyCode() {
         this.$http({
-            url: "/user/getVertifyCode",
-            method: "get",
-            data: this.user
+          url: "/user/getVertifyCode",
+          method: "get",
+          params: this.user
         }).then(data => {
           this.identifyCode = data.code;
         }).catch(error => {
@@ -134,18 +117,18 @@
         })
       },
       //验证手机号是否注册
-      checkPhone(){
+      checkPhone() {
         console.log('here')
         this.validator.validateAll({
           phone: this.user.phone
         }).then(result => {
           if (result) {
             this.$http({
-                url: "/user/checkPhone",
-                method: "GET",
-                params: {phone:this.user.phone}
+              url: "/user/checkPhone",
+              method: "GET",
+              params: {phone: this.user.phone}
             }).then(data => {
-              if(data.errCode != 0){
+              if (data.errCode != 0) {
                 this.err_phone = true;
               }
             }).catch(error => {
@@ -153,6 +136,12 @@
             })
           }
         });
+      },
+      //验证图片验证码
+      checkCaptcha(){
+        this.validator.validateAll({
+          captcha: this.captcha
+        }).then(result => result)
       },
       //发送手机验证码
       sendCode() {
@@ -175,17 +164,10 @@
                 return;
               }
             }, 1000);
-             this.$http({
-                url: "/user/sendVertifyMSG",
-                method: "GET",
-                params: {phone:this.user.phone,code:this.identifyCode},
-                // headers: {
-                //   'Content-Type': 'application/json;charset=UTF-8'
-                // },
-                // transformRequest: [function (data) {
-                //     let json = JSON.stringify(Qs.parse(data));
-                //     return json;
-                // }]
+            this.$http({
+              url: "/user/sendVertifyMSG",
+              method: "GET",
+              params: {phone: this.user.phone, code: this.identifyCode}
             }).then(data => {
               console.log(data)
             }).catch(error => {
@@ -207,7 +189,7 @@
         getMessage: field => "两次密码不一致!", //错误提示
         validate: value => this.user.password === this.passwords // 验证条件
       });
-       Validator.extend('captcha', {
+      Validator.extend('captcha', {
         getMessage: field => "验证码错误!", //错误提示
         validate: value => this.captcha === this.identifyCode // 验证条件
       });
@@ -222,10 +204,23 @@
 
       this.$set(this, 'errors', this.validator.errors);
     },
-    watch : {
-
+    directives: {
+      focus: {
+        inserted: function (el,binding, vnode) {
+          let oInput = el.querySelector('input');
+          oInput.onfocus = function () {
+            //创建focus的事件
+          };
+          oInput.onblur = function () {
+            if (el.name == 'phone') {
+              binding.value.checkPhone();
+            } else if (el.name == 'captcha') {
+              binding.value.checkCaptcha();
+            }
+          };
+        }
+      }
     }
-    
   }
 </script>
 
@@ -256,8 +251,8 @@
           font-size: 0.8rem;
         }
       }
-      .sendCode{
-        .mint-button{
+      .sendCode {
+        .mint-button {
           font-size: 0.6rem;
         }
       }

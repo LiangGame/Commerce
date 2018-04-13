@@ -9,7 +9,7 @@
       <router-link to="/certification"><mt-cell title="实名认证" is-link ></mt-cell></router-link>
       <router-link to="/share"><mt-cell title="分享" is-link ></mt-cell></router-link>
       <div class="exit">
-        <mt-button class="confirm" size="large" type="danger">退出登录</mt-button>
+        <mt-button class="confirm" size="large" type="danger" @click="signOut">退出登录</mt-button>
       </div>
     </div>
 </template>
@@ -18,13 +18,32 @@
   import myHeader from '@/components/header'
   export default {
     name: "index",
-    components: {myHeader}
+    components: {myHeader},
+    data(){
+      return{
+
+      }
+    },
+    created(){
+      //验证是否登录
+      let userInfo = this.Cookie.get('user');
+      if (!userInfo) {
+        this.$router.push('/');
+      }
+    },
+    methods:{
+      //退出登录
+      signOut(){
+        this.Cookie.remove('user');
+        this.$router.push('/login');
+      }
+    }
   }
 </script>
 
 <style lang="less">
     .person_container {
-      .mint-cell{        
+      .mint-cell{
         background: none;
         .mint-cell-wrapper{
           background: none;
