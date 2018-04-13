@@ -30,7 +30,6 @@ export default {
   .mint-cell-wrapper{
     font-size: 0.8rem;
   }
-
 /*#app {*/
   /*font-family: 'Avenir', Helvetica, Arial, sans-serif;*/
   /*-webkit-font-smoothing: antialiased;*/

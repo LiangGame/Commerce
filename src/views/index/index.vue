@@ -26,7 +26,7 @@
                 src="https://m.360buyimg.com//mobilecms/s636x636_jfs/t148/3/276621205/370727/4f218479/538615f8N48880623.jpg!q70.jpg.dpg.webp"
                 width="100%" alt="">
               <div class="goodInfo">
-                <p class="goodTitle">艾璐歌 摩托车 迷你小跑车 四冲程 手拉启动雷鹰三代 纯汽油版跑车可选前后减震真空胎 黑色小轮子</p>
+                <p class="goodTitle" style="-webkit-box-orient: vertical">艾璐歌 摩托车 迷你小跑车 四冲程 手拉启动雷鹰三代 纯汽油版跑车可选前后减震真空胎 黑色小轮子</p>
                 <div class="price"><span class="big_price">￥950</span>.00</div>
               </div>
             </router-link>
@@ -149,9 +149,12 @@
                 color: #666;
                 font-size: 0.8rem;
                 word-break:break-all;
-                display: -webkit-inline-box;
+                display: -webkit-box;
+                /* autoprefixer: off */
+                -webkit-box-orient: vertical;
                 -webkit-line-clamp:2;
-                -webkit-box-orient:vertical;
+                /* autoprefixer: on */
+                text-overflow:ellipsis;                                                
                 overflow:hidden;
               }
               .price {
