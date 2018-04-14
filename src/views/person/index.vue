@@ -1,7 +1,7 @@
 <template>
     <div class="person_container">
       <my-header title="个人中心"/>
-      <mt-cell title="我的ID"><span>123456</span></mt-cell>
+      <mt-cell title="我的ID"><span>{{userId}}</span></mt-cell>
       <mt-cell title="我的会员"><span>99</span></mt-cell>
       <router-link to="/updatePwd"><mt-cell title="修改密码" is-link ></mt-cell></router-link>
       <router-link to="/wallet"><mt-cell title="钱包" is-link ></mt-cell></router-link>
@@ -21,7 +21,7 @@
     components: {myHeader},
     data(){
       return{
-
+        userId:''
       }
     },
     created(){
@@ -30,6 +30,9 @@
       if (!userInfo) {
         this.$router.push('/');
       }
+      //获取个人信息
+      console.log(JSON.stringify(userInfo));
+      this.userId = JSON.parse(userInfo).id
     },
     methods:{
       //退出登录

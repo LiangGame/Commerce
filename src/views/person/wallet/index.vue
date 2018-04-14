@@ -6,13 +6,14 @@
       <h2>我的零钱</h2>
       <router-link to="/bill"><h1 class=money>￥<span>{{money}}</span></h1></router-link>
       <p class="hint">点击余额查看明细</p>
-      <mt-button class="confirm" size="large" type="danger">充值</mt-button>
-      <mt-button class="confirm" size="large" type="default">提现</mt-button>
+      <mt-button class="confirm" size="large" type="danger" @click="toRecharge">充值</mt-button>
+      <mt-button class="confirm" size="large" type="default" @click="toWithdrawals">提现</mt-button>
     </div>
   </div>
 </template>
 
 <script>
+  import {MessageBox} from 'mint-ui';
   import myHeader from '@/components/header'
 
   export default {
@@ -20,7 +21,8 @@
     components: {myHeader},
     data() {
       return {
-        money: '0.00'
+        money: '0.00',
+        user: JSON.parse(this.Cookie.get('user'))
       }
     },
     methods: {
@@ -28,7 +30,7 @@
         this.$http({
           url: "/balance/getList",
           method: "GET",
-          params: {userID: JSON.parse(this.Cookie.get('user')).id}
+          params: {userID: this.user.id}
         }).then(data => {
           console.log(data);
           if (data.errCode == 0) {
@@ -36,6 +38,38 @@
           }
         }).catch(error => {
         })
+      },
+      //充值
+      toRecharge() {
+        if (this.user.status) {
+          this.$router.push({path: '/recharge'});
+        } else {
+          MessageBox({
+            title: '提示',
+            message: '未实名,是否前往认证?',
+            showCancelButton: true
+          }).then(action => {
+            if (action == 'confirm') {
+              this.$router.push({path: '/certification'});
+            }
+          });
+        }
+      },
+      //提现
+      toWithdrawals() {
+        if (this.user.status) {
+          this.$router.push({path: '/withdrawals'});
+        } else {
+          MessageBox({
+            title: '提示',
+            message: '未实名,是否前往认证?',
+            showCancelButton: true
+          }).then(action => {
+            if (action == 'confirm') {
+              this.$router.push({path: '/certification'});
+            }
+          });
+        }
       }
     },
     created() {

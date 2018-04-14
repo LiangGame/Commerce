@@ -1,0 +1,126 @@
+<template>
+  <div class="withdrawals_container">
+    <my-header title="提现"/>
+    <div class="main">
+      <div class="money_container">
+        <mt-field label="金额" placeholder="请输入充值金额" v-model="money"></mt-field>
+      </div>
+      <p class="warning">注意 : 提现最小金额为100,提现金额必须是100的整数倍</p>
+      <!--<mt-radio-->
+        <!--title="选择支付方式"-->
+        <!--v-model="payMent"-->
+        <!--:options="options">-->
+      <!--</mt-radio>-->
+    </div>
+    <div class="pay_btn">
+      <mt-button class="confirm" size="large" @click="pay" type="danger">确认提现</mt-button>
+    </div>
+  </div>
+</template>
+
+<script>
+  import Qs from 'qs';
+  import myHeader from '@/components/header'
+  import {Toast} from 'mint-ui';
+
+  export default {
+    name: "withdrawals",
+    components: {myHeader},
+    data() {
+      return {
+        n:0,
+        user: JSON.parse(this.Cookie.get('user')),
+        money: '',
+        // payMent: '1',
+        // options: [
+        //   {
+        //     label: '支付宝支付',
+        //     value: '1'
+        //   },
+        //   {
+        //     label: '微信支付',
+        //     value: '2'
+        //   },
+        //   {
+        //     label: '银行卡支付',
+        //     value: '3',
+        //   }
+        // ],
+        // 弹窗
+        weChat: false,
+        alipay: false,
+        bankCard: false,
+      }
+    },
+    methods: {
+      //提现
+      pay() {
+        if(this.n < 1){
+          let formData = {userID: this.user.id, money: this.money};
+          this.$http({
+            url: "/order/withdrawals",
+            method: "POST",
+            data: formData,
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8'
+            },
+            transformRequest: [function (data) {
+              let json = JSON.stringify(Qs.parse(data));
+              return json;
+            }]
+          }).then(data => {
+            Toast(data.info);
+            if(data.error_code == 0){
+              this.n++;
+              this.$router.push('/wallet');
+            }
+          })
+        }else {
+          Toast('请勿重复提交')
+        }
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+  .withdrawals_container {
+    .main {
+      .money_container {
+        .mint-cell-wrapper {
+          background: none;
+          border-bottom: solid 1px #e6e6e6;
+        }
+      }
+      .warning{
+        font-size: 0.6rem;
+        padding: 20px 10px;
+        color:  #de181b;
+      }
+      .mint-radio-input:checked + .mint-radio-core {
+        background-color: #de181b;
+        border-color: #de181b;
+      }
+    }
+    .pay_btn {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      .mint-button {
+        border-radius: 0;
+        background: #e93b3b;
+      }
+    }
+    .dk_btn {
+      border-radius: 0;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      .mint-button {
+        background: #e93b3b;
+      }
+    }
+  }
+</style>

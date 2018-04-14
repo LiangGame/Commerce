@@ -15,7 +15,7 @@
       <mt-swipe :auto="3000">
         <mt-swipe-item v-for="item in items" :key="item.id">
           <a :href="item.href" rel="external nofollow">
-            <img :src="item.url" class="img"/>
+            <img :src="item.url" class=""/>
             <span class="desc"></span>
           </a>
         </mt-swipe-item>
@@ -23,44 +23,16 @@
       <div class="shops">
         <h1>为您推荐</h1>
         <ul>
-          <li class="good">
-            <router-link to="/home">
+          <li class="good" v-for="item in goods">
+            <router-link :to="{ name: '确定订单', params: { info: item }}">
               <img
-                src="https://m.360buyimg.com//mobilecms/s636x636_jfs/t148/3/276621205/370727/4f218479/538615f8N48880623.jpg!q70.jpg.dpg.webp"
-                width="100%" alt="">
+                :src="item.img"
+                width="100%" :alt="item.goodName">
               <div class="goodInfo">
-                <p class="goodTitle" style="-webkit-box-orient: vertical">艾璐歌 摩托车 迷你小跑车 四冲程 手拉启动雷鹰三代 纯汽油版跑车可选前后减震真空胎
-                  黑色小轮子</p>
-                <div class="price"><span class="big_price">￥950</span>.00</div>
+                <p class="goodTitle" style="-webkit-box-orient: vertical">{{item.goodName}}</p>
+                <div class="price"><span class="big_price">￥{{item.price ? (item.price+'').split('.')[0] : item.price}}.</span>{{item.price ? (item.price+'').split('.')[1] ? (item.price+'').split('.')[1] : '00':'' }}</div>
               </div>
             </router-link>
-          </li>
-          <li class="good">
-            <img
-              src="https://m.360buyimg.com//mobilecms/s636x636_jfs/t148/3/276621205/370727/4f218479/538615f8N48880623.jpg!q70.jpg.dpg.webp"
-              width="100%" alt="">
-            <div class="goodInfo">
-              <p class="goodTitle">艾璐歌 摩托车 迷你小跑车 四冲程 手拉启动雷鹰三代 纯汽油版跑车可选前后减震真空胎 黑色小轮子</p>
-              <div class="price"><span class="big_price">￥950</span>.00</div>
-            </div>
-          </li>
-          <li class="good">
-            <img
-              src="https://m.360buyimg.com//mobilecms/s636x636_jfs/t148/3/276621205/370727/4f218479/538615f8N48880623.jpg!q70.jpg.dpg.webp"
-              width="100%" alt="">
-            <div class="goodInfo">
-              <p class="goodTitle">艾璐歌 摩托车 迷你小跑车 四冲程 手拉启动雷鹰三代 纯汽油版跑车可选前后减震真空胎 黑色小轮子</p>
-              <div class="price"><span class="big_price">￥950</span>.00</div>
-            </div>
-          </li>
-          <li class="good">
-            <img
-              src="https://m.360buyimg.com//mobilecms/s636x636_jfs/t148/3/276621205/370727/4f218479/538615f8N48880623.jpg!q70.jpg.dpg.webp"
-              width="100%" alt="">
-            <div class="goodInfo">
-              <p class="goodTitle">艾璐歌 摩托车 迷你小跑车 四冲程 手拉启动雷鹰三代 纯汽油版跑车可选前后减震真空胎 黑色小轮子</p>
-              <div class="price"><span class="big_price">￥950</span>.00</div>
-            </div>
           </li>
         </ul>
       </div>
@@ -85,6 +57,7 @@
           href: 'http://baidu.com',
           url: 'https://m.360buyimg.com//mobilecms/s636x636_jfs/t148/3/276621205/370727/4f218479/538615f8N48880623.jpg!q70.jpg.dpg.webp'
         }],
+        goods:[],
         isLogin: false
       }
     },
@@ -103,8 +76,9 @@
           url: "/goods",
           method: "GET"
         }).then(data => {
-          if(data.errCode == 0){
-
+          if(data){
+            this.goods = data;
+            console.log((this.goods[0].price + '').split('.'));
           }
         }).catch(error => {
 

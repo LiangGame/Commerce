@@ -54,7 +54,6 @@
         </div>
         <mt-button size="large" @click="applyCoupon" type="danger">登录</mt-button>
       <!--</form>-->
-      <router-link to="/person">个人中心</router-link>
       <div class="bottom">
         <span class="toUpdatePwd">
           <router-link to="/mfindpwd">忘记密码</router-link>
@@ -70,6 +69,7 @@
 <script>
   import myHeader from '@/components/header'
   import {Validator} from 'vee-validate';
+  import {Toast} from 'mint-ui'
 
   export default {
     name: "index",
@@ -79,8 +79,8 @@
         validator: null,
         errors: null,
         user: {
-          phone: '17767292776',
-          password: 'mima111111'
+          phone: '',
+          password: ''
         },
         xy: '',
         yhxy: false,
@@ -105,6 +105,8 @@
               if(data.errCode == 0){
                 this.$router.push('/');
                 this.Cookie.set("user", data.info, { expires: 1 });
+              }else {
+                Toast(data.info);
               }
             }).catch(error => {
 
@@ -129,12 +131,12 @@
 
       Validator.extend('checked', {
         getMessage: field => "请勾选用户协议!", //错误提示
-        validate: value => value
+        validate: value => !!value
       });
 
       this.validator.attach({name: 'phone', rules: 'required|mobile|decimal', alias: '手机号'}); //phone添加验证规则
       this.validator.attach({name: 'password', rules: 'required|min:6|max:16', alias: '密码'}); //pwd添加验证规则
-      this.validator.attach({name: 'xy', rules: 'required', alias: '用户协议'}); //pwds添加验证规则
+      this.validator.attach({name: 'xy', rules: 'checked|required', alias: '用户协议'}); //pwds添加验证规则
 
       this.$set(this, 'errors', this.validator.errors);
     },

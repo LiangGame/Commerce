@@ -6,7 +6,7 @@
       <!--<form @submit.prevent="applyCoupon" class="">-->
       <mt-field label="手机号" placeholder="手机号" name="phone" v-focus="{checkPhone:checkPhone}" v-model="user.phone"></mt-field>
       <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
-      <span v-if="err_phone" class="error">手机号已注册</span>
+      <!--<span v-if="err_phone" class="error">手机号已注册</span>-->
       <mt-field label="图形验证码" placeholder="图形验证码" name="captcha" v-model="captcha" v-focus="{checkCaptcha:checkCaptcha}">
         <!--<img src="" height="45px" width="100px">-->
         <div class="code" @click="getVertifyCode">
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+  import { Toast } from 'mint-ui';
   import setCode from '@/components/setCode'
   import myHeader from '@/components/header'
   import {Validator} from 'vee-validate';
@@ -59,7 +60,7 @@
         },
         passwords: '',
         captcha: '',
-        err_phone: false,
+        // err_phone: false,
         identifyCode: "1234",
         // 验证码btn
         get: '发送验证码',
@@ -97,7 +98,11 @@
                 return json;
               }]
             }).then(data => {
-              console.log(data)
+              if(data.errCode == 0){
+                this.$router.push('/login');
+              }else if(data.errCode != 0){
+                Toast(data.info);
+              }
             }).catch(error => {
 
             })
@@ -109,32 +114,21 @@
         this.$http({
           url: "/user/getVertifyCode",
           method: "get",
-          params: this.user
+          withCredentials:true
         }).then(data => {
+          console.log(data)
           this.identifyCode = data.code;
         }).catch(error => {
           console.log(error)
         })
       },
       //验证手机号是否注册
-      checkPhone() {
+      checkPhone(tel) {
         console.log('here')
         this.validator.validateAll({
           phone: this.user.phone
         }).then(result => {
-          if (result) {
-            this.$http({
-              url: "/user/checkPhone",
-              method: "GET",
-              params: {phone: this.user.phone}
-            }).then(data => {
-              if (data.errCode != 0) {
-                this.err_phone = true;
-              }
-            }).catch(error => {
-
-            })
-          }
+          console.log(result);
         });
       },
       //验证图片验证码
@@ -170,8 +164,6 @@
               params: {phone: this.user.phone, code: this.identifyCode}
             }).then(data => {
               console.log(data)
-            }).catch(error => {
-
             })
           }
         });
@@ -185,6 +177,25 @@
         getMessage: field => "请输入正确的手机号码", //错误提示
         validate: value => value.length === 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)  // 验证条件
       });
+      Validator.extend('checkPhone', {
+        getMessage: field => "手机号已注册", //错误提示
+        validate: value => {
+          return this.$http({
+            url: "/user/checkPhone",
+            method: "GET",
+            params: {phone: value},
+            withCredentials:true
+          }).then(data => {
+            if (data.errCode == 0) {
+              return true;
+            }else {
+              return false;
+            }
+          }).catch(error => {
+
+          })
+        }  // 验证条件
+      });
       Validator.extend('verify', {
         getMessage: field => "两次密码不一致!", //错误提示
         validate: value => this.user.password === this.passwords // 验证条件
@@ -195,7 +206,7 @@
       });
 
       //this.validator.attach({name: 'name', rules: 'required|name|alpha_num', alias: '姓名'}); //name添加验证规则
-      this.validator.attach({name: 'phone', rules: 'required|mobile|decimal', alias: '手机号'}); //phone添加验证规则
+      this.validator.attach({name: 'phone', rules: 'required|mobile|decimal|checkPhone', alias: '手机号'}); //phone添加验证规则
       this.validator.attach({name: 'password', rules: 'required|min:6|max:16|verify', alias: '密码'}); //pwd添加验证规则
       this.validator.attach({name: 'passwords', rules: 'required|min:6|max:16|verify', alias: '确认密码'}); //pwds添加验证规则
       this.validator.attach({name: 'chief', rules: 'required', alias: '邀请码'});

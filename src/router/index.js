@@ -13,6 +13,8 @@ const routes = [
   {path: '/person', name: '个人中心', component: _import('person/index')},
   { path: '/updatePwd', name: '修改密码', component: _import('person/updatePwd/index'),},
   { path: '/wallet', name: '钱包', component: _import('person/wallet/index'),},
+  { path: '/recharge', name: '充值', component: _import('recharge/index'),},
+  { path: '/withdrawals', name: '提现', component: _import('withdrawals/index'),},
   { path: '/bill', name: '账单', component: _import('person/bill/index'),},
   { path: '/consignment', name: '我的寄售', component: _import('person/consignment/index'),},
   { path: '/certification', name: '实名认证', component: _import('person/certification/index'),},
