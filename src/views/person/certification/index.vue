@@ -3,14 +3,14 @@
     <my-header title="实名认证"/>
     <div class="main">
       <form @submit.prevent="applyCoupon" class="">
-        <!--<mt-field placeholder="银行卡开户行" v-model="bankAddress"></mt-field>-->
-        <!--<span v-show="errors.has('bankAddress')" class="error">{{ errors.first('bankAddress') }}</span>-->
+        <mt-field placeholder="银行卡开户行" v-model="data.bankname"></mt-field>
+        <span v-show="errors.has('bankname')" class="error">{{ errors.first('bankname') }}</span>
+        <mt-field placeholder="银行卡号" v-model="data.bankcard"></mt-field>
+        <span v-show="errors.has('bankcard')" class="error">{{ errors.first('bankcard') }}</span>
         <mt-field placeholder="姓名" v-model="data.realname"></mt-field>
         <span v-show="errors.has('realname')" class="error">{{ errors.first('realname') }}</span>
         <mt-field placeholder="身份证号" v-model="data.idcard"></mt-field>
         <span v-show="errors.has('idcard')" class="error">{{ errors.first('idcard') }}</span>
-        <mt-field placeholder="银行卡号" v-model="data.bankcard"></mt-field>
-        <span v-show="errors.has('bankcard')" class="error">{{ errors.first('bankcard') }}</span>
         <mt-field placeholder="银行预留手机号" disabled v-model="data.phone"></mt-field>
         <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
         <mt-field placeholder="图形验证码" name="captcha" v-model="data.code" v-focus="{checkCaptcha:checkCaptcha}">
@@ -53,7 +53,8 @@
           realname: '',
           idcard: '',
           phone: '',
-          code: ''
+          code: '',
+          bankname:''
         },
         captcha: '',
         identifyCode: "1234",
@@ -90,8 +91,8 @@
           idcard: this.data.idcard,
           realname: this.data.realname,
           bankcard: this.data.bankcard,
-          captcha: this.data.code
-          // bankAddress: this.bankAddress
+          captcha: this.data.code,
+          bankname: this.data.bankname
         }).then(result => {
           if (result) {
             var formData = JSON.stringify(this.data); // 这里才是你的表单数据
@@ -184,7 +185,7 @@
       this.validator.attach({name: 'bankcard', rules: 'required|bankcard', alias: '银行卡号'}); //pwd添加验证规则
       this.validator.attach({name: 'realname', rules: 'required', alias: '姓名'}); //pwds添加验证规则
       this.validator.attach({name: 'idcard', rules: 'required|idcard', alias: '身份证号'});
-      // this.validator.attach({name: 'bankAddress', rules: 'required', alias: '银行卡开户行'});
+      this.validator.attach({name: 'bankname', rules: 'required', alias: '银行卡开户行'});
       this.validator.attach({name: 'captcha', rules: 'required|captcha', alias: '图形验证码'});
 
       this.$set(this, 'errors', this.validator.errors);
