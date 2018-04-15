@@ -33,8 +33,10 @@
       }
       //获取个人信息
       console.log(JSON.stringify(userInfo));
-      this.userId = JSON.parse(userInfo).id
-      this.member = JSON.parse(userInfo).member
+      if(userInfo){
+        this.userId = JSON.parse(userInfo).id
+        this.member = JSON.parse(userInfo).member
+      }
     },
     methods:{
       //退出登录
