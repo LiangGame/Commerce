@@ -3,7 +3,7 @@
     <my-header title="修改密码"/>
     <div class="main">
       <!--<form @submit.prevent="applyCoupon" class="">-->
-      <mt-field label="手机号" placeholder="手机号" v-model="user.phone" name="phone"
+      <mt-field label="手机号" placeholder="手机号" v-model="user.phone" name="phone" disabled
                 v-focus="{checkPhone:checkPhone}"></mt-field>
       <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
       <mt-field label="图形验证码" placeholder="图形验证码" v-model="captcha" name="captcha"
@@ -20,8 +20,8 @@
         </div>
       </mt-field>
       <span v-show="errors.has('vertifyCode')" class="error">{{ errors.first('vertifyCode') }}</span>
-      <mt-field label="原密码" placeholder="原密码" type="password" v-model="user.afterPassword"></mt-field>
-      <span v-show="errors.has('afterPassword')" class="error">{{ errors.first('afterPassword') }}</span>
+      <!--<mt-field label="原密码" placeholder="原密码" type="password" v-model="user.afterPassword"></mt-field>-->
+      <!--<span v-show="errors.has('afterPassword')" class="error">{{ errors.first('afterPassword') }}</span>-->
       <mt-field label="密码" placeholder="密码" type="password" v-model="user.password"></mt-field>
       <span v-show="errors.has('password')" class="error">{{ errors.first('password') }}</span>
       <mt-field label="确认密码" placeholder="确认密码" type="password" v-model="passwords"></mt-field>
@@ -50,7 +50,7 @@
           phone: '',
           password: '',
           vertifyCode: '',
-          afterPassword: ''
+          // afterPassword: ''
         },
         passwords: '',
         captcha: '',
@@ -95,7 +95,7 @@
         this.validator.validateAll({
           password: this.user.password,
           vertifyCode: this.user.vertifyCode,
-          afterPassword: this.user.afterPassword,
+          // afterPassword: this.user.afterPassword,
           passwords: this.passwords,
           captcha: this.captcha
         }).then(result => {
@@ -155,6 +155,9 @@
       }
     },
     created() {
+      if(this.Cookie.get('user')){
+        this.user.phone = JSON.parse(this.Cookie.get('user')).phone
+      }
       this.getVertifyCode();
       this.validator = new Validator({});  // 初始化Validator对象
 
@@ -191,7 +194,7 @@
       });
 
       this.validator.attach({name: 'phone', rules: 'required|mobile|decimal|checkPhone', alias: '手机号'}); //phone添加验证规则
-      this.validator.attach({name: 'afterPassword', rules: 'required|min:6|max:16|verify', alias: '原密码'}); //pwd添加验证规则
+      // this.validator.attach({name: 'afterPassword', rules: 'required|min:6|max:16|verify', alias: '原密码'}); //pwd添加验证规则
       this.validator.attach({name: 'password', rules: 'required|min:6|max:16|verify', alias: '密码'});
       this.validator.attach({name: 'passwords', rules: 'required|min:6|max:16|verify', alias: '确认密码'}); //pwds添加验证规则
       this.validator.attach({name: 'chief', rules: 'required', alias: '邀请码'});

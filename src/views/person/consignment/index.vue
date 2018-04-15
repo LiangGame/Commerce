@@ -63,7 +63,7 @@
               if(item.status == 0){
                 item.status = '未支付'
               }else if(item.status == 1){
-                item.status = '待确认付款'
+                item.status = '财务未确认'
               }else if(item.status == 2){
                 item.status = '已付款'
               }else if(item.status == 3){

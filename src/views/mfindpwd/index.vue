@@ -3,7 +3,7 @@
     <my-header title="忘记密码"/>
     <div class="main">
       <!-- <form @submit.prevent="applyCoupon" class=""> -->
-      <mt-field label="手机号" placeholder="手机号" name="phone" v-focus="{checkPhone:checkPhone}" v-model="user.phone"></mt-field>
+      <mt-field label="手机号" placeholder="手机号" name="phone" v-focus="{checkPhone:checkPhone}" v-model="user.phone" :disabled="isSend"></mt-field>
       <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
       <mt-field label="图形验证码" placeholder="图形验证码" name="captcha" v-model="captcha" v-focus="{checkCaptcha:checkCaptcha}">
         <div class="code" @click="getVertifyCode">
@@ -40,6 +40,7 @@
     components: {myHeader, setCode},
     data() {
       return {
+        isSend:false,
         validator: null,
         errors: null,
         user: {
@@ -142,7 +143,9 @@
               method: "GET",
               params: {phone: this.user.phone, code: this.identifyCode}
             }).then(data => {
-              console.log(data)
+              if(data.errCode == 0){
+                this.isSend = true;
+              }
             })
           }
         });

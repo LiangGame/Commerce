@@ -77,7 +77,9 @@
   .mint-cell-wrapper {
     font-size: 0.8rem;
   }
-
+  .mint-toast{
+    z-index: 999999999;
+  }
   /*#app {*/
   /*font-family: 'Avenir', Helvetica, Arial, sans-serif;*/
   /*-webkit-font-smoothing: antialiased;*/
