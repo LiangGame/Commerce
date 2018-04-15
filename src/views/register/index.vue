@@ -25,7 +25,7 @@
       <span v-show="errors.has('password')" class="error">{{ errors.first('password') }}</span>
       <mt-field label="确认密码" placeholder="确认密码" type="password" v-model="passwords"></mt-field>
       <span v-show="errors.has('passwords')" class="error">{{ errors.first('passwords') }}</span>
-      <mt-field label="邀请码" placeholder="邀请码" type="text" v-model="user.chief"></mt-field>
+      <mt-field label="邀请码" placeholder="邀请码" type="text" v-model="user.chief" :disabled="isShare"></mt-field>
       <span v-show="errors.has('chief')" class="error">{{ errors.first('chief') }}</span>
       <mt-button class="confirm" size="large" @click="applyCoupon" type="danger">注册</mt-button>
       <!--</form>-->
@@ -50,6 +50,7 @@
     components: {setCode, myHeader},
     data() {
       return {
+        isShare:false,
         validator: null,
         errors: null,
         user: {
@@ -174,6 +175,11 @@
       }
     },
     created() {
+      if(this.$route.query.id){
+        console.log(this.$route.query.id);
+        this.isShare = true;
+        this.user.chief = this.$route.query.id;
+      }
       this.getVertifyCode();
       this.validator = new Validator({});  // 初始化Validator对象
 

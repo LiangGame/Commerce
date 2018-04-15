@@ -12,6 +12,8 @@
 <script>
   import myHeader from '@/components/header'
   import VueQr from 'vue-qr'
+  import {comUrl} from "@/common/common";
+
   export default {
     name: "share",
     components: {myHeader,VueQr},
@@ -19,7 +21,14 @@
       return{
         src:'', // bgSrc欲嵌入的背景图地址
         src2:'', // logoSrc欲嵌入至二维码中心的 LOGO 地址
-        shareSrc:'http://www.baidu.com'
+        shareSrc:comUrl+'?id='
+      }
+    },
+    created(){
+      let user = this.Cookie.get('user')
+      if(user){
+        this.shareSrc += JSON.parse(user).id;
+        console.log(this.shareSrc);
       }
     }
   }

@@ -32,17 +32,35 @@
         this.$router.push('/');
       }
       //获取个人信息
-      console.log(JSON.stringify(userInfo));
+      console.log(!!userInfo);
       if(userInfo){
         this.userId = JSON.parse(userInfo).id
         this.member = JSON.parse(userInfo).member
       }
+      this.getUserInfo();
     },
     methods:{
       //退出登录
       signOut(){
         this.Cookie.remove('user');
         this.$router.push('/login');
+      },
+      //获取用户信息
+      getUserInfo(){
+        this.$http({
+          url: "/user/getInfo",
+          method: "GET",
+          params: {id: this.userId}
+        }).then(data => {
+          console.log(data);
+          if (data.errCode == 0) {
+            this.Cookie.set("user", data.info, { expires: 1 });
+          } else {
+            Toast(data.info);
+          }
+        }).catch(error => {
+          console.log(error)
+        })
       }
     }
   }

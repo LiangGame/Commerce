@@ -2,6 +2,9 @@
 // api接口地址
 export const apiUrl = 'http://103.205.5.222:3000';
 // export const apiUrl = 'http://127.0.0.1:3000';
+export const fileUrl = apiUrl+'/uploads/';
+//前台地址
+export const comUrl = 'http://hmd.jtcun.cn/register';
 
 //获取文本中img标签的src
 export function getImgSrc(str) {

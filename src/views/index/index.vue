@@ -26,11 +26,14 @@
           <li class="good" v-for="item in goods">
             <router-link :to="{ name: '确定订单', params: { info: item }}">
               <img
-                :src="item.img"
+                :src="fileUrl+item.img"
                 width="100%" :alt="item.goodName">
               <div class="goodInfo">
                 <p class="goodTitle" style="-webkit-box-orient: vertical">{{item.goodName}}</p>
-                <div class="price"><span class="big_price">￥{{item.price ? (item.price+'').split('.')[0] : item.price}}.</span>{{item.price ? (item.price+'').split('.')[1] ? (item.price+'').split('.')[1] : '00':'' }}</div>
+                <div class="price"><span
+                  class="big_price">￥{{item.price ? (item.price+'').split('.')[0] : item.price}}.</span>{{item.price ?
+                  (item.price+'').split('.')[1] ? (item.price+'').split('.')[1] : '00':'' }}
+                </div>
               </div>
             </router-link>
           </li>
@@ -42,12 +45,14 @@
 
 <script>
   import myHeader from '@/components/header'
+  import {fileUrl} from "@/common/common";
 
   export default {
     name: "index",
     components: {myHeader},
     data() {
       return {
+        fileUrl: fileUrl,
         items: [{
           title: '你的名字',
           href: 'http://baidu.com',
@@ -57,7 +62,7 @@
           href: 'http://baidu.com',
           url: 'https://m.360buyimg.com//mobilecms/s636x636_jfs/t148/3/276621205/370727/4f218479/538615f8N48880623.jpg!q70.jpg.dpg.webp'
         }],
-        goods:[],
+        goods: [],
         isLogin: false
       }
     },
@@ -69,14 +74,14 @@
       }
       this.loadData();
     },
-    methods:{
+    methods: {
       //获取商品列表
-      loadData(){
+      loadData() {
         this.$http({
           url: "/goods",
           method: "GET"
         }).then(data => {
-          if(data){
+          if (data) {
             this.goods = data;
             console.log((this.goods[0].price + '').split('.'));
           }
