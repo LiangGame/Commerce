@@ -10,7 +10,7 @@
     name: 'App',
     data() {
       return {
-        user: JSON.parse(this.Cookie.get('user')),
+        user: this.Cookie.get('user'),
         isCertification: true
       }
     },
@@ -22,11 +22,13 @@
     },
     created() {
       if (this.user) {
-        if (this.user.status) {
+        if (JSON.parse(this.user).status) {
           this.isCertification = false;
         } else {
           this.isCertification = true;
         }
+      }else {
+        this.isCertification = false;
       }
       // if (this.$route.path == '/certification') {
       //   this.isCertification = false;

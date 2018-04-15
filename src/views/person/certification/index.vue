@@ -11,7 +11,7 @@
         <span v-show="errors.has('idcard')" class="error">{{ errors.first('idcard') }}</span>
         <mt-field placeholder="银行卡号" v-model="data.bankcard"></mt-field>
         <span v-show="errors.has('bankcard')" class="error">{{ errors.first('bankcard') }}</span>
-        <mt-field placeholder="银行预留手机号" v-model="data.phone"></mt-field>
+        <mt-field placeholder="银行预留手机号" disabled v-model="data.phone"></mt-field>
         <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
         <mt-field placeholder="图形验证码" name="captcha" v-model="data.code" v-focus="{checkCaptcha:checkCaptcha}">
           <div class="code" @click="getVertifyCode">
@@ -150,6 +150,9 @@
       }*/
     },
     created() {
+      if(this.Cookie.get('user')){
+        this.data.phone = JSON.parse(this.Cookie.get('user')).phone;
+      }
       this.$nextTick(() => {
         console.log(154,this.$refs)
         // 打印结果：<li>2</li> 本以为会获得一个数组

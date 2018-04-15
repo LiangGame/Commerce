@@ -50,7 +50,7 @@
 </template>
 
 <script>
-  import { MessageBox } from 'mint-ui';
+  import { MessageBox,Toast } from 'mint-ui';
   import myHeader from '@/components/header'
 
   export default {
@@ -58,13 +58,16 @@
     components: {myHeader},
     data() {
       return {
-        user: JSON.parse(this.Cookie.get('user')),
+        user: this.Cookie.get('user'),
         number: 1,
         good: null,
         priceTotal: 0
       }
     },
     created() {
+      if(this.user){
+        this.user = JSON.parse(this.user)
+      }
       if (!this.$route.params.info) {
         this.$router.push('/');
       } else {
@@ -85,18 +88,22 @@
         this.priceTotal = this.number * this.good.price
       },
       toPay() {
-        if(this.user.status){
-          this.$router.push({name: '立即支付', params: {price: this.priceTotal, num: this.number, goodId: this.good.id}})
+        if(this.user){
+          if(this.user.status){
+            this.$router.push({name: '立即支付', params: {price: this.priceTotal, num: this.number, goodId: this.good.id}})
+          }else {
+            MessageBox({
+              title: '提示',
+              message: '未实名,是否前往认证?',
+              showCancelButton: true
+            }).then(action => {
+              if (action == 'confirm'){
+                this.$router.push({ path: '/certification'});
+              }
+            });
+          }
         }else {
-          MessageBox({
-            title: '提示',
-            message: '未实名,是否前往认证?',
-            showCancelButton: true
-          }).then(action => {
-            if (action == 'confirm'){
-              this.$router.push({ path: '/certification'});
-            }
-          });
+          Toast('未登录!')
         }
       }
     }
