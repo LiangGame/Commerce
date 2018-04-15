@@ -108,10 +108,12 @@
                 return json;
               }]
             }).then(data => {
-              if (data.errCode == 0) {
-                this.$router.push('/login');
-              } else {
-                Toast(data.info);
+              let _this = this;
+              Toast(data.info);
+              if(data.errCode == 0){
+                setTimeout(function () {
+                  _this.$router.push({path: '/person'});
+                },3000)
               }
             })
           }

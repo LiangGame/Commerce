@@ -98,8 +98,12 @@
                 return json;
               }]
             }).then(data => {
+              let _this = this;
               if(data.errCode == 0){
-                this.$router.push('/login');
+                Toast(data.info);
+                setTimeout(function () {
+                  _this.$router.push('/login');
+                },3000)
               }else if(data.errCode != 0){
                 Toast(data.info);
               }

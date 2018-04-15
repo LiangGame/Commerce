@@ -24,13 +24,15 @@
       <mt-cell title="数量" :value="goodInfo.count"></mt-cell>
       <mt-cell title="单价" :value="goodInfo.price"></mt-cell>
       <mt-cell title="总价" :value="goodInfo.totalPrice"></mt-cell>
-
+      <div class="pay_btn" v-if="goodInfo.status == '未支付'">
+        <mt-button class="confirm" size="large" @click="toPay" type="danger">立即支付</mt-button>
+      </div>
     </mt-popup>
   </div>
 </template>
 
 <script>
-  import {Toast} from 'mint-ui';
+  import {Toast,MessageBox} from 'mint-ui';
   import myHeader from '@/components/header'
   import {timestampToTime} from "@/common/common";
 
@@ -86,6 +88,26 @@
         }).catch(error => {
           console.log(error)
         })
+      },
+      //前往支付
+      toPay() {
+        if(this.user){
+          if(this.user.status){
+            this.$router.push({name: '立即支付', params: {price: this.priceTotal, num: this.number, goodId: this.good.id}})
+          }else {
+            MessageBox({
+              title: '提示',
+              message: '未实名,是否前往认证?',
+              showCancelButton: true
+            }).then(action => {
+              if (action == 'confirm'){
+                this.$router.push({ path: '/certification'});
+              }
+            });
+          }
+        }else {
+          Toast('未登录!')
+        }
       },
       //订单详情
       orderInfo(item) {
@@ -144,6 +166,16 @@
       padding: 40px 10px;
       .mint-header {
         background: #de181b;
+      }
+      .pay_btn {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        .mint-button {
+          border-radius: 0;
+          background: #e93b3b;
+        }
       }
     }
   }

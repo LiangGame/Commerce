@@ -87,6 +87,7 @@
         this.number++;
         this.priceTotal = this.number * this.good.price
       },
+      //前往支付
       toPay() {
         if(this.user){
           if(this.user.status){
