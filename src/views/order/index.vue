@@ -8,7 +8,7 @@
       <!--</div>-->
       <div class="shopInfo_container">
         <div class="shopImg_container">
-          <img :src="good.img" width="75" height="75" :alt="good.goodName">
+          <img :src="fileUrl+good.img" width="75" height="75" :alt="good.goodName">
         </div>
         <div class="shop_content">
           <div class="shopTitle">
@@ -52,12 +52,14 @@
 <script>
   import { MessageBox,Toast } from 'mint-ui';
   import myHeader from '@/components/header'
+  import {fileUrl} from "@/common/common";
 
   export default {
     name: "order",
     components: {myHeader},
     data() {
       return {
+        fileUrl:fileUrl,
         user: this.Cookie.get('user'),
         number: 1,
         good: null,
@@ -91,7 +93,7 @@
       toPay() {
         if(this.user){
           if(this.user.status){
-            this.$router.push({name: '立即支付', params: {price: this.priceTotal, num: this.number, goodId: this.good.id}})
+            this.$router.push({name: '立即支付', params: {price: this.priceTotal, num: this.number, goodId: this.good.goodID}})
           }else {
             MessageBox({
               title: '提示',

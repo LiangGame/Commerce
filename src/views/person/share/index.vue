@@ -3,8 +3,8 @@
       <my-header title="邀请码"/>
       <div class="main">
         <vue-qr :bgSrc='src' :logoSrc="src2" :text="shareSrc" height="200" width="200"></vue-qr>
-        <p>您的邀请码</p>
-        <div class="id"><span>您的ID : 123456</span></div>
+        <!--<p>您的邀请码</p>-->
+        <div class="id"><span>您的邀请码 : {{userId}}</span></div>
       </div>
     </div>
 </template>
@@ -19,6 +19,7 @@
     components: {myHeader,VueQr},
     data(){
       return{
+        userId:'',
         src:'', // bgSrc欲嵌入的背景图地址
         src2:'', // logoSrc欲嵌入至二维码中心的 LOGO 地址
         shareSrc:comUrl+'?id='
@@ -28,6 +29,7 @@
       let user = this.Cookie.get('user')
       if(user){
         this.shareSrc += JSON.parse(user).id;
+        this.userId = JSON.parse(user).id;
         console.log(this.shareSrc);
       }
     }

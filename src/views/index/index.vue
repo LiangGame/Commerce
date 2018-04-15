@@ -55,12 +55,8 @@
         fileUrl: fileUrl,
         items: [{
           title: '你的名字',
-          href: 'http://baidu.com',
-          url: 'https://m.360buyimg.com//mobilecms/s636x636_jfs/t148/3/276621205/370727/4f218479/538615f8N48880623.jpg!q70.jpg.dpg.webp'
-        }, {
-          title: '我的名字',
-          href: 'http://baidu.com',
-          url: 'https://m.360buyimg.com//mobilecms/s636x636_jfs/t148/3/276621205/370727/4f218479/538615f8N48880623.jpg!q70.jpg.dpg.webp'
+          href: '',
+          url: require('@/assets/pic/20180122022031488.jpg')
         }],
         goods: [],
         isLogin: false

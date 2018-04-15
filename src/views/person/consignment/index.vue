@@ -6,7 +6,7 @@
         <mt-cell :key="index" :title="item.goodName" :label="item.status" icon="more">
           <div><span>数量：</span><span style="color: #333">{{item.count}}</span></div>
           <div><span>总价：</span><span style="color: #e93b3b">{{'￥'+item.totalPrice}}</span></div>
-          <img slot="icon" :src="item.img" width="55" height="55">
+          <img slot="icon" :src="fileUrl+item.img" width="55" height="55">
         </mt-cell>
       </div>
     </div>
@@ -34,13 +34,14 @@
 <script>
   import {Toast,MessageBox} from 'mint-ui';
   import myHeader from '@/components/header'
-  import {timestampToTime} from "@/common/common";
+  import {timestampToTime,fileUrl} from "@/common/common";
 
   export default {
     name: "consignment",
     components: {myHeader},
     data() {
       return {
+        fileUrl:fileUrl,
         user: JSON.parse(this.Cookie.get('user')),
         orderList: [],
         info: false,
@@ -139,8 +140,17 @@
             height: 55px;
             .mint-cell-text{
               margin-top: -25px;
-              display: inline-block;
+              /*display: inline-block;*/
               position: relative;
+              max-width: 70%;
+              word-break: break-all;
+              display: -webkit-inline-box;
+              /* autoprefixer: off */
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;
+              /* autoprefixer: on */
+              text-overflow: ellipsis;
+              overflow: hidden;
             }
             .mint-cell-label{
               margin-left: 60px;
