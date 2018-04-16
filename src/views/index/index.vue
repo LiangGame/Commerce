@@ -26,7 +26,7 @@
           <li class="good" v-for="item in goods">
             <router-link :to="{ name: '确定订单', params: { info: item }}">
               <img
-                :src="fileUrl+item.img"
+                :src="item.img ? fileUrl+item.img : ''"
                 width="100%" :alt="item.goodName">
               <div class="goodInfo">
                 <p class="goodTitle" style="-webkit-box-orient: vertical">{{item.goodName}}</p>

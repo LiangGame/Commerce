@@ -22,7 +22,7 @@
           <mt-button icon="back" @click="back"></mt-button>
         </router-link>
       </mt-header>
-      <img :src="fileUrl+payMentList.weixin" alt="">
+      <img :src="payMentList.weixin ? fileUrl+payMentList.weixin : ''" alt="">
       <p>微信</p>
       <mt-button @click="pay" size="large" type="primary" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
     </mt-popup>
@@ -33,7 +33,7 @@
           <mt-button icon="back" @click="back"></mt-button>
         </router-link>
       </mt-header>
-      <img :src="fileUrl+payMentList.zhifubao" alt="">
+      <img :src="payMentList.zhifubao ? fileUrl+payMentList.zhifubao : ''" alt="">
       <p>支付宝</p>
       <mt-button @click="pay" size="large" type="primary" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
     </mt-popup>

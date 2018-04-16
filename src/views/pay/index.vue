@@ -16,21 +16,47 @@
     </div>
     <!--微信弹窗-->
     <mt-popup v-model="weChat" position="right" class="mint-popup-3" :modal="false" align="center">
-      <img :src="fileUrl+payMentList.weixin" alt="">
-      <p>微信</p>
+      <img :src="require('@/assets/pic/weChat-logo.jpg')" alt="" width="50%">
+      <img :src="payMentList.weixin ? fileUrl+payMentList.weixin : ''" alt="" width="60%">
+      <h2 style="margin: 10px 0;font-weight: 500">户名:{{payMentList.weixinname}}</h2>
+      <p class="id">您的ID:{{user.id}}</p>
+      <p class="id_warning">转账时请备注您的ID</p>
+      <p class="warning">
+        温馨提示：<br>
+        请截图保存,在微信中打开扫一扫<br>
+        转账时请核对户名,以免造成损失
+      </p>
       <mt-button @click.once="payByOrderID" size="large" type="primary" class="dk_btn">已打款</mt-button>
     </mt-popup>
     <!--支付宝弹窗-->
     <mt-popup v-model="alipay" position="right" class="mint-popup-3" :modal="false">
-      <img :src="fileUrl+payMentList.zhifubao" alt="">
-      <p>支付宝</p>
+      <img :src="require('@/assets/pic/apliay-logo.jpg')" alt="" width="45%" style="margin-bottom: 25px">
+      <img :src="payMentList.zhifubao ? fileUrl+payMentList.zhifubao : ''" alt="">
+      <h2 style="margin: 10px 0;font-weight: 500">户名:{{payMentList.zhifubaoname}}</h2>
+      <p class="id">您的ID:{{user.id}}</p>
+      <p class="id_warning">转账时请备注您的ID</p>
+      <p class="warning">
+        温馨提示：<br>
+        请截图保存,在支付宝中打开扫一扫<br>
+        转账时请核对户名,以免造成损失
+      </p>
       <mt-button @click.once="payByOrderID" size="large" type="primary" class="dk_btn">已打款</mt-button>
     </mt-popup>
     <!--银行卡弹窗-->
     <mt-popup v-model="bankCard" position="right" class="mint-popup" :modal="false">
-      <p><span class="bank_label">开户行：</span>{{payMentList.cardBank}}</p>
-      <p><span class="bank_label">持卡人姓名：</span>{{payMentList.cardName}}</p>
-      <p><span class="bank_label">银行卡号：</span>{{payMentList.cardNub}}</p>
+      <img :src="require('@/assets/pic/pay-logo.jpg')" alt="" width="45%" style="margin-bottom: 25px">
+      <div style="text-align: left">
+        <p style="line-height: 2em;"><span class="bank_label">户名：</span>{{payMentList.cardName}}</p>
+        <p style="line-height: 2em;"><span class="bank_label">开户行：</span>{{payMentList.cardBank}}</p>
+        <p style="line-height: 2em;"><span class="bank_label">银行卡号：</span>{{payMentList.cardNub}}</p>
+      </div>
+      <p class="id" style="margin-top: 30px">您的ID:{{user.id}}</p>
+      <!--<p class="id_warning">转账时请备注您的ID</p>-->
+      <p class="warning">
+        温馨提示：<br>
+        转账时请核对入账信息,以免造成损失<br>
+        转账时请备注您的ID
+      </p>
       <mt-button @click.once="payByOrderID" size="large" type="primary" class="dk_btn">已打款</mt-button>
     </mt-popup>
   </div>
@@ -213,6 +239,7 @@
 </script>
 
 <style lang="less">
+  @warning_color:#e93b3b;
   .pay_container {
     .main {
       background: #e2e7ea;
@@ -237,11 +264,34 @@
       height: 100%;
       background-color: #fff;
       box-sizing: border-box;
-      padding: 40px 10px;
+      padding: 10px 10px;
       text-align: center;
     }
     .mint-popup{
-      text-align: left;
+      .id{
+        width: 120px;
+        margin: 0 auto;
+        padding: 5px 10px;
+        font-weight: 600;
+        color: @warning_color;
+        border: solid 1px #e6e6e6;
+      }
+      .id_warning{
+        font-weight: bolder;
+        color: @warning_color;
+        margin: 5px auto;
+      }
+      .warning{
+        text-align: left;
+        color: @warning_color;
+        font-size: 0.9rem;
+        line-height: 1.5em;
+        margin-top: 50px;
+        margin-left: 25px;
+      }
+    }
+    .mint-popup{
+      /*text-align: left;*/
     }
     .bank_label{
       display: inline-block;

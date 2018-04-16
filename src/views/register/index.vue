@@ -166,7 +166,7 @@
             this.$http({
               url: "/user/sendVertifyMSG",
               method: "GET",
-              params: {phone: this.user.phone, code: this.identifyCode,type:'rigist'}
+              params: {phone: this.user.phone, code: this.identifyCode,type:'regist'}
             }).then(data => {
               console.log(data)
             })

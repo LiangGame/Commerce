@@ -14,7 +14,15 @@
     props: ['title'],
     methods:{
       back(){
-        history.back(-1);
+        if(this.title == '充值'|| this.title == '提现'){
+          this.$router.push('/wallet');
+        }else if(this.title == '钱包') {
+          this.$router.push('/person');
+        }else if(this.title == '个人中心') {
+          this.$router.push('/');
+        }else {
+          history.back(-1);
+        }
       }
     }
   }

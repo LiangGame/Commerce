@@ -8,7 +8,7 @@
       <!--</div>-->
       <div class="shopInfo_container">
         <div class="shopImg_container">
-          <img :src="fileUrl+good.img" width="75" height="75" :alt="good.goodName">
+          <img :src="good.img ? fileUrl+good.img : ''" width="75" height="75" :alt="good.goodName">
         </div>
         <div class="shop_content">
           <div class="shopTitle">
@@ -41,7 +41,8 @@
           </div>
         </div>
         <div style="padding: 0 10px">
-          <mt-button size="large" type="primary" @click="toPay">前往支付</mt-button>
+          <mt-button size="large" type="danger" disabled>自提</mt-button>
+          <mt-button size="large" type="primary" @click="toPay">代售</mt-button>
         </div>
       </div>
     </div>
@@ -50,7 +51,7 @@
 </template>
 
 <script>
-  import { MessageBox,Toast } from 'mint-ui';
+  import {MessageBox, Toast} from 'mint-ui';
   import myHeader from '@/components/header'
   import {fileUrl} from "@/common/common";
 
@@ -59,17 +60,18 @@
     components: {myHeader},
     data() {
       return {
-        fileUrl:fileUrl,
+        fileUrl: fileUrl,
         user: this.Cookie.get('user'),
         number: 1,
-        good: null,
+        good: {},
         priceTotal: 0
       }
     },
     created() {
-      if(this.user){
+      if (this.user) {
         this.user = JSON.parse(this.user)
       }
+      console.log(this.$route.params.info);
       if (!this.$route.params.info) {
         this.$router.push('/');
       } else {
@@ -91,21 +93,24 @@
       },
       //前往支付
       toPay() {
-        if(this.user){
-          if(this.user.status){
-            this.$router.push({name: '立即支付', params: {price: this.priceTotal, num: this.number, goodId: this.good.goodID}})
-          }else {
+        if (this.user) {
+          if (this.user.status) {
+            this.$router.push({
+              name: '立即支付',
+              params: {price: this.priceTotal, num: this.number, goodId: this.good.goodID}
+            })
+          } else {
             MessageBox({
               title: '提示',
               message: '未实名,是否前往认证?',
               showCancelButton: true
             }).then(action => {
-              if (action == 'confirm'){
-                this.$router.push({ path: '/certification'});
+              if (action == 'confirm') {
+                this.$router.push({path: '/certification'});
               }
             });
           }
-        }else {
+        } else {
           Toast('未登录!')
         }
       }
@@ -158,7 +163,7 @@
         .shopNumber {
           overflow: hidden;
           padding-right: 20px;
-          margin-top: 15px;
+          margin-top: 35px;
           .price {
             float: left;
             line-height: 27px;
@@ -214,7 +219,7 @@
         .price {
           float: right;
           font-size: 1rem;
-          color: #26a2ff;
+          color: #e93b3b;
         }
         .count_price {
           float: right;
@@ -225,9 +230,18 @@
           }
           .big_price {
             font-size: 1.3rem;
-            color: #26a2ff;
+            color: #e93b3b;
             font-weight: 600;
           }
+        }
+      }
+      .mint-button--large {
+        display: inline-block;
+        width: 49%;
+        float: left;
+        border-radius: 4px;
+        &:first-child{
+          margin-right: 5px;
         }
       }
     }
