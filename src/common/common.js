@@ -1,6 +1,6 @@
 // import { zh_CN } from '@/common/zh_CN.js'
 // api接口地址
-export const apiUrl = 'api.jtcun.cn/admin/login';
+export const apiUrl = 'http://hmd.jtcun.cn:3000';
 // export const apiUrl = 'http://103.205.5.222:3000';
 // export const apiUrl = 'http://127.0.0.1:3000';
 export const fileUrl = apiUrl+'/uploads/';

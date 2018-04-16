@@ -78,14 +78,24 @@
         this.validator.validateAll({
           phone: this.user.phone
         }).then(result => {
-          console.log(result);
+          if(!result){
+            if(!this.Cookie.get('sendCode')){
+              this.isphoneCode = false;
+            }
+          }
         });
       },
       //验证图片验证码
       checkCaptcha(){
         this.validator.validateAll({
           captcha: this.captcha
-        }).then(result => result)
+        }).then(result => {
+          if(result){
+            if(!this.Cookie.get('sendCode')){
+              this.isphoneCode = false;
+            }
+          }
+        })
       },
       applyCoupon() {  // 提交执行函数
         this.validator.validateAll({
@@ -124,29 +134,36 @@
           captcha: this.captcha
         }).then(result => {
           if (result) {
-            let _this = this;
-            this.get = '重新发送';
-            this.one = true
-            this.isphoneCode = true;
-            var Interval = setInterval(function () {
-              _this.s -= 1;
-              if (_this.s == 0) {
-                _this.one = false;
-                _this.s = 60;
-                _this.isphoneCode = false;
-                clearInterval(Interval);
-                return;
-              }
-            }, 1000);
-            this.$http({
-              url: "/user/sendVertifyMSG",
-              method: "GET",
-              params: {phone: this.user.phone, code: this.identifyCode,type:'reset'}
-            }).then(data => {
-              if(data.errCode == 0){
-                this.isSend = true;
-              }
-            })
+            if(this.Cookie.get('sendCode')){
+              this.isphoneCode = true;
+            }else {
+              var inFifteenMinutes = new Date(new Date().getTime() + 1 * 60 * 1000);
+              this.Cookie.set('sendCode', 1, {expires: inFifteenMinutes});
+              let _this = this;
+              this.get = '重新发送';
+              this.one = true
+              this.isphoneCode = true;
+              var Interval = setInterval(function () {
+                _this.s -= 1;
+                if (_this.s == 0) {
+                  _this.one = false;
+                  _this.s = 60;
+                  _this.isphoneCode = false;
+                  clearInterval(Interval);
+                  return;
+                }
+              }, 1000);
+              this.$http({
+                url: "/user/sendVertifyMSG",
+                method: "GET",
+                params: {phone: this.user.phone, code: this.identifyCode, type: 'reset'}
+              }).then(data => {
+                Toast(data.info);
+                if (data.errCode == 0) {
+                  this.isSend = true;
+                }
+              })
+            }
           }
         });
       }
