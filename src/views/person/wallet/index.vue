@@ -26,19 +26,6 @@
       }
     },
     methods: {
-      getBalance() {
-        this.$http({
-          url: "/balance/getList",
-          method: "GET",
-          params: {userID: this.user.id}
-        }).then(data => {
-          console.log(data);
-          if (data.errCode == 0) {
-
-          }
-        }).catch(error => {
-        })
-      },
       //充值
       toRecharge() {
         if (this.user.status) {
@@ -73,7 +60,7 @@
       }
     },
     created() {
-      this.getBalance();
+
     }
 
   }

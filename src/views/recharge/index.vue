@@ -5,6 +5,7 @@
       <div class="money_container">
         <mt-field label="金额" placeholder="请输入充值金额" v-model="money"></mt-field>
       </div>
+      <p class="warning">注意 : 充值最小金额为100,充值金额必须是100的整数倍</p>
       <mt-radio
         title="选择支付方式"
         v-model="payMent"
@@ -84,12 +85,16 @@
     methods: {
       //前往支付
       toPay() {
-        if (this.payMent == 1) {
-          this.alipay = true;
-        } else if (this.payMent == 2) {
-          this.weChat = true;
-        } else if (this.payMent == 3) {
-          this.bankCard = true;
+        if(this.money && /^[0-9]+$/.test(this.money) && this.money%100 == 0){
+          if (this.payMent == 1) {
+            this.alipay = true;
+          } else if (this.payMent == 2) {
+            this.weChat = true;
+          } else if (this.payMent == 3) {
+            this.bankCard = true;
+          }
+        }else {
+          Toast('请输入正确的金额!');
         }
       },
       //返回
@@ -117,9 +122,10 @@
             Toast(data.info)
             if(data.errCode == 0){
               this.n++;
-              this.alipay = false;
-              this.weChat = false;
-              this.bankCard = false;
+              let _this = this;
+              setTimeout(function () {
+                _this.$router.push({path: '/wallet'});
+              },3000)
             }
           })
         }else {
@@ -143,6 +149,11 @@
       .mint-radio-input:checked + .mint-radio-core {
         background-color: #de181b;
         border-color: #de181b;
+      }
+      .warning{
+        font-size: 0.6rem;
+        padding: 20px 10px;
+        color:  #de181b;
       }
     }
     .mint-popup-3 {

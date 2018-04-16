@@ -7,9 +7,9 @@
       </div>
       <p class="warning">注意 : 提现最小金额为100,提现金额必须是100的整数倍</p>
       <!--<mt-radio-->
-        <!--title="选择支付方式"-->
-        <!--v-model="payMent"-->
-        <!--:options="options">-->
+      <!--title="选择支付方式"-->
+      <!--v-model="payMent"-->
+      <!--:options="options">-->
       <!--</mt-radio>-->
     </div>
     <div class="pay_btn">
@@ -28,7 +28,7 @@
     components: {myHeader},
     data() {
       return {
-        n:0,
+        n: 0,
         user: JSON.parse(this.Cookie.get('user')),
         money: '',
         // payMent: '1',
@@ -55,28 +55,35 @@
     methods: {
       //提现
       pay() {
-        if(this.n < 1){
-          let formData = {userID: this.user.id, money: this.money};
-          this.$http({
-            url: "/order/withdrawals",
-            method: "POST",
-            data: formData,
-            headers: {
-              'Content-Type': 'application/json;charset=UTF-8'
-            },
-            transformRequest: [function (data) {
-              let json = JSON.stringify(Qs.parse(data));
-              return json;
-            }]
-          }).then(data => {
-            Toast(data.info);
-            if(data.error_code == 0){
-              this.n++;
-              this.$router.push('/wallet');
-            }
-          })
-        }else {
-          Toast('请勿重复提交')
+        if (this.money && /^[0-9]+$/.test(this.money) && this.money % 100 == 0) {
+          if (this.n < 1) {
+            let formData = {userID: this.user.id, money: this.money};
+            this.$http({
+              url: "/order/withdrawals",
+              method: "POST",
+              data: formData,
+              headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+              },
+              transformRequest: [function (data) {
+                let json = JSON.stringify(Qs.parse(data));
+                return json;
+              }]
+            }).then(data => {
+              Toast(data.info);
+              if (data.errCode == 0) {
+                this.n++;
+                let _this = this;
+                setTimeout(function () {
+                  _this.$router.push('/wallet');
+                }, 3000)
+              }
+            })
+          } else {
+            Toast('请勿重复提交')
+          }
+        } else {
+          Toast('请输入正确的金额!');
         }
       }
     }
@@ -92,10 +99,10 @@
           border-bottom: solid 1px #e6e6e6;
         }
       }
-      .warning{
+      .warning {
         font-size: 0.6rem;
         padding: 20px 10px;
-        color:  #de181b;
+        color: #de181b;
       }
       .mint-radio-input:checked + .mint-radio-core {
         background-color: #de181b;

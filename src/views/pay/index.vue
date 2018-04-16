@@ -141,6 +141,8 @@
                 _this.alipay = true;
               }else if(formData.payMent == 3){
                 _this.bankCard = true;
+              }else if(formData.payMent == 4){
+                _this.$router.push('/person');
               }
             }, 3000)
           }

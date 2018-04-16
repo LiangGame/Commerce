@@ -158,6 +158,7 @@
         .shopNumber {
           overflow: hidden;
           padding-right: 20px;
+          margin-top: 15px;
           .price {
             float: left;
             line-height: 27px;
@@ -187,7 +188,7 @@
           }
           #number {
             float: left;
-            width: 80px;
+            width: 50px;
             height: 25px;
             border: none;
             border-top: solid 1px #CBCBCB;
