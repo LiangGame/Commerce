@@ -21,13 +21,13 @@
         <span v-show="errors.has('captcha')" class="error">{{ errors.first('captcha') }}</span>
         <!-- <mt-field placeholder="手机验证码" type="text" v-model="data.code">
            <div class="sendCode">
-             <mt-button size="small" type="danger" :disabled="isphoneCode" @click="sendCode">{{get}}<span v-if="one">({{s}}秒后)</span>
+             <mt-button size="small" type="primary" :disabled="isphoneCode" @click="sendCode">{{get}}<span v-if="one">({{s}}秒后)</span>
              </mt-button>
            </div>
          </mt-field>
          <span v-show="errors.has('vertifyCode')" class="error">{{ errors.first('vertifyCode') }}</span>-->
         <div style="padding: 20px 10px">
-          <mt-button size="large" type="danger">实名认证</mt-button>
+          <mt-button size="large" type="primary">实名认证</mt-button>
         </div>
       </form>
     </div>

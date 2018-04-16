@@ -133,7 +133,7 @@
           width: 100%;
           height: 40px;
           line-height: 40px;
-          background: #de181b;
+          background: #26a2ff;
           text-align: center;
           .mint-button {
             background: transparent;

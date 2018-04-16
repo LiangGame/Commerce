@@ -12,22 +12,26 @@
       </mt-radio>
     </div>
     <div class="pay_btn">
-      <mt-button class="confirm" size="large" @click="calcMaxOrder" type="danger">立即支付</mt-button>
+      <mt-button class="confirm" size="large" @click="calcMaxOrder" type="primary">立即支付</mt-button>
     </div>
     <!--微信弹窗-->
     <mt-popup v-model="weChat" position="right" class="mint-popup-3" :modal="false" align="center">
-      <img src="../../assets/pic/money.png" alt="">
-      <mt-button @click.once="payByOrderID" size="large" type="danger" class="dk_btn">已打款</mt-button>
+      <img :src="fileUrl+payMentList.weixin" alt="">
+      <p>微信</p>
+      <mt-button @click.once="payByOrderID" size="large" type="primary" class="dk_btn">已打款</mt-button>
     </mt-popup>
     <!--支付宝弹窗-->
     <mt-popup v-model="alipay" position="right" class="mint-popup-3" :modal="false">
-      <img src="../../assets/pic/money.png" alt="">
-      <mt-button @click.once="payByOrderID" size="large" type="danger" class="dk_btn">已打款</mt-button>
+      <img :src="fileUrl+payMentList.zhifubao" alt="">
+      <p>支付宝</p>
+      <mt-button @click.once="payByOrderID" size="large" type="primary" class="dk_btn">已打款</mt-button>
     </mt-popup>
     <!--银行卡弹窗-->
-    <mt-popup v-model="bankCard" position="right" class="mint-popup-3" :modal="false">
-      银行卡
-      <mt-button @click.once="payByOrderID" size="large" type="danger" class="dk_btn">已打款</mt-button>
+    <mt-popup v-model="bankCard" position="right" class="mint-popup" :modal="false">
+      <p><span class="bank_label">开户行：</span>{{payMentList.cardBank}}</p>
+      <p><span class="bank_label">持卡人姓名：</span>{{payMentList.cardName}}</p>
+      <p><span class="bank_label">银行卡号：</span>{{payMentList.cardNub}}</p>
+      <mt-button @click.once="payByOrderID" size="large" type="primary" class="dk_btn">已打款</mt-button>
     </mt-popup>
   </div>
 </template>
@@ -35,7 +39,7 @@
 <script>
   import myHeader from '@/components/header'
   import Qs from 'qs';
-  import {getWinHeight} from "@/common/common";
+  import {getWinHeight,getPayMent,fileUrl} from "@/common/common";
   import {Toast,Indicator } from 'mint-ui';
 
   export default {
@@ -43,6 +47,7 @@
     components: {myHeader},
     data() {
       return {
+        fileUrl:fileUrl,
         n : 0,
         height: 'height:' + this.getWinHeight() + 'px',
         user: JSON.parse(this.Cookie.get('user')),
@@ -50,6 +55,7 @@
         count: this.$route.params.num,
         goodID: this.$route.params.goodId,
         payMent: '4',
+        payMentList : {},
         options: [
           {
             label: '支付宝支付',
@@ -77,6 +83,7 @@
     },
     methods: {
       getWinHeight: getWinHeight,
+      getPayMent:getPayMent,
       //获取商品最大购买数量
       calcMaxOrder(){
         Indicator.open('请稍后...');
@@ -164,6 +171,7 @@
       },
       //用户确认付款
       payByOrderID() {
+        Indicator.open('请稍后...');
         let formData = {orderID:this.orderID};
         this.$http({
           url: "/order/payByOrderID",
@@ -177,6 +185,7 @@
             return json;
           }]
         }).then(data => {
+          Indicator.close();
           let _this = this;
           if(data.errCode == 0){
             console.log(138,'here');
@@ -185,10 +194,16 @@
               _this.$router.push('/');
             },3000)
           }
+        }).catch(()=>{
+          Indicator.close();
         })
       }
     },
     created() {
+      this.getPayMent(data => {
+        this.payMentList = data.info;
+      });
+      console.log(206,this.$route.params);
       if(!this.$route.params.price){
         this.$router.push('/');
       }
@@ -208,21 +223,29 @@
         border-bottom: solid 1px #e6e6e6;
         margin-bottom: 15px;
         .price {
-          color: #e93b3b;
+          color: #26a2ff;
           font-size: 1rem;
         }
       }
       .mint-radio-input:checked + .mint-radio-core {
-        background-color: #de181b;
-        border-color: #de181b;
+        background-color: #26a2ff;
+        border-color: #26a2ff;
       }
     }
-    .mint-popup-3 {
+    .mint-popup-3,.mint-popup{
       width: 100%;
       height: 100%;
       background-color: #fff;
       box-sizing: border-box;
       padding: 40px 10px;
+      text-align: center;
+    }
+    .mint-popup{
+      text-align: left;
+    }
+    .bank_label{
+      display: inline-block;
+      width: 100px;
     }
     .pay_btn {
       position: fixed;
@@ -231,7 +254,7 @@
       right: 0;
       .mint-button {
         border-radius: 0;
-        background: #e93b3b;
+        background: #26a2ff;
       }
     }
     .dk_btn{
@@ -241,7 +264,7 @@
       left: 0;
       right: 0;
       .mint-button {
-        background: #e93b3b;
+        background: #26a2ff;
       }
     }
     .mint-toast{

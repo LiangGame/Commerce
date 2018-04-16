@@ -13,7 +13,7 @@
       <span v-show="errors.has('captcha')" class="error">{{ errors.first('captcha') }}</span>
       <mt-field label="手机验证码" placeholder="手机验证码" type="text" v-model="user.vertifyCode">
         <div class="sendCode">
-          <mt-button size="small" type="danger" :disabled="isphoneCode" @click="sendCode">{{get}}<span v-if="one">({{s}}秒后)</span>
+          <mt-button size="small" type="primary" :disabled="isphoneCode" @click="sendCode">{{get}}<span v-if="one">({{s}}秒后)</span>
           </mt-button>
         </div>
       </mt-field>
@@ -22,7 +22,7 @@
       <span v-show="errors.has('password')" class="error">{{ errors.first('password') }}</span>
       <mt-field label="确认密码" placeholder="确认密码" type="password" v-model="passwords"></mt-field>
       <span v-show="errors.has('passwords')" class="error">{{ errors.first('passwords') }}</span>
-      <mt-button class="confirm" size="large" type="danger" @click="applyCoupon">找回密码</mt-button>
+      <mt-button class="confirm" size="large" type="primary" @click="applyCoupon">找回密码</mt-button>
       <!-- </form> -->
     </div>
   </div>
@@ -141,7 +141,7 @@
             this.$http({
               url: "/user/sendVertifyMSG",
               method: "GET",
-              params: {phone: this.user.phone, code: this.identifyCode}
+              params: {phone: this.user.phone, code: this.identifyCode,type:'reset'}
             }).then(data => {
               if(data.errCode == 0){
                 this.isSend = true;

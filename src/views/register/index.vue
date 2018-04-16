@@ -16,7 +16,7 @@
       <span v-show="errors.has('captcha')" class="error">{{ errors.first('captcha') }}</span>
       <mt-field label="手机验证码" placeholder="手机验证码" type="text" v-model="user.vertifyCode">
         <div class="sendCode">
-          <mt-button size="small" type="danger" :disabled="isphoneCode" @click="sendCode">{{get}}<span v-if="one">({{s}}秒后)</span>
+          <mt-button size="small" type="primary" :disabled="isphoneCode" @click="sendCode">{{get}}<span v-if="one">({{s}}秒后)</span>
           </mt-button>
         </div>
       </mt-field>
@@ -27,7 +27,7 @@
       <span v-show="errors.has('passwords')" class="error">{{ errors.first('passwords') }}</span>
       <mt-field label="邀请码" placeholder="邀请码" type="text" v-model="user.chief" :disabled="isShare"></mt-field>
       <span v-show="errors.has('chief')" class="error">{{ errors.first('chief') }}</span>
-      <mt-button class="confirm" size="large" @click="applyCoupon" type="danger">注册</mt-button>
+      <mt-button class="confirm" size="large" @click="applyCoupon" type="primary">注册</mt-button>
       <!--</form>-->
       <div class="bottom">
         <span class="toRegister">
@@ -166,7 +166,7 @@
             this.$http({
               url: "/user/sendVertifyMSG",
               method: "GET",
-              params: {phone: this.user.phone, code: this.identifyCode}
+              params: {phone: this.user.phone, code: this.identifyCode,type:'rigist'}
             }).then(data => {
               console.log(data)
             })

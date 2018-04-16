@@ -46,7 +46,7 @@
         margin-top: -125px;
         margin-left: -100px;
         p{
-          color: #de181b;
+          color: #26a2ff;
         }
         .id{
           font-weight: 600;

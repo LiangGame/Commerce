@@ -13,7 +13,7 @@
       </mt-radio>
     </div>
     <div class="pay_btn">
-      <mt-button class="confirm" size="large" @click="toPay" type="danger">前往支付</mt-button>
+      <mt-button class="confirm" size="large" @click="toPay" type="primary">前往支付</mt-button>
     </div>
     <!--微信弹窗-->
     <mt-popup v-model="weChat" position="right" class="mint-popup-3" :modal="false" align="center">
@@ -22,8 +22,9 @@
           <mt-button icon="back" @click="back"></mt-button>
         </router-link>
       </mt-header>
-      <img src="../../assets/pic/money.png" alt="">
-      <mt-button @click="pay" size="large" type="danger" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
+      <img :src="fileUrl+payMentList.weixin" alt="">
+      <p>微信</p>
+      <mt-button @click="pay" size="large" type="primary" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
     </mt-popup>
     <!--支付宝弹窗-->
     <mt-popup v-model="alipay" position="right" class="mint-popup-3" :modal="false">
@@ -32,18 +33,21 @@
           <mt-button icon="back" @click="back"></mt-button>
         </router-link>
       </mt-header>
-      <img src="../../assets/pic/money.png" alt="">
-      <mt-button @click="pay" size="large" type="danger" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
+      <img :src="fileUrl+payMentList.zhifubao" alt="">
+      <p>支付宝</p>
+      <mt-button @click="pay" size="large" type="primary" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
     </mt-popup>
     <!--银行卡弹窗-->
-    <mt-popup v-model="bankCard" position="right" class="mint-popup-3" :modal="false">
+    <mt-popup v-model="bankCard" position="right" class="mint-popup" :modal="false">
       <mt-header fixed title="">
         <router-link to="" slot="left">
           <mt-button icon="back" @click="back"></mt-button>
         </router-link>
       </mt-header>
-      银行卡
-      <mt-button @click="pay" size="large" type="danger" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
+      <p><span class="bank_label">开户行：</span>{{payMentList.cardBank}}</p>
+      <p><span class="bank_label">持卡人姓名：</span>{{payMentList.cardName}}</p>
+      <p><span class="bank_label">银行卡号：</span>{{payMentList.cardNub}}</p>
+      <mt-button @click="pay" size="large" type="primary" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
     </mt-popup>
   </div>
 </template>
@@ -51,17 +55,20 @@
 <script>
   import myHeader from '@/components/header'
   import Qs from 'qs';
-  import {Toast} from 'mint-ui';
+  import {Toast,Indicator} from 'mint-ui';
+  import {getPayMent,fileUrl} from "@/common/common";
 
   export default {
     name: "recharge",
     components: {myHeader},
     data() {
       return {
+        fileUrl:fileUrl,
         n: 0,
         user: JSON.parse(this.Cookie.get('user')),
         money: '',
         payMent: '1',
+        payMentList : {},
         payText: '已打款',
         isPay: false,
         options: [
@@ -85,6 +92,7 @@
       }
     },
     methods: {
+      getPayMent:getPayMent,
       //前往支付
       toPay() {
         if (this.money && /^[0-9]+$/.test(this.money) && this.money % 100 == 0) {
@@ -107,6 +115,7 @@
       },
       //打款
       pay() {
+        Indicator.open('请稍后...');
         if (this.n < 1) {
           let formData = {userID: this.user.id, money: this.money, payMent: this.payMent};
           this.$http({
@@ -121,6 +130,7 @@
               return json;
             }]
           }).then(data => {
+            Indicator.close();
             Toast(data.info)
             if (data.errCode == 0) {
               this.isPay = true;
@@ -133,11 +143,18 @@
                 _this.$router.push({path: '/wallet'});
               }, 3000)
             }
+          }).catch(()=>{
+            Indicator.close();
           })
         } else {
           Toast('请勿重复提交')
         }
       }
+    },
+    created(){
+      this.getPayMent(data => {
+        this.payMentList = data.info;
+      });
     }
 
   }
@@ -153,24 +170,31 @@
         }
       }
       .mint-radio-input:checked + .mint-radio-core {
-        background-color: #de181b;
-        border-color: #de181b;
+        background-color: #26a2ff;
+        border-color: #26a2ff;
       }
       .warning {
         font-size: 0.6rem;
         padding: 20px 10px;
-        color: #de181b;
+        color: #e93b3b;
       }
     }
-    .mint-popup-3 {
+    .mint-popup-3,.mint-popup{
       width: 100%;
       height: 100%;
       background-color: #fff;
       box-sizing: border-box;
       padding: 40px 10px;
       .mint-header {
-        background: #de181b;
+        background: #26a2ff;
       }
+    }
+    .mint-popup-3{
+      text-align: center;
+    }
+    .bank_label{
+      display: inline-block;
+      width: 100px;
     }
     .pay_btn {
       position: fixed;
@@ -179,7 +203,7 @@
       right: 0;
       .mint-button {
         border-radius: 0;
-        background: #e93b3b;
+        background: #26a2ff;
       }
     }
     .dk_btn {
@@ -189,7 +213,7 @@
       left: 0;
       right: 0;
       .mint-button {
-        background: #e93b3b;
+        background: #26a2ff;
       }
     }
   }

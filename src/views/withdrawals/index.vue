@@ -13,7 +13,7 @@
       <!--</mt-radio>-->
     </div>
     <div class="pay_btn">
-      <mt-button class="confirm" size="large" @click="pay" type="danger">确认提现</mt-button>
+      <mt-button class="confirm" size="large" @click="pay" type="primary">确认提现</mt-button>
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@
 <script>
   import Qs from 'qs';
   import myHeader from '@/components/header'
-  import {Toast} from 'mint-ui';
+  import {Toast,Indicator} from 'mint-ui';
 
   export default {
     name: "withdrawals",
@@ -55,6 +55,7 @@
     methods: {
       //提现
       pay() {
+        Indicator.open('请稍后...');
         if (this.money && /^[0-9]+$/.test(this.money) && this.money % 100 == 0) {
           if (this.n < 1) {
             let formData = {userID: this.user.id, money: this.money};
@@ -70,6 +71,7 @@
                 return json;
               }]
             }).then(data => {
+              Indicator.close();
               Toast(data.info);
               if (data.errCode == 0) {
                 this.n++;
@@ -78,11 +80,14 @@
                   _this.$router.push('/wallet');
                 }, 3000)
               }
+            }).catch(()=>{
+              Indicator.close();
             })
           } else {
             Toast('请勿重复提交')
           }
         } else {
+          Indicator.close();
           Toast('请输入正确的金额!');
         }
       }
@@ -102,11 +107,11 @@
       .warning {
         font-size: 0.6rem;
         padding: 20px 10px;
-        color: #de181b;
+        color: #e93b3b;
       }
       .mint-radio-input:checked + .mint-radio-core {
-        background-color: #de181b;
-        border-color: #de181b;
+        background-color: #26a2ff;
+        border-color: #26a2ff;
       }
     }
     .pay_btn {
@@ -116,7 +121,7 @@
       right: 0;
       .mint-button {
         border-radius: 0;
-        background: #e93b3b;
+        background: #26a2ff;
       }
     }
     .dk_btn {
@@ -126,7 +131,7 @@
       left: 0;
       right: 0;
       .mint-button {
-        background: #e93b3b;
+        background: #26a2ff;
       }
     }
   }

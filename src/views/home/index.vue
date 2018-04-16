@@ -177,7 +177,7 @@ import myHeader from '@/components/header'
             }
           }
           .carriage {
-            font-size: 0.8rem;            
+            font-size: 0.8rem;
             display: inline-block;
             width: 33.33%;
             margin-top: 27px;
@@ -186,7 +186,7 @@ import myHeader from '@/components/header'
             text-align: center;
           }
           .after_address {
-            font-size: 0.8rem;            
+            font-size: 0.8rem;
             width: 33.33%;
             float: right;
             margin-top: 27px;
@@ -295,7 +295,7 @@ import myHeader from '@/components/header'
     }
     .mint-tabbar{
       position: fixed;
-      background: #de181b;
+      /*background: #26a2ff;*/
       padding: 10px;
       .mint-tab-item-label{
         font-size: 1rem;

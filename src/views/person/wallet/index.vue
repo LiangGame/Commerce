@@ -6,7 +6,7 @@
       <h2>我的零钱</h2>
       <router-link to="/bill"><h1 class=money>￥<span>{{money}}</span></h1></router-link>
       <p class="hint">点击余额查看明细</p>
-      <mt-button class="confirm" size="large" type="danger" @click="toRecharge">充值</mt-button>
+      <mt-button class="confirm" size="large" type="primary" @click="toRecharge">充值</mt-button>
       <mt-button class="confirm" size="large" type="default" @click="toWithdrawals">提现</mt-button>
     </div>
   </div>

@@ -12,6 +12,17 @@ export function getImgSrc(str) {
   var src = regex.exec(str);
   return src == null ? null : src[1];
 }
+//获取支付方式
+export function getPayMent(callback) {
+  var result = null;
+  this.$http({
+    url: "/config/getPayMent",
+    method: "GET",
+    params: {}
+  }).then(data => {
+    callback(data);
+  })
+}
 
 //获取当前时间
 export function getNowFormatDate() {

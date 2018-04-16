@@ -5,7 +5,7 @@
       <div v-for="(item,index) in orderList" @click="orderInfo(item)">
         <mt-cell :key="index" :title="item.goodName" :label="item.status" icon="more">
           <div><span>数量：</span><span style="color: #333">{{item.count}}</span></div>
-          <div><span>总价：</span><span style="color: #e93b3b">{{'￥'+item.totalPrice}}</span></div>
+          <div><span>总价：</span><span style="color: #26a2ff">{{'￥'+item.totalPrice}}</span></div>
           <img slot="icon" :src="fileUrl+item.img" width="55" height="55">
         </mt-cell>
       </div>
@@ -25,7 +25,7 @@
       <mt-cell title="单价" :value="goodInfo.price"></mt-cell>
       <mt-cell title="总价" :value="goodInfo.totalPrice"></mt-cell>
       <div class="pay_btn" v-if="goodInfo.status == '未支付'">
-        <mt-button class="confirm" size="large" @click="toPay" type="danger">立即支付</mt-button>
+        <mt-button class="confirm" size="large" @click="toPay" type="primary">立即支付</mt-button>
       </div>
     </mt-popup>
   </div>
@@ -94,7 +94,9 @@
       toPay() {
         if(this.user){
           if(this.user.status){
-            this.$router.push({name: '立即支付', params: {price: this.priceTotal, num: this.number, goodId: this.good.id}})
+            console.log(97,this.goodInfo.totalPrice);
+            console.log(this.goodInfo.count);
+            this.$router.push({path: '/pay',name: '立即支付', params: {price: this.goodInfo.totalPrice, num: this.goodInfo.count, goodId: this.goodInfo.goodID}})
           }else {
             MessageBox({
               title: '提示',
@@ -175,7 +177,7 @@
       box-sizing: border-box;
       padding: 40px 10px;
       .mint-header {
-        background: #de181b;
+        /*background: #26a2ff;*/
       }
       .pay_btn {
         position: fixed;
@@ -184,7 +186,7 @@
         right: 0;
         .mint-button {
           border-radius: 0;
-          background: #e93b3b;
+          background: #26a2ff;
         }
       }
     }

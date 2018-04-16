@@ -41,7 +41,7 @@
           </div>
         </div>
         <div style="padding: 0 10px">
-          <mt-button size="large" type="danger" @click="toPay">前往支付</mt-button>
+          <mt-button size="large" type="primary" @click="toPay">前往支付</mt-button>
         </div>
       </div>
     </div>
@@ -214,7 +214,7 @@
         .price {
           float: right;
           font-size: 1rem;
-          color: #e93b3b;
+          color: #26a2ff;
         }
         .count_price {
           float: right;
@@ -225,7 +225,7 @@
           }
           .big_price {
             font-size: 1.3rem;
-            color: #e93b3b;
+            color: #26a2ff;
             font-weight: 600;
           }
         }

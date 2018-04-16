@@ -23,7 +23,7 @@
 <style lang="less" scoped>
   .header_container {
     .mint-header {
-      background: #de181b;
+      /*background: #26a2ff;*/
     }
   }
 </style>

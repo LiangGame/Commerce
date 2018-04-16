@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <!--<div ref="Certification" class="warning" v-if="isCertification" @click="toCertification">未进行实名，<u style="color: #e93b3b;">前往认证</u></div>-->
+    <!--<div ref="Certification" class="warning" v-if="isCertification" @click="toCertification">未进行实名，<u style="color: #26a2ff;">前往认证</u></div>-->
     <router-view/>
   </div>
 </template>

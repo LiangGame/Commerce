@@ -16,13 +16,14 @@
       <!--</router-link>-->
       <router-link to="/share"><mt-cell title="分享" is-link ></mt-cell></router-link>
       <div class="exit">
-        <mt-button class="confirm" size="large" type="danger" @click="signOut">退出登录</mt-button>
+        <mt-button class="confirm" size="large" type="primary" @click="signOut">退出登录</mt-button>
       </div>
     </div>
 </template>
 
 <script>
   import myHeader from '@/components/header'
+  import {Toast} from 'mint-ui'
   export default {
     name: "index",
     components: {myHeader},
@@ -67,7 +68,11 @@
           console.log(data);
           if (data.errCode == 0) {
             this.Cookie.set("user", data.info, { expires: 1 });
-          } else {
+          } else if(data.errCode == -1) {
+            Toast(data.info);
+            this.Cookie.remove('user');
+            this.$router.push('/login');
+          }else {
             Toast(data.info);
           }
         }).catch(error => {

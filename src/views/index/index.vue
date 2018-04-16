@@ -1,6 +1,6 @@
 <template>
   <div class="commerce_container">
-    <mt-header title="寄售宝">
+    <mt-header title="恒迈达">
       <router-link to="/" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
@@ -15,7 +15,7 @@
       <mt-swipe :auto="3000">
         <mt-swipe-item v-for="item in items" :key="item.id">
           <a :href="item.href" rel="external nofollow">
-            <img :src="item.url" class=""/>
+            <img :src="item.url ? item.url : ''" class=""/>
             <span class="desc"></span>
           </a>
         </mt-swipe-item>
@@ -94,7 +94,7 @@
   .commerce_container {
     background: #f5f5f5;
     .mint-header {
-      background: #de181b;
+      background: #26a2ff;
     }
     .main {
       .mint-swipe-item {

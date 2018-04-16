@@ -2,6 +2,9 @@
   <div class="login_container">
     <my-header title="登陆"/>
     <div class="main">
+      <div class="logo">
+        <img :src="require('@/assets/pic/logo-01.png')" width="100%" alt="">
+      </div>
       <!--<form @submit.prevent="applyCoupon" class="">-->
         <mt-field label="手机号" placeholder="手机号" v-model="user.phone"></mt-field>
         <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
@@ -52,7 +55,7 @@
             </div>
           </mt-popup>
         </div>
-        <mt-button size="large" @click="applyCoupon" type="danger">登录</mt-button>
+        <mt-button size="large" @click="applyCoupon" type="primary">登录</mt-button>
       <!--</form>-->
       <div class="bottom">
         <span class="toUpdatePwd">
@@ -150,6 +153,9 @@
   .login_container {
     .main {
       padding: 0 15px;
+      .logo{
+        width: 100%;
+      }
       .mint-cell-wrapper {
         background: none;
         border-bottom: solid 1px #e6e6e6;
