@@ -22,7 +22,7 @@
     data() {
       return {
         money: '0.00',
-        user: JSON.parse(this.Cookie.get('user'))
+        user: this.Cookie.get('user')
       }
     },
     methods: {
@@ -60,7 +60,10 @@
       }
     },
     created() {
-
+      if(this.user){
+        this.user = JSON.parse(this.user);
+        this.money = this.user.balance;
+      }
     }
 
   }

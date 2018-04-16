@@ -36,7 +36,7 @@
   import myHeader from '@/components/header'
   import Qs from 'qs';
   import {getWinHeight} from "@/common/common";
-  import {Toast} from 'mint-ui';
+  import {Toast,Indicator } from 'mint-ui';
 
   export default {
     name: "pay",
@@ -79,6 +79,7 @@
       getWinHeight: getWinHeight,
       //获取商品最大购买数量
       calcMaxOrder(){
+        Indicator.open('请稍后...');
         if(this.n <= 1){
           let formData = {goodID:this.goodID,userID:this.user.id};
           this.$http({
@@ -98,8 +99,12 @@
                 this.n++;
                 this.cerateOrder();
               }else {
+                Indicator.close();
                 Toast('超出最大购买数量,剩余购买数量:'+(+data.info.max - data.info.count))
               }
+            }else {
+              Indicator.close();
+              Toast(data.info);
             }
           })
         }else {
@@ -128,11 +133,17 @@
           }]
         }).then(data => {
           if (data.errorCode != 0) {
+            Indicator.close();
             Toast(data.info);
           } else {
+            Indicator.close();
             let _this = this;
             _this.orderID = data.info.orderID;
-            Toast(data.info.info);
+            if(formData.payMent == 4){
+              Toast(data.info);
+            }else {
+              Toast(data.info.info);
+            }
             setTimeout(function () {
               console.log('102>>>', formData.payMent);
               if (formData.payMent == 2) {
@@ -147,6 +158,7 @@
             }, 3000)
           }
         }).catch(error => {
+          Indicator.close();
           console.log(error);
         })
       },

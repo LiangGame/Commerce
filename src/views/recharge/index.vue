@@ -23,7 +23,7 @@
         </router-link>
       </mt-header>
       <img src="../../assets/pic/money.png" alt="">
-      <mt-button @click="pay" size="large" type="danger" class="dk_btn">已打款</mt-button>
+      <mt-button @click="pay" size="large" type="danger" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
     </mt-popup>
     <!--支付宝弹窗-->
     <mt-popup v-model="alipay" position="right" class="mint-popup-3" :modal="false">
@@ -33,7 +33,7 @@
         </router-link>
       </mt-header>
       <img src="../../assets/pic/money.png" alt="">
-      <mt-button @click="pay" size="large" type="danger" class="dk_btn">已打款</mt-button>
+      <mt-button @click="pay" size="large" type="danger" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
     </mt-popup>
     <!--银行卡弹窗-->
     <mt-popup v-model="bankCard" position="right" class="mint-popup-3" :modal="false">
@@ -43,7 +43,7 @@
         </router-link>
       </mt-header>
       银行卡
-      <mt-button @click="pay" size="large" type="danger" class="dk_btn">已打款</mt-button>
+      <mt-button @click="pay" size="large" type="danger" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
     </mt-popup>
   </div>
 </template>
@@ -58,10 +58,12 @@
     components: {myHeader},
     data() {
       return {
-        n:0,
+        n: 0,
         user: JSON.parse(this.Cookie.get('user')),
         money: '',
         payMent: '1',
+        payText: '已打款',
+        isPay: false,
         options: [
           {
             label: '支付宝支付',
@@ -85,7 +87,7 @@
     methods: {
       //前往支付
       toPay() {
-        if(this.money && /^[0-9]+$/.test(this.money) && this.money%100 == 0){
+        if (this.money && /^[0-9]+$/.test(this.money) && this.money % 100 == 0) {
           if (this.payMent == 1) {
             this.alipay = true;
           } else if (this.payMent == 2) {
@@ -93,7 +95,7 @@
           } else if (this.payMent == 3) {
             this.bankCard = true;
           }
-        }else {
+        } else {
           Toast('请输入正确的金额!');
         }
       },
@@ -105,7 +107,7 @@
       },
       //打款
       pay() {
-        if(this.n < 1){
+        if (this.n < 1) {
           let formData = {userID: this.user.id, money: this.money, payMent: this.payMent};
           this.$http({
             url: "/order/recharge",
@@ -120,15 +122,19 @@
             }]
           }).then(data => {
             Toast(data.info)
-            if(data.errCode == 0){
+            if (data.errCode == 0) {
+              this.isPay = true;
+              this.payText = '正在充值,请稍后...';
               this.n++;
               let _this = this;
               setTimeout(function () {
+                this.payText = '已打款';
+                this.isPay = true;
                 _this.$router.push({path: '/wallet'});
-              },3000)
+              }, 3000)
             }
           })
-        }else {
+        } else {
           Toast('请勿重复提交')
         }
       }
@@ -150,10 +156,10 @@
         background-color: #de181b;
         border-color: #de181b;
       }
-      .warning{
+      .warning {
         font-size: 0.6rem;
         padding: 20px 10px;
-        color:  #de181b;
+        color: #de181b;
       }
     }
     .mint-popup-3 {
@@ -187,7 +193,8 @@
       }
     }
   }
-  .mint-toast{
+
+  .mint-toast {
     z-index: 9999;
   }
 </style>
