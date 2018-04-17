@@ -12,6 +12,9 @@ Vue.prototype.Cookie = Cookie;
 import axios from '@/common/axios.js'
 Vue.prototype.$http = axios;
 
+//vueClipboard2
+import vueClipboard2 from 'vue-clipboard2'
+Vue.use(vueClipboard2);
 //mint-ui
 import 'mint-ui/lib/style.css'
 import Mint from 'mint-ui';

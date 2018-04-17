@@ -2,7 +2,7 @@
   <div class="consignment_container">
     <my-header title="我的寄售"/>
     <div class="main">
-      <div v-for="(item,index) in orderList" @click="orderInfo(item)">
+      <div v-for="(item,index) in orderList" :key=index @click="orderInfo(item)">
         <mt-cell :key="index" :title="item.goodName" :label="item.status" icon="more">
           <div><span>数量：</span><span style="color: #333">{{item.count}}</span></div>
           <div><span>总价：</span><span style="color: #26a2ff">{{'￥'+item.totalPrice}}</span></div>
@@ -66,7 +66,7 @@
               }else if(item.status == 1){
                 item.status = '财务未确认'
               }else if(item.status == 2){
-                item.status = '已付款'
+                item.status = '已付款,代售中...'
               }else if(item.status == 3){
                 item.status = '已返第一次佣金'
               }else if(item.status == 4){

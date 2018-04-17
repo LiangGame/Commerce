@@ -16,7 +16,7 @@
       back(){
         if(this.title == '充值'|| this.title == '提现'){
           this.$router.push('/wallet');
-        }else if(this.title == '钱包') {
+        }else if(this.title == '钱包' || this.title=='邀请码') {
           this.$router.push('/person');
         }else if(this.title == '个人中心') {
           this.$router.push('/');

@@ -3,7 +3,7 @@
     <my-header title="账单"/>
     <div class="main">
       <ul class="list">
-        <li class="item" v-for="item in data" @click="billInfo(item)">
+        <li class="item" v-for="(item,index) in data" :key="index" @click="billInfo(item)">
           <mt-cell :title="item.time" is-link><span>{{item.sum}}</span></mt-cell>
         </li>
       </ul>
@@ -20,6 +20,7 @@
               <li><span class="label">支付方式</span><span class="value">{{dataInfo.payMent | Ment}}</span></li>
               <li><span class="label">余额变动类型</span><span class="value">{{dataInfo.type | status}}</span></li>
               <li><span class="label">账户</span><span class="value">{{dataInfo.userID}}</span></li>
+              <li v-if="dataInfo.fromUserID"><span class="label">代言费的来源用户ID</span><span class="value">{{dataInfo.fromUserID}}</span></li>
             </ul>
           </div>
         </div>
@@ -92,14 +93,14 @@
         return type;
       },
       status(value){
-        // 余额变动类型：1，购买。2，代售回款。3，提成。4，提现。5，充值
+        // 余额变动类型：1，购买。2，代售回款。3，代言费。4，提现。5，充值
         var status = null;
         if(value == 1){
           status = '购买'
         }else if(value == 2) {
           status = '代售回款'
         }else if(value == 3) {
-          status = '提成'
+          status = '代言费'
         }else if(value == 4) {
           status = '提现'
         }else if(value == 5) {

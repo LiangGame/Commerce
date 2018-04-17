@@ -148,7 +148,7 @@
             }).then(data => {
               let _this = this;
               if(data.errCode == 0){
-                Toast(data.info);
+                Toast('操作成功,请重新登录');
                 setTimeout(function () {
                   _this.$router.push('/login');
                 },3000)
@@ -259,7 +259,7 @@
 
       Validator.extend('mobile', {
         getMessage: field => "请输入正确的手机号码", //错误提示
-        validate: value => value.length === 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)  // 验证条件
+        validate: value => value.length === 11  // 验证条件
       });
       Validator.extend('checkPhone', {
         getMessage: field => "手机号已注册", //错误提示

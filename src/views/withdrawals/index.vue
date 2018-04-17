@@ -3,9 +3,14 @@
     <my-header title="提现"/>
     <div class="main">
       <div class="money_container">
-        <mt-field label="金额" placeholder="请输入充值金额" v-model="money"></mt-field>
+        <mt-field label="金额" placeholder="请输入提现金额" v-model="money"></mt-field>
       </div>
-      <p class="warning">注意 : 提现最小金额为100,提现金额必须是100的整数倍</p>
+      <p class="warning">
+      温馨提示:<br>
+        ·余额提现后低于3500的，请必须预留一单寄售，否则将自动取消代言资格，请谨慎操作!<br>
+        ·提现最少金额为100元，且必须是100的整数倍!<br>
+        ·到账时间周一至周五，早上8:00-下午18:00(节假日除外)
+      </p>
       <!--<mt-radio-->
       <!--title="选择支付方式"-->
       <!--v-model="payMent"-->
@@ -90,6 +95,7 @@
           Indicator.close();
           Toast('请输入正确的金额!');
         }
+          Indicator.close();        
       }
     }
   }
@@ -105,7 +111,7 @@
         }
       }
       .warning {
-        font-size: 0.6rem;
+        font-size: 1rem;
         padding: 20px 10px;
         color: #e93b3b;
       }

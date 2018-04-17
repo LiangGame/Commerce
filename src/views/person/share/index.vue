@@ -5,6 +5,12 @@
         <vue-qr :bgSrc='src' :logoSrc="src2" :text="shareSrc" height="200" width="200"></vue-qr>
         <!--<p>您的邀请码</p>-->
         <div class="id"><span>您的邀请码 : {{userId}}</span></div>
+
+        <mt-button style="margin-top:25px" size="large" class="copy" type="primary"
+          v-clipboard:copy="shareSrc"
+          v-clipboard:success="onSuccess"
+          v-clipboard:error="onError">复制推广链接</mt-button>
+        <!-- :data-clipboard-text = "https://www.baidu.com/" -->
       </div>
     </div>
 </template>
@@ -13,6 +19,8 @@
   import myHeader from '@/components/header'
   import VueQr from 'vue-qr'
   import {comUrl} from "@/common/common";
+  import clipboard from 'clipboard';//复制到粘贴板
+  // var clipboard = new Clipboard('.copy');
 
   export default {
     name: "share",
@@ -23,6 +31,14 @@
         src:'', // bgSrc欲嵌入的背景图地址
         src2:'', // logoSrc欲嵌入至二维码中心的 LOGO 地址
         shareSrc:comUrl+'?id='
+      }
+    },
+    methods:{
+      onSuccess(e){
+        Toast('复制成功!')
+      },
+      onError(e){
+        Toast('复制失败!')
       }
     },
     created(){

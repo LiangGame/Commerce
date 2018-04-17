@@ -17,37 +17,48 @@
     </div>
     <!--微信弹窗-->
     <mt-popup v-model="weChat" position="right" class="mint-popup-3" :modal="false" align="center">
-      <mt-header fixed title="">
-        <router-link to="" slot="left">
-          <mt-button icon="back" @click="back"></mt-button>
-        </router-link>
-      </mt-header>
-      <img :src="payMentList.weixin ? fileUrl+payMentList.weixin : ''" alt="">
-      <p>微信</p>
-      <mt-button @click="pay" size="large" type="primary" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
+      <img :src="require('@/assets/pic/weChat-logo.jpg')" alt="" width="50%">
+      <img :src="payMentList.weixin ? fileUrl+payMentList.weixin : ''" alt="" width="60%">
+      <h2 style="margin: 10px 0;font-weight: 500">户名:{{payMentList.weixinname}}</h2>
+      <p class="id">您的ID:{{user.id}}</p>
+      <p class="id_warning">转账时请备注您的ID</p>
+      <p class="warning">
+        温馨提示：<br>
+        请截图保存,在微信中打开扫一扫<br>
+        转账时请核对户名,以免造成损失
+      </p>
+      <mt-button @click.once="pay" size="large" type="primary" class="dk_btn" :disabled="isOne">已打款</mt-button>
     </mt-popup>
     <!--支付宝弹窗-->
     <mt-popup v-model="alipay" position="right" class="mint-popup-3" :modal="false">
-      <mt-header fixed title="">
-        <router-link to="" slot="left">
-          <mt-button icon="back" @click="back"></mt-button>
-        </router-link>
-      </mt-header>
+      <img :src="require('@/assets/pic/apliay-logo.jpg')" alt="" width="45%" style="margin-bottom: 25px">
       <img :src="payMentList.zhifubao ? fileUrl+payMentList.zhifubao : ''" alt="">
-      <p>支付宝</p>
-      <mt-button @click="pay" size="large" type="primary" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
+      <h2 style="margin: 10px 0;font-weight: 500">户名:{{payMentList.zhifubaoname}}</h2>
+      <p class="id">您的ID:{{user.id}}</p>
+      <p class="id_warning">转账时请备注您的ID</p>
+      <p class="warning">
+        温馨提示：<br>
+        请截图保存,在支付宝中打开扫一扫<br>
+        转账时请核对户名,以免造成损失
+      </p>
+      <mt-button @click.once="pay" size="large" type="primary" class="dk_btn" :disabled="isOne">已打款</mt-button>
     </mt-popup>
     <!--银行卡弹窗-->
     <mt-popup v-model="bankCard" position="right" class="mint-popup" :modal="false">
-      <mt-header fixed title="">
-        <router-link to="" slot="left">
-          <mt-button icon="back" @click="back"></mt-button>
-        </router-link>
-      </mt-header>
-      <p><span class="bank_label">开户行：</span>{{payMentList.cardBank}}</p>
-      <p><span class="bank_label">持卡人姓名：</span>{{payMentList.cardName}}</p>
-      <p><span class="bank_label">银行卡号：</span>{{payMentList.cardNub}}</p>
-      <mt-button @click="pay" size="large" type="primary" class="dk_btn" :disdbled="isPay">{{payText}}</mt-button>
+      <img :src="require('@/assets/pic/pay-logo.jpg')" alt="" width="45%" style="margin-bottom: 25px">
+      <div style="text-align: left">
+        <p style="line-height: 2em;"><span class="bank_label">户名：</span>{{payMentList.cardName}}</p>
+        <p style="line-height: 2em;"><span class="bank_label">开户行：</span>{{payMentList.cardBank}}</p>
+        <p style="line-height: 2em;"><span class="bank_label">银行卡号：</span>{{payMentList.cardNub}}</p>
+      </div>
+      <p class="id" style="margin-top: 30px">您的ID:{{user.id}}</p>
+      <!--<p class="id_warning">转账时请备注您的ID</p>-->
+      <p class="warning">
+        温馨提示：<br>
+        转账时请核对入账信息,以免造成损失<br>
+        转账时请备注您的ID
+      </p>
+      <mt-button @click.once="pay" size="large" type="primary" class="dk_btn" :disabled="isOne">已打款</mt-button>
     </mt-popup>
   </div>
 </template>
@@ -63,6 +74,7 @@
     components: {myHeader},
     data() {
       return {
+        isOne:false,
         fileUrl:fileUrl,
         n: 0,
         user: JSON.parse(this.Cookie.get('user')),
@@ -147,6 +159,7 @@
             Indicator.close();
           })
         } else {
+            Indicator.close();          
           Toast('请勿重复提交')
         }
       }
@@ -161,6 +174,7 @@
 </script>
 
 <style lang="less">
+  @warning_color:#e93b3b;
   .recharge_container {
     .main {
       .money_container {
@@ -174,7 +188,7 @@
         border-color: #26a2ff;
       }
       .warning {
-        font-size: 0.6rem;
+        font-size: 1rem;
         padding: 20px 10px;
         color: #e93b3b;
       }
@@ -184,13 +198,31 @@
       height: 100%;
       background-color: #fff;
       box-sizing: border-box;
-      padding: 40px 10px;
-      .mint-header {
-        background: #26a2ff;
-      }
-    }
-    .mint-popup-3{
+      padding: 10px 10px;
       text-align: center;
+    }
+    .mint-popup{
+      .id{
+        width: 120px;
+        margin: 0 auto;
+        padding: 5px 10px;
+        font-weight: 600;
+        color: @warning_color;
+        border: solid 1px #e6e6e6;
+      }
+      .id_warning{
+        font-weight: bolder;
+        color: @warning_color;
+        margin: 5px auto;
+      }
+      .warning{
+        text-align: left;
+        color: @warning_color;
+        font-size: 0.9rem;
+        line-height: 1.5em;
+        margin-top: 50px;
+        margin-left: 25px;
+      }
     }
     .bank_label{
       display: inline-block;

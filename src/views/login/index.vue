@@ -62,6 +62,11 @@
                 this.Cookie.set("user", data.info, { expires: 1 });
               }else {
                 Toast(data.info);
+              // Toast({
+                // message: 'Upload Complete',
+                // position: 'bottom',
+                // duration: 5000000
+              // });
               }
             }).catch(error => {
 
@@ -76,7 +81,7 @@
 
       Validator.extend('mobile', {
         getMessage: field => "请输入正确的手机号码", //错误提示
-        validate: value => value.length === 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)  // 验证条件
+        validate: value => value.length === 11  // 验证条件
       });
 
       this.validator.attach({name: 'phone', rules: 'required|mobile|decimal', alias: '手机号'}); //phone添加验证规则

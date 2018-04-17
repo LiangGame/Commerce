@@ -26,7 +26,7 @@
         请截图保存,在微信中打开扫一扫<br>
         转账时请核对户名,以免造成损失
       </p>
-      <mt-button @click.once="payByOrderID" size="large" type="primary" class="dk_btn">已打款</mt-button>
+      <mt-button @click.once="payByOrderID" size="large" type="primary" class="dk_btn" :disabled="isOne">已打款</mt-button>
     </mt-popup>
     <!--支付宝弹窗-->
     <mt-popup v-model="alipay" position="right" class="mint-popup-3" :modal="false">
@@ -40,7 +40,7 @@
         请截图保存,在支付宝中打开扫一扫<br>
         转账时请核对户名,以免造成损失
       </p>
-      <mt-button @click.once="payByOrderID" size="large" type="primary" class="dk_btn">已打款</mt-button>
+      <mt-button @click.once="payByOrderID" size="large" type="primary" class="dk_btn" :disabled="isOne">已打款</mt-button>
     </mt-popup>
     <!--银行卡弹窗-->
     <mt-popup v-model="bankCard" position="right" class="mint-popup" :modal="false">
@@ -57,7 +57,7 @@
         转账时请核对入账信息,以免造成损失<br>
         转账时请备注您的ID
       </p>
-      <mt-button @click.once="payByOrderID" size="large" type="primary" class="dk_btn">已打款</mt-button>
+      <mt-button @click.once="payByOrderID" size="large" type="primary" class="dk_btn" :disabled="isOne">已打款</mt-button>
     </mt-popup>
   </div>
 </template>
@@ -73,6 +73,7 @@
     components: {myHeader},
     data() {
       return {
+        isOne:false,
         fileUrl:fileUrl,
         n : 0,
         height: 'height:' + this.getWinHeight() + 'px',
@@ -197,7 +198,8 @@
       },
       //用户确认付款
       payByOrderID() {
-        Indicator.open('请稍后...');
+        this.isOne = true;
+        Indicator.open('正在获取支付信息，请稍等...');
         let formData = {orderID:this.orderID};
         this.$http({
           url: "/order/payByOrderID",
@@ -211,11 +213,12 @@
             return json;
           }]
         }).then(data => {
+          this.isOne = fasle;          
           Indicator.close();
           let _this = this;
           if(data.errCode == 0){
             console.log(138,'here');
-            Toast(data.info);
+            Toast('恭喜成为代言人,即将获得丰厚奖励');
             setTimeout(function () {
               _this.$router.push('/');
             },3000)

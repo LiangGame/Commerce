@@ -57,13 +57,34 @@
             }
           });
         }
-      }
+      },
+      //获取用户信息
+      getUserInfo(){
+        this.$http({
+          url: "/user/getInfo",
+          method: "GET",
+          params: {id: this.user.id}
+        }).then(data => {
+          console.log(data);
+          if (data.errCode == 0) {
+           this.money = data.info.balance;
+          }else{
+            if(this.user){
+              this.user = JSON.parse(this.user);
+              this.money = this.user.balance;
+            }
+            // this.money = JSON.parse(this.Cookie.get('user')).balance
+          }
+        }).catch(error => {
+          console.log(error)
+        })
+      },
     },
     created() {
-      if(this.user){
-        this.user = JSON.parse(this.user);
-        this.money = this.user.balance;
+      if(this.Cookie.get('user')){
+        this.user = JSON.parse(this.Cookie.get('user'));
       }
+      this.getUserInfo();
     }
 
   }

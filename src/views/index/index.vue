@@ -136,6 +136,7 @@
           .good {
             float: left;
             width: 50%;
+            min-height: 220px;
             box-sizing: border-box;
             padding-bottom: 2px;
             &:nth-child(2n) {

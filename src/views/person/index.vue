@@ -3,7 +3,6 @@
       <my-header title="个人中心"/>
       <mt-cell title="我的ID"><span>{{userId}}</span></mt-cell>
       <mt-cell title="我的会员"><span>{{member}}</span></mt-cell>
-      <router-link to="/updatePwd"><mt-cell title="修改密码" is-link ></mt-cell></router-link>
       <router-link to="/wallet"><mt-cell title="钱包" is-link ></mt-cell></router-link>
       <router-link to="/consignment"><mt-cell title="我的寄售" is-link ></mt-cell></router-link>
       <!--<router-link to="/certification">-->
@@ -15,6 +14,7 @@
 
       <!--</router-link>-->
       <router-link to="/share"><mt-cell title="分享" is-link ></mt-cell></router-link>
+      <router-link to="/updatePwd"><mt-cell title="修改密码" is-link ></mt-cell></router-link>      
       <div class="exit">
         <mt-button class="confirm" size="large" type="primary" @click="signOut">退出登录</mt-button>
       </div>
