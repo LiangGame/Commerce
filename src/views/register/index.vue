@@ -329,7 +329,6 @@
       .code {
         width: 112px;
         height: 38px;
-        border: 1px solid red;
       }
       padding: 0 15px;
       .mint-cell-wrapper {

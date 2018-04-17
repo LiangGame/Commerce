@@ -213,7 +213,7 @@
             return json;
           }]
         }).then(data => {
-          this.isOne = fasle;          
+          this.isOne = false;
           Indicator.close();
           let _this = this;
           if(data.errCode == 0){
@@ -223,7 +223,8 @@
               _this.$router.push('/');
             },3000)
           }
-        }).catch(()=>{
+        }).catch((err)=>{
+          console.log(err);
           Indicator.close();
         })
       }
@@ -253,7 +254,7 @@
         border-bottom: solid 1px #e6e6e6;
         margin-bottom: 15px;
         .price {
-          color: #26a2ff;
+          color: #e93b3b;
           font-size: 1rem;
         }
       }

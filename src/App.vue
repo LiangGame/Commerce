@@ -78,8 +78,8 @@
     font-size: 0.8rem;
   }
   .mint-toast{
-    position: relative;
-    z-index: 999999999;
+    /*position: relative;*/
+    z-index: 999999999 !important;
   }
   .mint-indicator{
     position: relative;
