@@ -84,13 +84,14 @@ const routes = [
       }
     },},
   { path: '/order', name: '确定订单', component: _import('order/index'),
-    beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
-        next({path: '/'})
-      } else {
-        next();
-      }
-    }},
+    // beforeEnter: (to, from, next) => {
+      // if (Cookie.get('user') == undefined) {
+      //   next({path: '/'})
+      // } else {
+      //   next();
+      // }
+    // }
+    },
   { path: '/pay', name: '立即支付', component: _import('pay/index'),
     beforeEnter: (to, from, next) => {
       if (Cookie.get('user') == undefined) {
