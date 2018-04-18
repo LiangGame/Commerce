@@ -1,9 +1,9 @@
 <template>
   <div class="commerce_container">
     <mt-header title="恒迈达">
-      <router-link to="/" slot="left">
-        <mt-button icon="back"></mt-button>
-      </router-link>
+      <!--<router-link to="/" slot="left">-->
+        <!--<mt-button icon="back"></mt-button>-->
+      <!--</router-link>-->
       <router-link to="/login" slot="right" v-if="!isLogin">
         <mt-button>登录</mt-button>
       </router-link>

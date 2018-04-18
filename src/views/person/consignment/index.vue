@@ -1,6 +1,11 @@
 <template>
   <div class="consignment_container">
-    <my-header title="我的寄售"/>
+    <mt-header title="我的寄售">
+      <router-link to="/person" slot="left">
+        <mt-button icon="back"></mt-button>
+      </router-link>
+      <mt-button slot="right" @click.native="showFormat = true">筛选</mt-button>
+    </mt-header>
     <div class="main">
       <div v-for="(item,index) in orderList" :key=index @click="orderInfo(item)">
         <mt-cell :key="index" :title="item.goodName" :label="item.status" icon="more">
@@ -28,28 +33,47 @@
         <mt-button class="confirm" size="large" @click="toPay" type="primary">立即支付</mt-button>
       </div>
     </mt-popup>
+    <!--筛选-->
+    <mt-popup
+      v-model="showFormat"
+      position="bottom"
+      class="format">
+      <mt-checklist
+        class="page-part"
+        title="请选择筛选条件"
+        v-model="formatInfo"
+        :options="formatList">
+      </mt-checklist>
+      <div style="text-align: center">
+        <mt-button style="margin: 10px" size="small" @click="formatData" type="primary">确认</mt-button>
+      </div>
+    </mt-popup>
   </div>
 </template>
 
 <script>
-  import {Toast,MessageBox} from 'mint-ui';
+  import {Toast, MessageBox} from 'mint-ui';
   import myHeader from '@/components/header'
-  import {timestampToTime,fileUrl} from "@/common/common";
+  import {timestampToTime, fileUrl} from "@/common/common";
 
   export default {
     name: "consignment",
     components: {myHeader},
     data() {
       return {
-        fileUrl:fileUrl,
+        fileUrl: fileUrl,
         user: JSON.parse(this.Cookie.get('user')),
         orderList: [],
+        allList:[],
         info: false,
-        goodInfo: {}
+        goodInfo: {},
+        showFormat:false,
+        formatList:['未支付','财务未确认','已结束'],
+        formatInfo:[]
       }
     },
     methods: {
-      timestampToTime:timestampToTime,
+      timestampToTime: timestampToTime,
       // 获取订单列表
       loadData() {
         this.$http({
@@ -61,28 +85,29 @@
             data.info.map(item => {
               item.cerateTime = this.timestampToTime(item.cerateTime);
               item.payTime = this.timestampToTime(item.payTime);
-              if(item.status == 0){
+              if (item.status == 0) {
                 item.status = '未支付'
-              }else if(item.status == 1){
+              } else if (item.status == 1) {
                 item.status = '财务未确认'
-              }else if(item.status == 2){
+              } else if (item.status == 2) {
                 item.status = '已付款,代售中...'
-              }else if(item.status == 3){
+              } else if (item.status == 3) {
                 item.status = '已返第一次佣金'
-              }else if(item.status == 4){
+              } else if (item.status == 4) {
                 item.status = '已返全部佣金'
               }
-              if(item.payMent == 1){
+              if (item.payMent == 1) {
                 item.payMent = '支付宝'
-              }else if(item.payMent == 2){
+              } else if (item.payMent == 2) {
                 item.payMent = '微信'
-              }else if(item.payMent == 3){
+              } else if (item.payMent == 3) {
                 item.payMent = '银行卡'
-              }else if(item.payMent == 4){
+              } else if (item.payMent == 4) {
                 item.payMent = '余额'
               }
             })
             this.orderList = data.info;
+            this.allList = data.info;
           } else {
             Toast(data.info);
           }
@@ -92,23 +117,27 @@
       },
       //前往支付
       toPay() {
-        if(this.user){
-          if(this.user.status){
-            console.log(97,this.goodInfo.totalPrice);
+        if (this.user) {
+          if (this.user.status) {
+            console.log(97, this.goodInfo.totalPrice);
             console.log(this.goodInfo.count);
-            this.$router.push({path: '/pay',name: '立即支付', params: {price: this.goodInfo.totalPrice, num: this.goodInfo.count, goodId: this.goodInfo.goodID}})
-          }else {
+            this.$router.push({
+              path: '/pay',
+              name: '立即支付',
+              params: {price: this.goodInfo.totalPrice, num: this.goodInfo.count, goodId: this.goodInfo.goodID}
+            })
+          } else {
             MessageBox({
               title: '提示',
               message: '未实名,是否前往认证?',
               showCancelButton: true
             }).then(action => {
-              if (action == 'confirm'){
-                this.$router.push({ path: '/certification'});
+              if (action == 'confirm') {
+                this.$router.push({path: '/certification'});
               }
             });
           }
-        }else {
+        } else {
           Toast('未登录!')
         }
       },
@@ -122,6 +151,25 @@
       back() {
         this.info = false;
       },
+      //筛选
+      formatData(){
+        if(this.formatInfo.length){
+          let newList = [];
+          this.allList.map(item => {
+            if(item.status == this.formatInfo[0]){
+              newList.push(item);
+            }else if(item.status == this.formatInfo[1]){
+              newList.push(item);
+            }else if(item.status == this.formatInfo[2]){
+              newList.push(item);
+            }
+          })
+          this.orderList = newList;
+        }else {
+          this.orderList = this.allList;
+        }
+        this.showFormat = false;
+      }
     },
     created() {
       this.loadData();
@@ -138,9 +186,9 @@
         border-bottom: solid 1px #e6e6e6;
         .mint-cell-wrapper {
           background: none;
-          .mint-cell-title{
+          .mint-cell-title {
             height: 55px;
-            .mint-cell-text{
+            .mint-cell-text {
               margin-top: -25px;
               /*display: inline-block;*/
               position: relative;
@@ -154,7 +202,7 @@
               text-overflow: ellipsis;
               overflow: hidden;
             }
-            .mint-cell-label{
+            .mint-cell-label {
               margin-left: 60px;
               margin-top: -20px;
 
@@ -189,6 +237,9 @@
           background: #26a2ff;
         }
       }
+    }
+    .format{
+      width: 100%;
     }
   }
 </style>

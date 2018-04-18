@@ -1,30 +1,39 @@
 <template>
   <div class="share_container">
     <my-header title="邀请码"/>
-    <div class="main">
-      <div v-if="isShare">
-        <vue-qr :bgSrc='src' :logoSrc="src2" :text="shareSrc" height="200" width="200"></vue-qr>
-        <!--<p>您的邀请码</p>-->
-        <div class="id"><span>您的邀请码 : {{userId}}</span></div>
-
-        <mt-button style="margin-top:25px" size="large" class="copy" type="primary"
-                   v-clipboard:copy="shareSrc"
-                   v-clipboard:success="onSuccess"
-                   v-clipboard:error="onError">复制推广链接
-        </mt-button>
-        <p class="warning">
+    <!--<p class="warning">
           温馨提示:<br>
           钱包余额低于3500或低于1单代售订单，您将无法分享获得代言费!
-        </p>
-      </div>
-      <div v-if="!isShare" class="noShare">
-        <h3>您的钱包余额低于3500或者是没代售订单。</h3>
-        <div class="btn_container">
-          <mt-button style="margin-top:25px" size="large" class="copy" type="primary" @click="toPay">去购买</mt-button>
-          <mt-button style="margin-top:25px" size="large" class="copy" type="primary" @click="toCz">去充值</mt-button>
+        </p>-->
+    <div class="top">
+
+      <img src="../../../assets/pic/share01.png" width="100%"/>
+    </div>
+    <div v-if="isShare" class="middle">
+      <div style="color: white;font-size: 1.2rem;overflow: hidden">
+        <div style="text-align: center;width: 50%;float: left">
+          <vue-qr :bgSrc='src' :logoSrc="src2" :text="shareSrc" height="100" width="100" :size="90" :margin="0"
+                  style="display: inline-block;"></vue-qr>
+          <p>您的邀请码:{{userId}}</p>
+        </div>
+        <div style="text-align: center;width: 50%;float: left">
+          <mt-button style="margin-top:25px;background: #48912c" size="large" class="copy" type="primary"
+                     v-clipboard:copy="shareSrc"
+                     v-clipboard:success="onSuccess"
+                     v-clipboard:error="onError">复制推广链接
+          </mt-button>
         </div>
       </div>
-      <!-- :data-clipboard-text = "https://www.baidu.com/" -->
+    </div>
+    <div v-if="!isShare" class="middle noShare">
+      <h3>您的钱包余额低于3500或者是没代售订单。</h3>
+      <div class="btn_container">
+        <mt-button size="large" class="copy" type="danger" @click="toPay">去购买</mt-button>
+        <mt-button size="large" class="copy" type="primary" @click="toCz">去充值</mt-button>
+      </div>
+    </div>
+    <div class="bottom">
+      <img src="../../../assets/pic/share02.png" width="100%"/>
     </div>
   </div>
 </template>
@@ -52,7 +61,7 @@
         Toast('复制成功!')
       },
       onError(e) {
-        Toast('复制失败!')
+        Toast('该浏览器不支持一键复制功能;请手动复制!')
       },
       //获取分享资格
       getShare() {
@@ -92,34 +101,29 @@
 
 <style lang="less" scoped>
   .share_container {
-    .main {
-      text-align: center;
-      position: absolute;
-      padding: 0 10px;
-      p {
-        color: #26a2ff;
-      }
-      .id {
-        font-weight: 600;
+    .noShare {
+      overflow: hidden;
+      margin: 0 auto;
+      h3 {
+        text-align: center;
+        color: #fff;
         font-size: 1.5rem;
-        color: #56abf2;
       }
-      .warning {
-        font-size: 1rem;
-        padding: 20px 10px;
-        color: #e93b3b;
-        text-align: left;
-      }
-      .btn_container {
-
-      }
-      .noShare{
-        margin: 0 auto;
-        margin-top: 30%;
-        h3{
-          color: #e93b3b;
+      .btn_container{
+        overflow: hidden;
+        .mint-button{
+          width: 49%;
+          float: left;
+          margin-top: 10px;
+          &:first-child{
+            margin-right: 5px;
+          }
         }
       }
+    }
+    .middle {
+      background: url("../../../assets/pic/share03.png");
+      padding: 0 20px;
     }
   }
 </style>

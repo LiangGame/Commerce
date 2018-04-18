@@ -107,10 +107,12 @@
     created() {
       this.validator = new Validator({});  // 初始化Validator对象
       Validator.extend('checked', {
-        getMessage: field => "请勾选用户协议!", //错误提示
-        validate: value => !!value
+        getMessage: field => "请同意并勾选提示", //错误提示
+        validate: value => {
+          return !!value.length
+        }
       });
-      this.validator.attach({name: 'value', rules: 'checked|required', alias: '用户协议'}); //pwds添加验证规则
+      this.validator.attach({name: 'value', rules: 'checked', alias: '用户协议'}); //pwds添加验证规则
       this.$set(this, 'errors', this.validator.errors);
 
     }
@@ -127,7 +129,7 @@
         }
       }
       .warning {
-        font-size: 1rem;
+        font-size: 1.3rem;
         padding: 20px 10px;
         color: #e93b3b;
       }
