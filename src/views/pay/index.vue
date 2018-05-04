@@ -84,18 +84,18 @@
         payMent: '4',
         payMentList : {},
         options: [
-          {
-            label: '支付宝支付',
-            value: '1'
-          },
-          {
-            label: '微信支付',
-            value: '2'
-          },
-          {
-            label: '银行卡支付',
-            value: '3',
-          },
+          // {
+          //   label: '支付宝支付',
+          //   value: '1'
+          // },
+          // {
+          //   label: '微信支付',
+          //   value: '2'
+          // },
+          // {
+          //   label: '银行卡支付',
+          //   value: '3',
+          // },
           {
             label: '余额支付',
             value: '4'

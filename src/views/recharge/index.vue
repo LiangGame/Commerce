@@ -2,15 +2,15 @@
   <div class="recharge_container">
     <my-header title="充值"/>
     <div class="main">
-      <div class="money_container">
-        <mt-field label="金额" placeholder="请输入充值金额" v-model="money"></mt-field>
-      </div>
-      <p class="warning">注意 : 充值最小金额为100,充值金额必须是100的整数倍</p>
       <mt-radio
         title="选择支付方式"
         v-model="payMent"
         :options="options">
       </mt-radio>
+      <div class="money_container">
+        <mt-field label="金额" placeholder="请输入充值金额" v-model="money"></mt-field>
+      </div>
+      <p class="warning">注意 : 充值最小金额为100,充值金额必须是100的整数倍</p>
     </div>
     <div class="pay_btn">
       <mt-button class="confirm" size="large" @click="toPay" type="primary">前往支付</mt-button>
@@ -108,6 +108,7 @@
       //前往支付
       toPay() {
         if (this.money && /^[0-9]+$/.test(this.money) && this.money % 100 == 0) {
+          this.pay();
           if (this.payMent == 1) {
             this.alipay = true;
           } else if (this.payMent == 2) {
@@ -153,13 +154,13 @@
                 this.payText = '已打款';
                 this.isPay = true;
                 _this.$router.push({path: '/wallet'});
-              }, 3000)
+              }, 60000)
             }
           }).catch(()=>{
             Indicator.close();
           })
         } else {
-            Indicator.close();          
+            Indicator.close();
           Toast('请勿重复提交')
         }
       }
@@ -178,8 +179,10 @@
   .recharge_container {
     .main {
       .money_container {
+        margin-top: 50px;
         .mint-cell-wrapper {
           background: none;
+          border-top: solid 1px #e6e6e6;
           border-bottom: solid 1px #e6e6e6;
         }
       }
