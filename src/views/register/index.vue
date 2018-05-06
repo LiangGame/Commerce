@@ -29,7 +29,7 @@
       <span v-show="errors.has('chief')" class="error">{{ errors.first('chief') }}</span>
       <div style="margin-top:10px">
         <input type="checkbox" name="xy" v-model="xy">
-        <span style="font-size: 0.6rem">同意并接受<a href="javascript:void(0)" @click="showYhxy">《用户协议与免责条款》</a>及<a
+        <span style="font-size: 12px">同意并接受<a href="javascript:void(0)" @click="showYhxy">《用户协议与免责条款》</a>及<a
           href="javascript:void(0)" @click="showFwxy">《服务合作协议书》</a></span>
         <p>
           <span v-show="errors.has('xy')" class="error">{{ errors.first('xy') }}</span>
@@ -346,12 +346,12 @@
         a {
           color: #666;
           text-decoration: none;
-          font-size: 0.8rem;
+          font-size: 12px;
         }
       }
       .sendCode {
         .mint-button {
-          font-size: 0.6rem;
+          font-size: 12px;
         }
       }
     }
@@ -362,7 +362,7 @@
       overflow-y: auto;
     }
     .error {
-      font-size: 0.6rem;
+      font-size: 12px;
       color: #ff1c13;
     }
   }

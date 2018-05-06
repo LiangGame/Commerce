@@ -161,7 +161,7 @@
             }
             .mint-cell-text {
               color: #666;
-              font-size: 1.2rem;
+              font-size: 18px;
             }
             .mint-cell-value {
               color: #333;

@@ -220,12 +220,12 @@
       }
       .sendCode {
         .mint-button {
-          font-size: 0.6rem;
+          font-size: 12px;
         }
       }
     }
     .error {
-      font-size: 0.6rem;
+      font-size: 16px;
       color: #ff1c13;
       padding: 0 2em;
     }

@@ -49,21 +49,22 @@
       max-width: 630px;
       text-align: center;
       color: #fff;
-      font-size: 1rem;
+      font-size: 18px;
       padding: 5px;
       position: absolute;
       z-index: 99999999;
       top: 40px;
       background: rgba(51, 51, 51, 0.6);
     }
+    margin-bottom: 55px;
   }
 
   body {
     font-family: 'Microsoft YaHei';
     max-width: 640px;
     margin: 0 auto;
+    background: #f6f6f6;
   }
-
   .mint-tabbar {
     max-width: 620px;
     box-sizing: border-box;
@@ -71,11 +72,11 @@
   }
 
   .mint-button {
-    font-size: 1rem;
+    font-size: 14px;
   }
 
   .mint-cell-wrapper {
-    font-size: 0.8rem;
+    font-size: 12px;
   }
   .mint-toast{
     /*position: relative;*/
@@ -84,6 +85,9 @@
   .mint-indicator{
     position: relative;
     z-index: 999999999;
+  }
+  .mint-tabbar{
+    position: fixed;
   }
   /*#app {*/
   /*font-family: 'Avenir', Helvetica, Arial, sans-serif;*/

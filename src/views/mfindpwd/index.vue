@@ -242,14 +242,14 @@
       }
       .sendCode {
         .mint-button {
-          font-size: 0.6rem;
+          font-size: 12px;
         }
       }
       .confirm {
         margin-top: 25px;
       }
       .error {
-        font-size: 0.6rem;
+        font-size: 12px;
         color: #ff1c13;
       }
     }

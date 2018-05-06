@@ -2,8 +2,7 @@
   <div class="wallet_container">
     <my-header title="钱包"/>
     <div class="main">
-      <img :src="require('@/assets/pic/money.png')" width="100" height="100" alt="">
-      <h2>我的零钱</h2>
+      <img :src="require('@/assets/pic/u807.png')" width="100" height="100" alt="">
       <router-link to="/bill"><h1 class=money>￥<span>{{money}}</span></h1></router-link>
       <p class="hint">点击余额查看明细</p>
       <mt-button class="confirm" size="large" type="primary" @click="toRecharge">充值</mt-button>

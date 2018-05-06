@@ -1,14 +1,23 @@
 <template>
   <div class="consignment_container">
     <mt-header title="我的寄售">
-      <router-link to="/person" slot="left">
+      <router-link :to="{path:'/',query:{next:'mine'}}" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
-      <mt-button slot="right" @click.native="showFormat = true">筛选</mt-button>
+      <!--<mt-button slot="right" @click.native="showFormat = true">筛选</mt-button>-->
     </mt-header>
     <div class="main">
+      <div class="title">
+        <ul>
+          <li data-type="9" class="active" @click="formatData($event)">全部</li>
+          <li data-type="2" @click="formatData($event)">代售中</li>
+          <li data-type="1" @click="formatData($event)">未确认</li>
+          <li data-type="0" @click="formatData($event)">未支付</li>
+          <li data-type="4" @click="formatData($event)">已完成</li>
+        </ul>
+      </div>
       <div v-for="(item,index) in orderList" :key=index @click="orderInfo(item)">
-        <mt-cell :key="index" :title="item.goodName" :label="item.status" icon="more">
+        <mt-cell :key="index" :title="item.goodName" :label="item.status | zh" icon="more">
           <div><span>数量：</span><span style="color: #333">{{item.count}}</span></div>
           <div><span>总价：</span><span style="color: #26a2ff">{{'￥'+item.totalPrice}}</span></div>
           <img slot="icon" :src="fileUrl+item.img" width="55" height="55">
@@ -85,17 +94,6 @@
             data.info.map(item => {
               item.cerateTime = this.timestampToTime(item.cerateTime);
               item.payTime = this.timestampToTime(item.payTime);
-              if (item.status == 0) {
-                item.status = '未支付'
-              } else if (item.status == 1) {
-                item.status = '财务未确认'
-              } else if (item.status == 2) {
-                item.status = '已付款,代售中...'
-              } else if (item.status == 3) {
-                item.status = '已返第一次佣金'
-              } else if (item.status == 4) {
-                item.status = '已返全部佣金'
-              }
               if (item.payMent == 1) {
                 item.payMent = '支付宝'
               } else if (item.payMent == 2) {
@@ -152,15 +150,16 @@
         this.info = false;
       },
       //筛选
-      formatData(){
-        if(this.formatInfo.length){
+      formatData(event){
+        // $(event.target).siblings().className='';
+        $(event.target).siblings().removeClass('active');
+        $(event.target).addClass('active');
+        let type = $(event.target).attr('data-type');
+        if(type != 9){
           let newList = [];
           this.allList.map(item => {
-            if(item.status == this.formatInfo[0]){
-              newList.push(item);
-            }else if(item.status == this.formatInfo[1]){
-              newList.push(item);
-            }else if(item.status == this.formatInfo[2]){
+            console.log(item.status,'--'+type);
+            if (item.status == type) {
               newList.push(item);
             }
           })
@@ -168,12 +167,30 @@
         }else {
           this.orderList = this.allList;
         }
-        this.showFormat = false;
+        // this.showFormat = false;
       }
     },
     created() {
       this.loadData();
+    },
+    filters:{
+      zh(value){
+        console.log(value);
+        if (value == 0) {
+          value = '未支付'
+        } else if (value == 1) {
+          value = '财务未确认'
+        } else if (value == 2) {
+          value = '已付款,代售中...'
+        } else if (value == 3) {
+          value = '已返第一次佣金'
+        } else if (value == 4) {
+          value = '已返全部佣金'
+        }
+        return value
+      }
     }
+
 
   }
 </script>
@@ -181,6 +198,24 @@
 <style lang="less">
   .consignment_container {
     .main {
+      .title{
+        ul{
+          height: 35px;
+          line-height: 35px;
+          background: #ddd;
+          overflow: hidden;
+          li{
+            text-align: center;
+            float: left;
+            width: 20%;
+            font-weight: 600;
+            font-size: 14px;
+          }
+        }
+        .active{
+          color: #e93b3b;
+        }
+      }
       .mint-cell {
         padding: 15px 0;
         border-bottom: solid 1px #e6e6e6;

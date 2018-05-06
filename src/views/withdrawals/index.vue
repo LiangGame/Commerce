@@ -129,7 +129,7 @@
         }
       }
       .warning {
-        font-size: 1.3rem;
+        font-size: 18px;
         padding: 20px 10px;
         color: #e93b3b;
       }

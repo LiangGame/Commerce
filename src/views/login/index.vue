@@ -120,11 +120,11 @@
         a {
           color: #666;
           text-decoration: none;
-          font-size: 0.8rem;
+          font-size: 12px;
         }
       }
       .error {
-        font-size: 0.6rem;
+        font-size: 12px;
         color: #ff1c13;
       }
       .mint-checkbox-core {

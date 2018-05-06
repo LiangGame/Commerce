@@ -11,6 +11,12 @@
         :options="options">
       </mt-radio>
     </div>
+    <div style="margin-top: 20px;" v-if="!this.$route.params.type">
+      <div>
+        <p style="height: 35px;line-height:35px;background:#E2E7EA;padding-left: 10px">提货地址：</p>
+        <p style="padding: 10px;font-size: 18px;color: #e93b3b">贵阳市花果园区国际中心24楼</p>
+      </div>
+    </div>
     <div class="pay_btn">
       <mt-button class="confirm" size="large" @click="calcMaxOrder" type="primary">立即支付</mt-button>
     </div>
@@ -187,7 +193,7 @@
               }else if(formData.payMent == 3){
                 _this.bankCard = true;
               }else if(formData.payMent == 4){
-                _this.$router.push('/person');
+                _this.$router.push('/');
               }
             }, 3000)
           }
@@ -255,7 +261,7 @@
         margin-bottom: 15px;
         .price {
           color: #e93b3b;
-          font-size: 1rem;
+          font-size: 14px;
         }
       }
       .mint-radio-input:checked + .mint-radio-core {

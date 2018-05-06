@@ -191,7 +191,7 @@
         border-color: #26a2ff;
       }
       .warning {
-        font-size: 1rem;
+        font-size: 14px;
         padding: 20px 10px;
         color: #e93b3b;
       }

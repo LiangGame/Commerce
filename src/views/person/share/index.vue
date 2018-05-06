@@ -10,7 +10,7 @@
       <img src="../../../assets/pic/share01.png" width="100%"/>
     </div>
     <div v-if="isShare" class="middle">
-      <div style="color: white;font-size: 1.2rem;overflow: hidden">
+      <div style="color: white;font-size: 18px;overflow: hidden">
         <div style="text-align: center;width: 50%;float: left">
           <vue-qr :bgSrc='src' :logoSrc="src2" :text="shareSrc" height="100" width="100" :size="90" :margin="0"
                   style="display: inline-block;"></vue-qr>
