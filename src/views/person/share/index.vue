@@ -70,7 +70,6 @@
           method: "GET",
           params: {id: this.userId}
         }).then(data => {
-          console.log(data);
           if (data.errCode == 0) {
             this.isShare = data.info
           }
@@ -88,11 +87,10 @@
       }
     },
     created() {
-      let user = this.Cookie.get('user')
+      let user = localStorage.getItem('user')
       if (user) {
         this.shareSrc += JSON.parse(user).id;
         this.userId = JSON.parse(user).id;
-        console.log(this.shareSrc);
       }
       this.getShare()
     }
@@ -107,7 +105,7 @@
       h3 {
         text-align: center;
         color: #fff;
-        font-size: 1.5rem;
+        font-size: 0.8rem;
       }
       .btn_container{
         overflow: hidden;

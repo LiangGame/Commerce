@@ -7,6 +7,11 @@
         v-model="payMent"
         :options="options">
       </mt-radio>
+      <mt-radio
+        title="选择入账类型"
+        v-model="inMoney"
+        :options="types">
+      </mt-radio>
       <div class="money_container">
         <mt-field label="金额" placeholder="请输入充值金额" v-model="money"></mt-field>
       </div>
@@ -27,7 +32,7 @@
         请截图保存,在微信中打开扫一扫<br>
         转账时请核对户名,以免造成损失
       </p>
-      <mt-button @click.once="pay" size="large" type="primary" class="dk_btn" :disabled="isOne">已打款</mt-button>
+      <mt-button @click.once="haveMoney" size="large" type="primary" class="dk_btn" :disabled="isOne">已打款</mt-button>
     </mt-popup>
     <!--支付宝弹窗-->
     <mt-popup v-model="alipay" position="right" class="mint-popup-3" :modal="false">
@@ -41,7 +46,7 @@
         请截图保存,在支付宝中打开扫一扫<br>
         转账时请核对户名,以免造成损失
       </p>
-      <mt-button @click.once="pay" size="large" type="primary" class="dk_btn" :disabled="isOne">已打款</mt-button>
+      <mt-button @click.once="haveMoney" size="large" type="primary" class="dk_btn" :disabled="isOne">已打款</mt-button>
     </mt-popup>
     <!--银行卡弹窗-->
     <mt-popup v-model="bankCard" position="right" class="mint-popup" :modal="false">
@@ -58,7 +63,7 @@
         转账时请核对入账信息,以免造成损失<br>
         转账时请备注您的ID
       </p>
-      <mt-button @click.once="pay" size="large" type="primary" class="dk_btn" :disabled="isOne">已打款</mt-button>
+      <mt-button @click.once="haveMoney" size="large" type="primary" class="dk_btn" :disabled="isOne">已打款</mt-button>
     </mt-popup>
   </div>
 </template>
@@ -77,24 +82,35 @@
         isOne:false,
         fileUrl:fileUrl,
         n: 0,
-        user: JSON.parse(this.Cookie.get('user')),
+        user: JSON.parse(localStorage.getItem('user')),
         money: '',
-        payMent: '1',
+        inMoney:'1',
+        payMent: '3',
         payMentList : {},
         payText: '已打款',
         isPay: false,
         options: [
-          {
-            label: '支付宝支付',
-            value: '1'
-          },
-          {
-            label: '微信支付',
-            value: '2'
-          },
+          // {
+          //   label: '支付宝支付',
+          //   value: '1'
+          // },
+          // {
+          //   label: '微信支付',
+          //   value: '2'
+          // },
           {
             label: '银行卡支付',
             value: '3',
+          }
+        ],
+        types: [
+          {
+            label: '余额',
+            value: '1'
+          },
+          {
+            label: '迈达币',
+            value: '2'
           }
         ],
         // 弹窗
@@ -128,9 +144,9 @@
       },
       //打款
       pay() {
-        Indicator.open('请稍后...');
         if (this.n < 1) {
-          let formData = {userID: this.user.id, money: this.money, payMent: this.payMent};
+          Indicator.open('请稍后...');
+          let formData = {userID: this.user.id, money: this.money, payMent: this.payMent,type:this.inMoney};
           this.$http({
             url: "/order/recharge",
             method: "POST",
@@ -150,25 +166,68 @@
               this.payText = '正在充值,请稍后...';
               this.n++;
               let _this = this;
-              setTimeout(function () {
-                this.payText = '已打款';
-                this.isPay = true;
-                _this.$router.push({path: '/wallet'});
-              }, 60000)
+              if(this.inMoney == 2){
+                setTimeout(function () {
+                  this.payText = '已打款';
+                  this.isPay = true;
+                  _this.$router.push({path: '/wallet'});
+                }, 3000)
+              }else {
+                setTimeout(function () {
+                  this.payText = '已打款';
+                  this.isPay = true;
+                  _this.$router.push({path: '/wallet'});
+                }, 60000)
+              }
             }
           }).catch(()=>{
             Indicator.close();
           })
         } else {
-            Indicator.close();
-          Toast('请勿重复提交')
+          Toast('请勿重复提交');
+          let _this = this;
+          setTimeout(function () {
+            this.payText = '已打款';
+            this.isPay = true;
+            _this.$router.push({path: '/wallet'});
+          }, 1000)
         }
+      },
+      //已打款
+      haveMoney(){
+        let _this = this;
+        Indicator.open('正在自动跳转回钱包，请稍等...');
+        setTimeout(function () {
+          Indicator.close();
+          _this.$router.push('/wallet');
+        }, 1000)
       }
     },
     created(){
       this.getPayMent(data => {
         this.payMentList = data.info;
       });
+    },
+    watch:{
+      inMoney:function (val,oldval) {
+        if(val == 2){
+          this.options = [
+            {
+              label: '余额支付',
+              value: '4',
+            }
+          ]
+          this.payMent = '4';
+        }else {
+          this.options= [
+            {
+              label: '银行卡支付',
+              value: '3',
+            }
+          ]
+          this.payMent = '3';
+        }
+      }
     }
 
   }

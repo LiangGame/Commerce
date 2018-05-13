@@ -15,7 +15,7 @@
       <mt-tab-container-item id="index">
         <div class="main">
           <mt-swipe :auto="3000">
-            <mt-swipe-item v-for="item in items" :key="item.id">
+            <mt-swipe-item v-for="item in imgList1" :key="item.id">
               <a :href="item.href" rel="external nofollow">
                 <img :src="item.url ? item.url : ''" class=""/>
                 <span class="desc"></span>
@@ -32,10 +32,10 @@
                     width="100%" :alt="item.goodName">
                   <div class="goodInfo">
                     <p class="goodTitle" style="-webkit-box-orient: vertical">{{item.goodName}}</p>
-                    <div class="price"><span
-                      class="big_price">￥{{item.price ? (item.price+'').split('.')[0] : item.price}}.</span>{{item.price
-                      ?
-                      (item.price+'').split('.')[1] ? (item.price+'').split('.')[1] : '00':'' }}
+                    <div class="price">
+                      <span class="big_price">￥{{item.price ? (item.price+'').split('.')[0] : item.price}}.</span>
+                      {{item.price ? (item.price+'').split('.')[1] ? (item.price+'').split('.')[1] : '00':'' }}
+                      <span style="float: right;color:#333">月销量：{{item.volume ? item.volume:'0'}}</span>
                     </div>
                   </div>
                 </router-link>
@@ -47,14 +47,14 @@
       <mt-tab-container-item id="shop">
         <div class="main">
           <mt-swipe :auto="3000">
-            <mt-swipe-item v-for="item in items" :key="item.id">
+            <mt-swipe-item v-for="item in imgList2" :key="item.id">
               <a :href="item.href" rel="external nofollow">
                 <img :src="item.url ? item.url : ''" class=""/>
                 <span class="desc"></span>
               </a>
             </mt-swipe-item>
           </mt-swipe>
-          <div class="orderType">
+          <!--<div class="orderType">
             <ul>
               <router-link to="/myOrder">
                 <li>
@@ -73,7 +73,7 @@
                 </li>
               </router-link>
             </ul>
-          </div>
+          </div>-->
           <div class="shops">
             <h1 style="background: #56abf2;color: white;padding: 0;margin: 0">推荐商品</h1>
             <ul>
@@ -84,10 +84,10 @@
                     width="100%" :alt="item.goodName">
                   <div class="goodInfo">
                     <p class="goodTitle" style="-webkit-box-orient: vertical">{{item.goodName}}</p>
-                    <div class="price"><span
-                      class="big_price">￥{{item.price ? (item.price+'').split('.')[0] : item.price}}.</span>{{item.price
-                      ?
-                      (item.price+'').split('.')[1] ? (item.price+'').split('.')[1] : '00':'' }}
+                    <div class="price">
+                      <span class="big_price">￥{{item.price ? (item.price+'').split('.')[0] : item.price}}.</span>
+                      {{item.price ? (item.price+'').split('.')[1] ? (item.price+'').split('.')[1] : '00':'' }}
+                      <span style="float: right;color:#333">月销量：{{item.volume ? item.volume:'0'}}</span>
                     </div>
                   </div>
                 </router-link>
@@ -122,9 +122,9 @@
         <div class="person_main">
           <ul>
             <li>
-              <router-link to="/myVip">
+              <router-link :to="{path:'/myVip',query:{id:userId}}">
                 <img src="../../assets/pic/u633.png"/>
-                <div>我的会员</div>
+                <div>我的团队</div>
               </router-link>
             </li>
             <li>
@@ -136,10 +136,10 @@
             <li>
               <router-link to="/consignment">
                 <img src="../../assets/pic/u267.png"/>
-                <div>我的寄售</div>
+                <div>我的订单</div>
               </router-link>
             </li>
-            <li @click="toCertification(JSON.parse(userInfo).status)">
+            <li @click="toCertification()">
               <img src="../../assets/pic/u645.png"/>
               <div>实名认证</div>
             </li>
@@ -163,9 +163,21 @@
             </li>
             <li>
               <router-link to="/service">
-              <img src="../../assets/pic/u670.png"/>
-              <div>联系客服</div>
+                <img src="../../assets/pic/u670.png"/>
+                <div>联系客服</div>
               </router-link>
+            </li>
+            <li @click="_alert">
+              <!--<router-link to="/service">-->
+                <img src="../../assets/pic/hf.png"/>
+                <div>话费充值</div>
+              <!--</router-link>-->
+            </li>
+            <li @click="_alert">
+              <!--<router-link to="/service">-->
+                <img src="../../assets/pic/jp.png"/>
+                <div>机票预订</div>
+              <!--</router-link>-->
             </li>
           </ul>
         </div>
@@ -174,7 +186,7 @@
 
     <mt-tabbar v-model="selected" fixed>
       <mt-tab-item id="index">
-        <img slot="icon" src="../../assets/pic/homepage.png" :click="toIndex()">
+        <img slot="icon" src="../../assets/pic/homepage.png">
         首页
       </mt-tab-item>
       <mt-tab-item id="shop">
@@ -183,7 +195,7 @@
       </mt-tab-item>
       <mt-tab-item id="mine">
         <img slot="icon" src="../../assets/pic/people.png">
-        我的
+        个人中心
       </mt-tab-item>
     </mt-tabbar>
   </div>
@@ -199,6 +211,8 @@
     components: {myHeader},
     data() {
       return {
+        imgList1:[],
+        imgList2:[],
         userId: '',
         about: '',
         selected: this.$route.query.next || 'index',
@@ -212,41 +226,110 @@
         isLogin: false
       }
     },
+    watch: {
+      selected: function (val, oldVal) {
+        // 这里就可以通过 val 的值变更来确定
+        if (val != 'mine') {
+          this.loadData()
+        } else {
+          this.getNotice()
+        }
+
+        this.userInfo = localStorage.getItem('user');
+        if (this.selected == "mine") {
+          //验证是否登录
+          console.log(this.userInfo);
+          if (!this.userInfo) {
+            this.selected = "index"
+            Toast("未登录！");
+          } else {
+            this.userId = JSON.parse(this.userInfo).id;
+            this.getUserInfo();
+          }
+          //获取个人信息
+          if (this.userInfo) {
+            this.userId = JSON.parse(this.userInfo).id
+            this.member = JSON.parse(this.userInfo).member
+            if (JSON.parse(this.userInfo).status) {
+              this.isCertification = true;
+            }
+          }
+        } else if (this.selected == "shop") {
+          this.getAD(2)
+          this.$router.push({path: '/', query: {next: 'shop'}});
+        } else {
+          this.getAD(1)
+          this.$router.push({path: '/', query: {next: 'index'}})
+        }
+      }
+    },
     created() {
       //验证是否登录
-      let userInfo = this.Cookie.get('user');
+      let userInfo = localStorage.getItem('user');
       if (userInfo) {
         this.isLogin = true;
       }
-      this.loadData();
-      this.getNotice();
+      if(this.selected == 'mine'){
+        this.userId = JSON.parse(userInfo).id
+        this.getUserInfo();
+        this.getNotice();
+      }else{
+        this.loadData();
+        if(this.selected == 'index'){
+          this.getAD(1);
+        }else {
+          this.getAD(2);
+        }
+      }
     },
     methods: {
+      //获取轮播图
+      getAD(type = 1) {
+        this.$http({
+          url: '/config/getAD',
+          method: 'GET',
+          params: {type: type}
+        }).then(data => {
+          if (data.errCode == 0) {
+            if (type == 1) {
+              this.imgList1 = [];
+            }else {
+              this.imgList2 = [];
+            }
+            data.info.map(item => {
+              if (type == 1) {
+                this.imgList1.push({name:item.img,url:this.fileUrl+item.img,id:item.id})
+              } else {
+                this.imgList2.push({name:item.img,url:this.fileUrl+item.img,id:item.id})
+              }
+            })
+          }
+        })
+      },
       //前往实名认证
       toCertification(isCertification) {
-        console.log(isCertification);
-        if (!isCertification) {
+        // if (!isCertification) {
           this.$router.push('/certification');
-        } else {
-          Toast("已认证！")
-        }
+        // } else {
+        //   Toast("已认证！")
+        // }
       },
       //退出登录
       signOut() {
-        this.Cookie.remove('user');
+        // localStorage.removeItem('user');
+        localStorage.removeItem('user')
         this.$router.push('/login');
         this.userInfo = null;
       },
       //获取公告
       getNotice() {
         this.$http({
-          url: "/config/getNotice",
+          url: "/config/getConfig",
           method: "GET",
           params: {}
         }).then(data => {
-          console.log(data);
           if (data.errCode == 0) {
-            this.about = data.info.info
+            this.about = data.info.notice
           }
         }).catch(error => {
           console.log(error)
@@ -259,12 +342,13 @@
           method: "GET",
           params: {id: this.userId}
         }).then(data => {
-          console.log(data);
-          if (data.errCode == 0) {
-            this.Cookie.set("user", data.info, {expires: 1});
+          if (data.errCode == 0&&data.info) {
+            // this.Cookie.set("user", data.info, {expires: 1});
+            localStorage.setItem('user',JSON.stringify(data.info))
           } else if (data.errCode == -1) {
             Toast(data.info);
-            this.Cookie.remove('user');
+            // localStorage.removeItem('user');
+            localStorage.removeItem('user')
             this.$router.push('/login');
           } else {
             Toast(data.info);
@@ -292,46 +376,26 @@
       },
       //获取商品列表
       loadData() {
+        let type = 1;
+        if (this.selected == 'index') {
+          type = 1
+        } else {
+          type = 3
+        }
         this.$http({
-          url: "/goods",
+          url: "/goods?type=" + type,
           method: "GET"
         }).then(data => {
           if (data) {
             this.goods = data;
-            console.log((this.goods[0].price + '').split('.'));
           }
         }).catch(error => {
 
         })
       },
-      toIndex() {
-        console.log(this.selected);
-        // if(this.selected == "首页"){
-        //   this.$router.push('/');
-        // }else
-        if (this.selected == "mine") {
-          //验证是否登录
-          this.userInfo = this.Cookie.get('user');
-          console.log(!this.userInfo);
-          if (!this.userInfo) {
-            this.selected = "index"
-              Toast("未登录！");
-          } else {
-            this.getUserInfo();
-          }
-          //获取个人信息
-          if (this.userInfo) {
-            this.userId = JSON.parse(this.userInfo).id
-            this.member = JSON.parse(this.userInfo).member
-            if (JSON.parse(this.userInfo).status) {
-              this.isCertification = true;
-            }
-          }
-        } else if(this.selected == "shop") {
-          this.$router.push({path:'/',query:{next:'shop'}});
-        }else {
-          this.$router.push({path:'/',query:{next:'index'}})
-        }
+      //alert
+      _alert(){
+        Toast('正在研发对接中...')
       }
     },
     mounted() {
@@ -353,11 +417,12 @@
         img {
           width: 100%;
           height: 6.5rem;
+          max-height: 160px;
         }
       }
       .mint-swipe {
         height: 6.5rem;
-        max-height: 6.5rem;
+        max-height: 160px;
         background: #f7f7f7;
         overflow: hidden;
       }
@@ -398,6 +463,7 @@
               padding-right: 2px;
             }
             img {
+              min-height: 150px;
             }
             .goodInfo {
               background: #fff;
@@ -447,6 +513,7 @@
         display: inline-block;
         overflow: hidden;
         clear: both;
+        margin-top: 2px;
       }
       .laba {
         float: left;
@@ -502,7 +569,7 @@
           width: 33.33%;
           text-align: center;
           color: #333;
-          img{
+          img {
             width: 1.5rem;
             height: 1.5rem;
           }

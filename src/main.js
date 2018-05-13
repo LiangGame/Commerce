@@ -53,7 +53,7 @@ export const vue = new Vue({
 })
 // cookie失效重新登陆
 router.beforeResolve((to, from, next) => {
-  if( to.path.indexOf('/')==-1 && vue.Cookie.get('user')==undefined){
+  if( to.path.indexOf('/')==-1 && localStorage.getItem('user')==undefined){
       next({ path: '/'})
   }else{
       next();

@@ -66,7 +66,6 @@
           method: "get",
           withCredentials: true
         }).then(data => {
-          console.log(data)
           this.identifyCode = data.code;
         }).catch(error => {
           console.log(error)
@@ -74,12 +73,11 @@
       },
       //验证手机号是否注册
       checkPhone(tel) {
-        console.log('here')
         this.validator.validateAll({
           phone: this.user.phone
         }).then(result => {
           if(!result){
-            if(!this.Cookie.get('sendCode')){
+            if(!localStorage.getItem('sendCode')){
               this.isphoneCode = false;
             }
           }
@@ -91,7 +89,7 @@
           captcha: this.captcha
         }).then(result => {
           if(result){
-            if(!this.Cookie.get('sendCode')){
+            if(!localStorage.getItem('sendCode')){
               this.isphoneCode = false;
             }
           }
@@ -134,11 +132,12 @@
           captcha: this.captcha
         }).then(result => {
           if (result) {
-            if(this.Cookie.get('sendCode')){
+            if(localStorage.getItem('sendCode')){
               this.isphoneCode = true;
             }else {
               var inFifteenMinutes = new Date(new Date().getTime() + 1 * 60 * 1000);
-              this.Cookie.set('sendCode', 1, {expires: inFifteenMinutes});
+              // this.Cookie.set('sendCode', 1, {expires: inFifteenMinutes});
+              localStorage.setItem('sendCode',1)
               let _this = this;
               this.get = '重新发送';
               this.one = true

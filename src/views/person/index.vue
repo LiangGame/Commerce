@@ -60,7 +60,7 @@
     },
     created() {
       //验证是否登录
-      this.userInfo = this.Cookie.get('user');
+      this.userInfo = localStorage.getItem('user');
       if (!this.userInfo) {
         this.$router.push('/');
       }
@@ -96,7 +96,7 @@
       },
       //退出登录
       signOut() {
-        this.Cookie.remove('user');
+        localStorage.removeItem('user');
         this.$router.push('/login');
       },
       //获取用户信息
@@ -106,12 +106,12 @@
           method: "GET",
           params: {id: this.userId}
         }).then(data => {
-          console.log(data);
           if (data.errCode == 0) {
-            this.Cookie.set("user", data.info, {expires: 1});
+            // this.Cookie.set("user", data.info, {expires: 1});
+            localStorage.setItem('user',JSON.stringify(data.info))
           } else if (data.errCode == -1) {
             Toast(data.info);
-            this.Cookie.remove('user');
+            localStorage.removeItem('user');
             this.$router.push('/login');
           } else {
             Toast(data.info);
@@ -122,7 +122,6 @@
       },
       //前往实名认证
       toCertification(isCertification) {
-        console.log(isCertification);
         if (!isCertification) {
           this.$router.push('/certification');
         } else {
@@ -136,7 +135,6 @@
           method: "GET",
           params: {}
         }).then(data => {
-          console.log(data);
           if (data.errCode == 0) {
             this.about = data.info.info
           }

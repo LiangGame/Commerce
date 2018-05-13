@@ -3,17 +3,17 @@
     <my-header title="实名认证"/>
     <div class="main">
       <form @submit.prevent="applyCoupon" class="">
-        <mt-field placeholder="银行卡开户行" v-model="data.bankname"></mt-field>
+        <mt-field placeholder="银行卡开户行" v-model="data.bankname" :disabled="!!isStatus"></mt-field>
         <span v-show="errors.has('bankname')" class="error">{{ errors.first('bankname') }}</span>
-        <mt-field placeholder="银行卡号" v-model="data.bankcard"></mt-field>
+        <mt-field placeholder="银行卡号" v-model="data.creditCard" :disabled="!!isStatus"></mt-field>
         <span v-show="errors.has('bankcard')" class="error">{{ errors.first('bankcard') }}</span>
-        <mt-field placeholder="姓名" v-model="data.realname"></mt-field>
+        <mt-field placeholder="姓名" v-model="data.realName" :disabled="!!isStatus"></mt-field>
         <span v-show="errors.has('realname')" class="error">{{ errors.first('realname') }}</span>
-        <mt-field placeholder="身份证号" v-model="data.idcard"></mt-field>
+        <mt-field placeholder="身份证号" v-model="data.IDcard" :disabled="!!isStatus"></mt-field>
         <span v-show="errors.has('idcard')" class="error">{{ errors.first('idcard') }}</span>
         <mt-field placeholder="银行预留手机号" disabled v-model="data.phone"></mt-field>
         <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
-        <mt-field placeholder="图形验证码" name="captcha" v-model="data.code" v-focus="{checkCaptcha:checkCaptcha}">
+        <mt-field placeholder="图形验证码" name="captcha" v-model="data.code" v-focus="{checkCaptcha:checkCaptcha}" v-if="!isStatus">
           <div class="code" @click="getVertifyCode">
             <set-code :identifyCode="identifyCode"/>
           </div>
@@ -26,7 +26,7 @@
            </div>
          </mt-field>
          <span v-show="errors.has('vertifyCode')" class="error">{{ errors.first('vertifyCode') }}</span>-->
-        <div style="padding: 20px 10px">
+        <div style="padding: 20px 10px" v-if="!isStatus">
           <mt-button size="large" type="primary">实名认证</mt-button>
         </div>
       </form>
@@ -46,6 +46,8 @@
     components: {myHeader, setCode},
     data() {
       return {
+        id:'',
+        isStatus:'',
         validator: null,
         errors: null,
         data: {
@@ -73,7 +75,6 @@
           method: "get",
           withCredentials: true
         }).then(data => {
-          console.log(data)
           this.identifyCode = data.code;
         }).catch(error => {
           console.log(error)
@@ -96,7 +97,6 @@
         }).then(result => {
           if (result) {
             var formData = JSON.stringify(this.data); // 这里才是你的表单数据
-            console.log(formData);
             this.$http({
               url: "/user/verifybankcard",
               method: "POST",
@@ -151,13 +151,26 @@
           }
         });
       }*/
+      //获取数据
+      getInfo(){
+        this.$http({
+          url:'/user/getInfo?id='+this.id,
+          method:'GET',
+        }).then(data => {
+          if(data.errCode == 0){
+            this.data = data.info
+          }
+        })
+      }
     },
     created() {
-      if(this.Cookie.get('user')){
-        this.data.phone = JSON.parse(this.Cookie.get('user')).phone;
+      if(localStorage.getItem('user')){
+        this.data.phone = JSON.parse(localStorage.getItem('user')).phone;
+        this.id = JSON.parse(localStorage.getItem('user')).id;
+        this.isStatus = JSON.parse(localStorage.getItem('user')).status;
       }
+      this.getInfo();
       this.$nextTick(() => {
-        console.log(154,this.$refs)
         // 打印结果：<li>2</li> 本以为会获得一个数组
       })
       this.getVertifyCode();

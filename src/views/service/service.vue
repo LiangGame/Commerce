@@ -15,10 +15,10 @@
       </span>
       </div>
       <div style="text-align: center;margin: 20px 0">
-        <img src="../../assets/pic/money.png" style="width: 5rem;height: 5rem"/>
+        <img :src="weChatPic" style="width: 5rem;height: 5rem"/>
         <p style="font-weight: 600;font-size: 16px;margin-top: 20px">打开微信扫一扫添加为好友</p>
       </div>
-      <mt-button type="primary" size="large">0851-85945546</mt-button>
+      <mt-button type="primary" size="large">{{phone}}</mt-button>
     </div>
   </div>
 </template>
@@ -27,7 +27,22 @@
   export default {
     name: "service",
     data() {
-      return {}
+      return {
+        weChatPic:'',
+        phone:''
+      }
+    },
+    created(){
+      this.$http({
+        url: "/config/getConfig",
+        method: "GET",
+        params: this.formData
+      }).then(data => {
+        if(data.errCode == 0){
+          this.weChatPic = data.info.wechatPic
+          this.phone = data.info.phone
+        }
+      })
     }
   }
 </script>

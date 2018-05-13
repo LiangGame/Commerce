@@ -10,7 +10,7 @@
     name: 'App',
     data() {
       return {
-        user: this.Cookie.get('user'),
+        user: localStorage.getItem('user'),
         isCertification: true
       }
     },

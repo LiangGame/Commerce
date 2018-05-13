@@ -70,7 +70,6 @@
           method: "get",
           withCredentials: true
         }).then(data => {
-          console.log(data)
           this.identifyCode = data.code;
         }).catch(error => {
           console.log(error)
@@ -78,12 +77,11 @@
       },
       //验证手机号是否注册
       checkPhone(tel) {
-        console.log('here')
         this.validator.validateAll({
           phone: this.user.phone
         }).then(result => {
           if(!result){
-            if(!this.Cookie.get('sendCode')){
+            if(!localStorage.getItem('sendCode')){
               this.isphoneCode = false;
             }
           }
@@ -95,7 +93,7 @@
           captcha: this.captcha
         }).then(result => {
           if(result){
-            if(!this.Cookie.get('sendCode')){
+            if(!localStorage.getItem('sendCode')){
               this.isphoneCode = false;
             }
           }
@@ -109,7 +107,6 @@
           passwords: this.passwords,
           captcha: this.captcha
         }).then(result => {
-          console.log(result);
           if (result) {
             var formData = JSON.stringify(this.user); // 这里才是你的表单数据
             this.$http({
@@ -139,11 +136,12 @@
           captcha: this.captcha
         }).then(result => {
           if (result) {
-            if(this.Cookie.get('sendCode')){
+            if(localStorage.getItem('sendCode')){
               this.isphoneCode = true;
             }else {
               var inFifteenMinutes = new Date(new Date().getTime() + 1 * 60 * 1000);
-              this.Cookie.set('sendCode', 1, {expires: inFifteenMinutes});
+              // this.Cookie.set('sendCode', 1, {expires: inFifteenMinutes});
+              localStorage.getItem('sendCode',1)
               let _this = this;
               this.get = '重新发送';
               this.one = true
@@ -164,7 +162,6 @@
                 params: {phone: this.user.phone, code: this.identifyCode, type: 'reset'}
               }).then(data => {
                 Toast(data.info);
-                console.log(data)
               })
             }
           }
@@ -172,8 +169,8 @@
       }
     },
     created() {
-      if(this.Cookie.get('user')){
-        this.user.phone = JSON.parse(this.Cookie.get('user')).phone
+      if(localStorage.getItem('user')){
+        this.user.phone = JSON.parse(localStorage.getItem('user')).phone
       }
       this.getVertifyCode();
       this.validator = new Validator({});  // 初始化Validator对象

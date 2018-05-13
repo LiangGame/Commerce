@@ -26,13 +26,14 @@
         </mt-radio>
       </div>
       <div class="btn_box">
-        <mt-button size="small" type="primary">立即支付</mt-button>
+        <mt-button size="small" type="primary" @click="buyAgent">立即支付</mt-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import {Toast} from 'mint-ui'
   export default {
     name: "agencyPay",
     data() {
@@ -43,6 +44,27 @@
             value: '4'
           }
         ],
+      }
+    },
+    created(){
+    },
+    methods:{
+      buyAgent(){
+        let _this = this;
+        this.$http({
+          url: "/user/buyAgent",
+          method: "GET",
+          params: {id: JSON.parse(localStorage.getItem('user')).id}
+        }).then(data => {
+          if(data.errCode == 0){
+            Toast(data.info);
+            setTimeout(function () {
+              _this.$router.push('/agency')
+            },1000)
+          }else {
+            Toast(data.info)
+          }
+        })
       }
     }
   }

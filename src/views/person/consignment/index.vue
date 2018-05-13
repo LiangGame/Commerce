@@ -1,6 +1,6 @@
 <template>
   <div class="consignment_container">
-    <mt-header title="我的寄售">
+    <mt-header title="我的订单">
       <router-link :to="{path:'/',query:{next:'mine'}}" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
@@ -9,11 +9,10 @@
     <div class="main">
       <div class="title">
         <ul>
-          <li data-type="9" class="active" @click="formatData($event)">全部</li>
-          <li data-type="2" @click="formatData($event)">代售中</li>
-          <li data-type="1" @click="formatData($event)">未确认</li>
-          <li data-type="0" @click="formatData($event)">未支付</li>
-          <li data-type="4" @click="formatData($event)">已完成</li>
+          <li data-type="9" class="active" @click="formatData('')">全部</li>
+          <li data-type="2" @click="formatData(2)">自提订单</li>
+          <li data-type="1" @click="formatData(1)">代售订单</li>
+          <li data-type="0" @click="formatData(3)">商城订单</li>
         </ul>
       </div>
       <div v-for="(item,index) in orderList" :key=index @click="orderInfo(item)">
@@ -34,7 +33,7 @@
       <mt-cell title="下单时间" :value="goodInfo.cerateTime"></mt-cell>
       <mt-cell title="支付时间" :value="goodInfo.payTime"></mt-cell>
       <mt-cell title="支付方式" :value="goodInfo.payMent"></mt-cell>
-      <mt-cell title="订单状态" :value="goodInfo.status"></mt-cell>
+      <mt-cell title="订单状态" :value="goodInfo.status | zh"></mt-cell>
       <mt-cell title="数量" :value="goodInfo.count"></mt-cell>
       <mt-cell title="单价" :value="goodInfo.price"></mt-cell>
       <mt-cell title="总价" :value="goodInfo.totalPrice"></mt-cell>
@@ -61,6 +60,7 @@
 </template>
 
 <script>
+  import Qs from 'qs';
   import {Toast, MessageBox} from 'mint-ui';
   import myHeader from '@/components/header'
   import {timestampToTime, fileUrl} from "@/common/common";
@@ -71,7 +71,7 @@
     data() {
       return {
         fileUrl: fileUrl,
-        user: JSON.parse(this.Cookie.get('user')),
+        user: JSON.parse(localStorage.getItem('user')),
         orderList: [],
         allList:[],
         info: false,
@@ -117,8 +117,6 @@
       toPay() {
         if (this.user) {
           if (this.user.status) {
-            console.log(97, this.goodInfo.totalPrice);
-            console.log(this.goodInfo.count);
             this.$router.push({
               path: '/pay',
               name: '立即支付',
@@ -143,31 +141,50 @@
       orderInfo(item) {
         this.goodInfo = item;
         this.info = true;
-        console.log(item);
       },
       //关闭弹窗
       back() {
         this.info = false;
       },
       //筛选
-      formatData(event){
-        // $(event.target).siblings().className='';
+      formatData(type){
+        $(event.target).siblings().className='';
         $(event.target).siblings().removeClass('active');
         $(event.target).addClass('active');
-        let type = $(event.target).attr('data-type');
-        if(type != 9){
-          let newList = [];
-          this.allList.map(item => {
-            console.log(item.status,'--'+type);
-            if (item.status == type) {
-              newList.push(item);
-            }
-          })
-          this.orderList = newList;
-        }else {
-          this.orderList = this.allList;
-        }
-        // this.showFormat = false;
+
+        this.$http({
+          url: "/order/getAllList?userID="+this.user.id+'&type='+type,
+          method: "GET",
+        }).then(data => {
+          if (data.errCode == 0) {
+            data.info.map(item => {
+              item.cerateTime = this.timestampToTime(item.cerateTime);
+              item.payTime = this.timestampToTime(item.payTime);
+              if (item.payMent == 1) {
+                item.payMent = '支付宝'
+              } else if (item.payMent == 2) {
+                item.payMent = '微信'
+              } else if (item.payMent == 3) {
+                item.payMent = '银行卡'
+              } else if (item.payMent == 4) {
+                item.payMent = '余额'
+              }else if (item.payMent == 5) {
+                item.payMent = '迈达币'
+              }
+              if(type == 1){
+                if(item.status == 2){
+                  item.status = '已付款，代售中...'
+                }
+              }
+            })
+            this.orderList = data.info;
+            this.allList = data.info;
+          } else {
+            Toast(data.info);
+          }
+        }).catch(error => {
+          console.log(error)
+        })
       }
     },
     created() {
@@ -175,17 +192,20 @@
     },
     filters:{
       zh(value){
-        console.log(value);
         if (value == 0) {
           value = '未支付'
         } else if (value == 1) {
           value = '财务未确认'
         } else if (value == 2) {
-          value = '已付款,代售中...'
+          value = '已付款'
         } else if (value == 3) {
-          value = '已返第一次佣金'
+          value = '已首次返现'
         } else if (value == 4) {
           value = '已返全部佣金'
+        }else if (value == 5) {
+          value = '已发货'
+        }else if (value == 6) {
+          value = '已收货'
         }
         return value
       }
@@ -207,7 +227,7 @@
           li{
             text-align: center;
             float: left;
-            width: 20%;
+            width: 25%;
             font-weight: 600;
             font-size: 14px;
           }
@@ -217,10 +237,12 @@
         }
       }
       .mint-cell {
+        height: 86px;
         padding: 15px 0;
         border-bottom: solid 1px #e6e6e6;
         .mint-cell-wrapper {
           background: none;
+          height: 55px;
           .mint-cell-title {
             height: 55px;
             .mint-cell-text {
@@ -240,14 +262,14 @@
             .mint-cell-label {
               margin-left: 60px;
               margin-top: -20px;
-
             }
           }
           .mint-cell-value {
             display: inline-block;
             width: 25%;
+            font-size: 12px;
             & > div {
-              padding: 7px 0;
+              padding: 0px 0;
             }
           }
         }

@@ -20,6 +20,8 @@
           this.$router.push({name:'首页',query:{next:'mine'}});
         }else if(this.title == '个人中心') {
           this.$router.push('/');
+        }else if(this.title == '实名认证') {
+          this.$router.push({path:'/',query:{next:'mine'}});
         }else {
           history.back(-1);
         }

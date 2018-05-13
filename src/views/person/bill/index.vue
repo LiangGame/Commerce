@@ -39,7 +39,7 @@
     data() {
       return {
         popupVisible: false,
-        user: this.Cookie.get('user'),
+        user: localStorage.getItem('user'),
         data: null,
         dataInfo: {}
       }
@@ -61,7 +61,6 @@
           method: "GET",
           params: {userID: this.user.id}
         }).then(data => {
-          console.log(data);
           if (data.errCode == 0) {
             this.data = data.info;
             this.data.map(item => {
@@ -93,18 +92,31 @@
         return type;
       },
       status(value){
-        // 余额变动类型：1，购买。2，代售回款。3，代言费。4，提现。5，充值
+        // 余额变动类型：1，购买。2，代售回款。3，提成。4，提现。5，充值。6，购买代理资格。7，代理资格提成。8，代理资格回款。9代理资格退款。10，自提订单回款
+
         var status = null;
         if(value == 1){
           status = '购买'
         }else if(value == 2) {
           status = '代售回款'
         }else if(value == 3) {
-          status = '代言费'
+          status = '提成'
         }else if(value == 4) {
           status = '提现'
         }else if(value == 5) {
           status = '充值'
+        }else if(value == 6) {
+          status = '购买代理资格'
+        }else if(value == 7) {
+          status = '代理资格提成'
+        }else if(value == 8) {
+          status = '代理资格回款'
+        }else if(value == 9) {
+          status = '代理资格退款'
+        }else if(value == 10) {
+          status = '自提订单回款'
+        }else if(value == 11) {
+          status = '购买迈达币'
         }
         return status
       }
@@ -165,7 +177,7 @@
             }
             .mint-cell-value {
               color: #333;
-              font-size: 1.8rem;
+              font-size: 0.8rem;
             }
           }
           li {

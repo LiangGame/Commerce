@@ -86,10 +86,8 @@ import myHeader from '@/components/header'
     },
     methods: {
       takePhoto() {
-        console.log('taking photo');
       },
       openAlbum() {
-        console.log('opening album');
       },
       goBack() {
         history.go(-1);

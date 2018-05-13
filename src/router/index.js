@@ -14,7 +14,7 @@ const routes = [
   {path: '/mfindpwd', name: '忘记密码', component: _import('mfindpwd/index')},
   // {path: '/person', name: '个人中心', component: _import('person/index'),
   //   beforeEnter: (to, from, next) => {
-  //     if (Cookie.get('user') == undefined) {
+  //     if (localStorage.getItem('user') == undefined) {
   //       next({path: '/'})
   //     } else {
   //       next();
@@ -23,7 +23,7 @@ const routes = [
   {
     path: '/updatePwd', name: '修改密码', component: _import('person/updatePwd/index'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -33,7 +33,7 @@ const routes = [
   {
     path: '/wallet', name: '钱包', component: _import('person/wallet/index'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -43,7 +43,7 @@ const routes = [
   {
     path: '/recharge', name: '充值', component: _import('recharge/index'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -53,7 +53,7 @@ const routes = [
   {
     path: '/withdrawals', name: '提现', component: _import('withdrawals/index'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -63,7 +63,7 @@ const routes = [
   {
     path: '/bill', name: '账单', component: _import('person/bill/index'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -73,7 +73,7 @@ const routes = [
   {
     path: '/consignment', name: '我的寄售', component: _import('person/consignment/index'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -83,7 +83,7 @@ const routes = [
   {
     path: '/certification', name: '实名认证', component: _import('person/certification/index'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -93,7 +93,7 @@ const routes = [
   {
     path: '/share', name: '分享', component: _import('person/share/index'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -103,7 +103,7 @@ const routes = [
   {
     path: '/order', name: '确定订单', component: _import('order/index'),
     // beforeEnter: (to, from, next) => {
-    // if (Cookie.get('user') == undefined) {
+    // if (localStorage.getItem('user') == undefined) {
     //   next({path: '/'})
     // } else {
     //   next();
@@ -113,7 +113,7 @@ const routes = [
   {
     path: '/pay', name: '立即支付', component: _import('pay/index'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -123,7 +123,7 @@ const routes = [
   {
     path: '/myOrder', name: '订单', component: _import('myOrder/myOrder'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -133,7 +133,7 @@ const routes = [
   {
     path: '/myVip', name: '我的会员', component: _import('myVip/myVip'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -143,7 +143,7 @@ const routes = [
   {
     path: '/service', name: '联系客服', component: _import('service/service'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -153,7 +153,7 @@ const routes = [
   {
     path: '/agency', name: '加入代理', component: _import('agency/agency'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -163,7 +163,7 @@ const routes = [
   {
     path: '/agencyPay', name: '代理支付', component: _import('agency/agencyPay'),
     beforeEnter: (to, from, next) => {
-      if (Cookie.get('user') == undefined) {
+      if (localStorage.getItem('user') == undefined) {
         next({path: '/'})
       } else {
         next();
@@ -175,6 +175,6 @@ const routes = [
 
 //去除地址栏 #
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   routes: routes
 })

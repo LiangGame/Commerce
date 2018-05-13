@@ -3,25 +3,39 @@
     <my-header title="钱包"/>
     <div class="main">
       <img :src="require('@/assets/pic/u807.png')" width="100" height="100" alt="">
-      <router-link to="/bill"><h1 class=money>￥<span>{{money}}</span></h1></router-link>
-      <p class="hint">点击余额查看明细</p>
+      <router-link to="/bill">
+        <h1 class=money>￥<span>{{money}}</span></h1>
+        <p class="hint">点击余额查看明细</p>
+      </router-link>
+      <!--@click="info"-->
+      <h2 class=money >迈达币：￥
+        <span>{{rewardPoint}}
+        <!--<span style="display: inline-block;width: 25px;height: 25px;line-height: 25px;border-radius: 50%;background: #56abf2;color: #ffff00">?</span>-->
+      </span>
+      </h2>
       <mt-button class="confirm" size="large" type="primary" @click="toRecharge">充值</mt-button>
       <mt-button class="confirm" size="large" type="default" @click="toWithdrawals">提现</mt-button>
     </div>
+    <mt-popup v-model="popupVisible" class="popup">
+      **************************
+      **************************
+    </mt-popup>
   </div>
 </template>
 
 <script>
   import {MessageBox} from 'mint-ui';
-  import myHeader from '@/components/header'
+  import myHeader from '@/components/header';
 
   export default {
     name: "index",
     components: {myHeader},
     data() {
       return {
+        rewardPoint: '0.00',
         money: '0.00',
-        user: this.Cookie.get('user')
+        user: localStorage.getItem('user'),
+        popupVisible: false
       }
     },
     methods: {
@@ -58,30 +72,33 @@
         }
       },
       //获取用户信息
-      getUserInfo(){
+      getUserInfo() {
         this.$http({
           url: "/user/getInfo",
           method: "GET",
           params: {id: this.user.id}
         }).then(data => {
-          console.log(data);
           if (data.errCode == 0) {
-           this.money = data.info.balance;
-          }else{
-            if(this.user){
+            this.money = data.info.balance;
+            this.rewardPoint = data.info.rewardPoint;
+          } else {
+            if (this.user) {
               this.user = JSON.parse(this.user);
               this.money = this.user.balance;
             }
-            // this.money = JSON.parse(this.Cookie.get('user')).balance
+            // this.money = JSON.parse(localStorage.getItem('user')).balance
           }
         }).catch(error => {
           console.log(error)
         })
       },
+      info() {
+        this.popupVisible = true;
+      }
     },
     created() {
-      if(this.Cookie.get('user')){
-        this.user = JSON.parse(this.Cookie.get('user'));
+      if (localStorage.getItem('user')) {
+        this.user = JSON.parse(localStorage.getItem('user'));
       }
       this.getUserInfo();
     }
@@ -110,6 +127,11 @@
       .mint-button {
         margin: 15px 0;
       }
+    }
+    .popup {
+      width: 245px;
+      padding: 20px 10px;
+      border-radius: 10px;
     }
   }
 </style>

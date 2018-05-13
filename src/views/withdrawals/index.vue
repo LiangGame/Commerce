@@ -7,9 +7,8 @@
       </div>
       <p class="warning">
         温馨提示:<br>
-        ·余额提现后低于3500的，请必须预留一单寄售，否则将自动取消代言资格，请谨慎操作!<br>
         ·提现最少金额为100元，且必须是100的整数倍!<br>
-        ·到账时间周一至周五，早上8:00-下午18:00(节假日除外)
+        ·到账时间为T+1，周一至周五，早上8:00-下午18:00(节假日除外)
       </p>
       <mt-checklist
         v-model="value"
@@ -44,7 +43,7 @@
         errors: null,
         value: [],
         n: 0,
-        user: JSON.parse(this.Cookie.get('user')),
+        user: JSON.parse(localStorage.getItem('user')),
         money: '',
         // 弹窗
         weChat: false,
@@ -58,7 +57,6 @@
         this.validator.validateAll({
           value: this.value,
         }).then(result => {
-          console.log(result);
           if (result) {
             Indicator.open('请稍后...');
             if (this.money && /^[0-9]+$/.test(this.money) && this.money % 100 == 0) {

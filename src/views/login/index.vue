@@ -51,7 +51,6 @@
         }).then(result => {
           if (result) {
             var formData = JSON.stringify(this.user); // 这里才是你的表单数据
-            console.log(99,formData);
             this.$http({
               url: "/user/login",
               method: "GET",
@@ -59,7 +58,13 @@
             }).then(data => {
               if(data.errCode == 0){
                 this.$router.push('/');
-                this.Cookie.set("user", data.info, { expires: 1 });
+                // console.log(plus);
+                let date = new Date();
+                date.setMonth(date.getMonth()+1);
+                // plus.navigator.setCookie('121.43.180.179',"user="+ data.info+"; expires="+date+"; path=/");
+                // this.Cookie.set("user", data.info, { expires: 1,path:'/' });
+                localStorage.setItem('user',JSON.stringify(data.info));
+                // this.Cookie.getJSON("user");
               }else {
                 Toast(data.info);
               // Toast({

@@ -46,18 +46,20 @@
         <div style="padding: 0 10px" v-if="payMent">
           <div style="background: #ddd;color: #e93b3b;margin: 0 -10px;padding: 5px 10px">购买方式：</div>
           <div style="margin-top: 1rem">
-            <mt-button size="large" type="danger" @click="toPay(0)">自提</mt-button>
+            <mt-button size="large" type="danger" @click="toPay(2)">自提</mt-button>
             <mt-button size="large" type="primary" @click="toPay(1)">代售</mt-button>
           </div>
         </div>
         <div style="padding: 0 10px" v-if="!payMent">
           <div style="background: #ddd;color: #e93b3b;margin: 0 -10px;padding: 5px 10px">收货地址：</div>
           <div>
+            <mt-field v-model="name" placeholder="请填写姓名" style="margin: 0 -10px;min-height: 35px;border-bottom: solid 1px #e6e6e6"></mt-field>
+            <mt-field v-model="phone" placeholder="请填写手机号" style="margin: 0 -10px;min-height: 35px;border-bottom: solid 1px #e6e6e6"></mt-field>
             <mt-field v-model="address" placeholder="请填写详细地址 如：**省**市**区**路**号*室" style="margin: 0 -10px;min-height: 35px"></mt-field>
           </div>
           <div style="margin-top: 1rem;text-align: right;overflow: hidden">
             <!--<mt-button size="large" type="danger" @click="toPay(0)">自提</mt-button>-->
-            <mt-button style="float: right" size="large" type="primary" @click="toPay(1)">购买</mt-button>
+            <mt-button style="float: right" size="large" type="primary" @click="toPay(3)">购买</mt-button>
           </div>
         </div>
       </div>
@@ -77,27 +79,26 @@
     data() {
       return {
         fileUrl: fileUrl,
-        user: this.Cookie.get('user'),
+        user: localStorage.getItem('user'),
         number: 1,
         good: {},
         priceTotal: 0,
         payMent:this.$route.params.payMent,
-        address:''
+        address:'',
+        name:'',
+        phone:''
       }
     },
     created() {
-      console.log(this.$route.params.payMent);
       if (this.user) {
         this.user = JSON.parse(this.user)
       }
-      console.log(this.$route.params.info);
       if (!this.$route.params.info) {
         this.$router.push('/');
       } else {
         this.good = this.$route.params.info;
         this.priceTotal = this.number * this.good.price
       }
-
     },
     methods: {
       minus() {
@@ -112,13 +113,21 @@
       },
       //前往支付
       toPay(num) {
-        if(num){
+        if(num == 1){
           if (this.user) {
             if (this.user.status) {
-              this.$router.push({
-                name: '立即支付',
-                params: {price: this.priceTotal, num: this.number, goodId: this.good.goodID,type:num}
-              })
+              MessageBox({
+                title: '提示',
+                message: '仅享受“代言费”奖励，不可享受推广奖励，是否确认购买？',
+                showCancelButton: true
+              }).then(action => {
+                if (action == 'confirm') {
+                  this.$router.push({
+                    name: '立即支付',
+                    params: {price: this.priceTotal, num: this.number, goodId: this.good.id,type:num}
+                  })
+                }
+              });
             } else {
               MessageBox({
                 title: '提示',
@@ -133,11 +142,10 @@
           } else {
             Toast('未登录!')
           }
-        }else {
+        }else if(num == 2) {
           MessageBox({
             title: '提示',
-            message: '·自提购买方式需您到店提货且无法获得代言费<br>' +
-            '·请谨慎购买！',
+            message: '请在指定地点提取商品，是否确认购买？',
             showCancelButton: true
           }).then(action => {
             if (action == 'confirm') {
@@ -145,7 +153,7 @@
                 if (this.user.status) {
                   this.$router.push({
                     name: '立即支付',
-                    params: {price: this.priceTotal, num: this.number, goodId: this.good.goodID,type:num}
+                    params: {price: this.priceTotal, num: this.number, goodId: this.good.id,type:num}
                   })
                 } else {
                   MessageBox({
@@ -163,6 +171,31 @@
               }
             }
           });
+        }else {
+          if(this.address&&this.phone&&this.name){
+            if (this.user) {
+              if (this.user.status) {
+                this.$router.push({
+                  name: '立即支付',
+                  params: {price: this.priceTotal, num: this.number, goodId: this.good.id,type:num,address:{address:this.address, name:this.name, phone:this.phone}}
+                })
+              } else {
+                MessageBox({
+                  title: '提示',
+                  message: '未实名,是否前往认证?',
+                  showCancelButton: true
+                }).then(action => {
+                  if (action == 'confirm') {
+                    this.$router.push({path: '/certification'});
+                  }
+                });
+              }
+            } else {
+              Toast('未登录!')
+            }
+          }else{
+            Toast('请填写收货地址!')
+          }
         }
       }
     }
