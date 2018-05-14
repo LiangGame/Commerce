@@ -99,13 +99,16 @@
       <mt-tab-container-item id="mine">
         <div class="person_box">
           <div class="person_top">
-            <div class="Pt_left">
-              <img src="../../assets/pic/person_logo.png" width="80" height="40"/></div>
-            <div class="Pt_middle">
-              ID: <span>{{userId}}</span>
-            </div>
-            <div class="Pt_right">
-              <mt-button class="signOut" size="large" type="primary" @click="signOut">退出登录</mt-button>
+            <div style="margin-top:25px;width:100%">
+              <div class="Pt_left">
+                <img src="../../assets/pic/person_logo.png" width="80" height="40"/>
+              </div>
+              <div class="Pt_middle">
+                ID: <span>{{userId}}</span>
+              </div>
+              <div class="Pt_right">
+                <mt-button class="signOut" size="large" type="primary" @click="signOut">退出登录</mt-button>
+              </div>
             </div>
           </div>
           <div class="affiche">
@@ -528,6 +531,7 @@
     }
     .person_top {
       overflow: hidden;
+      height:120px;
       div {
         float: left;
         width: 33.33%;
