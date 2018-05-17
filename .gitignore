@@ -16,3 +16,4 @@ common.js
 *.ntvs*
 *.njsproj
 *.sln
+src/views/index/index.vue

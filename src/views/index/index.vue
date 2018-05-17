@@ -22,6 +22,11 @@
               </a>
             </mt-swipe-item>
           </mt-swipe>
+          <div class="notice">
+            <ul>
+              <li v-for="item in abouts">{{item}}</li>
+            </ul>
+          </div>
           <div class="shops">
             <h1 style="background: #56abf2;color: white;padding: 0;margin: 0">代售商城</h1>
             <ul>
@@ -99,13 +104,16 @@
       <mt-tab-container-item id="mine">
         <div class="person_box">
           <div class="person_top">
-            <div class="Pt_left">
-              <img src="../../assets/pic/person_logo.png" width="80" height="40"/></div>
-            <div class="Pt_middle">
-              ID: <span>{{userId}}</span>
-            </div>
-            <div class="Pt_right">
-              <mt-button class="signOut" size="large" type="primary" @click="signOut">退出登录</mt-button>
+            <div style="margin-top:25px;width:100%">
+              <div class="Pt_left">
+                <img src="../../assets/pic/person_logo.png" width="80" height="40"/>
+              </div>
+              <div class="Pt_middle">
+                ID: <span>{{userId}}</span>
+              </div>
+              <div class="Pt_right">
+                <mt-button class="signOut" size="large" type="primary" @click="signOut">退出登录</mt-button>
+              </div>
             </div>
           </div>
           <div class="affiche">
@@ -169,14 +177,14 @@
             </li>
             <li @click="_alert">
               <!--<router-link to="/service">-->
-                <img src="../../assets/pic/hf.png"/>
-                <div>话费充值</div>
+              <img src="../../assets/pic/hf.png"/>
+              <div>话费充值</div>
               <!--</router-link>-->
             </li>
             <li @click="_alert">
               <!--<router-link to="/service">-->
-                <img src="../../assets/pic/jp.png"/>
-                <div>机票预订</div>
+              <img src="../../assets/pic/jp.png"/>
+              <div>机票预订</div>
               <!--</router-link>-->
             </li>
           </ul>
@@ -211,8 +219,9 @@
     components: {myHeader},
     data() {
       return {
-        imgList1:[],
-        imgList2:[],
+        abouts: [],
+        imgList1: [],
+        imgList2: [],
         userId: '',
         about: '',
         selected: this.$route.query.next || 'index',
@@ -269,20 +278,40 @@
       if (userInfo) {
         this.isLogin = true;
       }
-      if(this.selected == 'mine'){
+      if (this.selected == 'mine') {
         this.userId = JSON.parse(userInfo).id
         this.getUserInfo();
         this.getNotice();
-      }else{
+      } else {
         this.loadData();
-        if(this.selected == 'index'){
+        if (this.selected == 'index') {
           this.getAD(1);
-        }else {
+        } else {
           this.getAD(2);
         }
       }
     },
     methods: {
+      //随机生成
+      ran() {
+        for (let i = 0; i < Math.ceil(Math.random()*10)* 50; i++) {
+          let a = '恭喜ID ' + Math.ceil((Math.random()+8)*100) + '** 成功代售 ' + Math.ceil(Math.random()*10) + ' 台',
+            b = '恭喜ID ' + Math.ceil((Math.random()+8)*100) + '**晋级代理资格';
+          this.abouts.push(a);
+          if (Math.ceil(Math.random())* 500 % 3) {
+            this.abouts.push(b);
+          }
+        }
+        console.log(this.abouts);
+      },
+      //滚动公告
+      noticeUp(obj, top, time) {
+        $(obj).animate({
+          marginTop: top
+        }, time, function () {
+          $(this).css({marginTop: "0"}).find(":first").appendTo(this);
+        })
+      },
       //获取轮播图
       getAD(type = 1) {
         this.$http({
@@ -293,14 +322,14 @@
           if (data.errCode == 0) {
             if (type == 1) {
               this.imgList1 = [];
-            }else {
+            } else {
               this.imgList2 = [];
             }
             data.info.map(item => {
               if (type == 1) {
-                this.imgList1.push({name:item.img,url:this.fileUrl+item.img,id:item.id})
+                this.imgList1.push({name: item.img, url: this.fileUrl + item.img, id: item.id})
               } else {
-                this.imgList2.push({name:item.img,url:this.fileUrl+item.img,id:item.id})
+                this.imgList2.push({name: item.img, url: this.fileUrl + item.img, id: item.id})
               }
             })
           }
@@ -309,7 +338,7 @@
       //前往实名认证
       toCertification(isCertification) {
         // if (!isCertification) {
-          this.$router.push('/certification');
+        this.$router.push('/certification');
         // } else {
         //   Toast("已认证！")
         // }
@@ -342,9 +371,9 @@
           method: "GET",
           params: {id: this.userId}
         }).then(data => {
-          if (data.errCode == 0&&data.info) {
+          if (data.errCode == 0 && data.info) {
             // this.Cookie.set("user", data.info, {expires: 1});
-            localStorage.setItem('user',JSON.stringify(data.info))
+            localStorage.setItem('user', JSON.stringify(data.info))
           } else if (data.errCode == -1) {
             Toast(data.info);
             // localStorage.removeItem('user');
@@ -394,7 +423,7 @@
         })
       },
       //alert
-      _alert(){
+      _alert() {
         Toast('正在研发对接中...')
       }
     },
@@ -402,6 +431,12 @@
       this.el = this.$mount().$refs.about;
       this.width = $('.about01').width();
       this.scoll();
+      let _this = this;
+
+      this.ran();
+      setInterval(function () {
+        _this.noticeUp('.notice ul', '-35px', 1000);
+      }, 5000);
     }
   }
 </script>
@@ -411,6 +446,21 @@
     background: #f5f5f5;
     .mint-header {
       background: #26a2ff;
+    }
+    .notice {
+      width: 100%; /*单行显示，超出隐藏*/
+      height: 35px; /*固定公告栏显示区域的高度*/
+      padding: 0 30px;
+      overflow: hidden;
+    }
+    .notice ul li {
+      list-style: none;
+      line-height: 35px;
+      /*以下为了单行显示，超出隐藏*/
+      display: block;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
     .main {
       .mint-swipe-item {
@@ -528,6 +578,7 @@
     }
     .person_top {
       overflow: hidden;
+      height:120px;
       div {
         float: left;
         width: 33.33%;
