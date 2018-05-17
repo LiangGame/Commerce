@@ -8,10 +8,13 @@
     </mt-header>
     <div class="myVip_main">
       <div class="title">
-        <span style="margin-right: 20px">会员({{member.level1Count+member.level2Count}})</span>
-        <span class="vipType" style="background: #e93b3b"></span><span style="margin-right: 20px">({{member.type1}})</span>
-        <span class="vipType" style="background: #56abf2"></span><span style="margin-right: 20px">({{member.type2}})</span>
-        <span class="vipType" style="background: #5a5a5a;"></span><span style="margin-right: 20px">({{member.type3}})</span>
+        <div style="overflow:hidden;line-height:48px">
+          <span style="margin-right: 20px">会员({{member.level1Count+member.level2Count}})</span>
+          <span class="vipType" style="background: #e93b3b"></span><span style="margin-right: 20px">({{member.type1}})</span>
+          <span class="vipType" style="background: #56abf2"></span><span style="margin-right: 20px">({{member.type2}})</span>
+          <span class="vipType" style="background: #5a5a5a;"></span><span style="margin-right: 20px">({{member.type3}})</span>
+        </div>
+        <div style="display:block;margin-top:-10px">有效代售单量：{{orderCount}}</div>
       </div>
       <div class="list_box">
         <div class="first_vip">
@@ -63,7 +66,8 @@
       return {
         userID:this.$route.query.id,
         member:{},
-        popupVisible:false
+        popupVisible:false,
+        orderCount:0
       }
     },
     methods:{
@@ -75,7 +79,13 @@
           params: {id:userID}
         }).then(data =>{
           if(data.errCode == 0){
-            this.member = data.info
+            this.member = data.info;
+            data.info.level1Res.map(item => {
+              this.orderCount += item.orderCount
+            })
+            data.info.level2Res.map(item => {
+              this.orderCount += item.orderCount
+            })
           }
         })
       },
@@ -105,8 +115,8 @@
     }
     .myVip_main {
       .title {
-        height: 45px;
-        line-height: 45px;
+        height: 65px;
+        // line-height: 45px;
         padding: 0 10px;
         border-bottom: solid 1px #e6e6e6;
         span {
