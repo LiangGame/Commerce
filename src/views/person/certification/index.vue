@@ -6,11 +6,11 @@
         <mt-field placeholder="银行卡开户行" v-model="data.bankname" :disabled="!!isStatus"></mt-field>
         <span v-show="errors.has('bankname')" class="error">{{ errors.first('bankname') }}</span>
         <mt-field placeholder="银行卡号" v-model="data.creditCard" :disabled="!!isStatus"></mt-field>
-        <span v-show="errors.has('bankcard')" class="error">{{ errors.first('bankcard') }}</span>
+        <span v-show="errors.has('creditCard')" class="error">{{ errors.first('creditCard') }}</span>
         <mt-field placeholder="姓名" v-model="data.realName" :disabled="!!isStatus"></mt-field>
-        <span v-show="errors.has('realname')" class="error">{{ errors.first('realname') }}</span>
+        <span v-show="errors.has('realName')" class="error">{{ errors.first('realName') }}</span>
         <mt-field placeholder="身份证号" v-model="data.IDcard" :disabled="!!isStatus"></mt-field>
-        <span v-show="errors.has('idcard')" class="error">{{ errors.first('idcard') }}</span>
+        <span v-show="errors.has('IDcard')" class="error">{{ errors.first('IDcard') }}</span>
         <mt-field placeholder="银行预留手机号" disabled v-model="data.phone"></mt-field>
         <span v-show="errors.has('phone')" class="error">{{ errors.first('phone') }}</span>
         <mt-field placeholder="图形验证码" name="captcha" v-model="data.code" v-focus="{checkCaptcha:checkCaptcha}" v-if="!isStatus">
@@ -89,9 +89,9 @@
       applyCoupon() {  // 提交执行函数
         this.validator.validateAll({
           phone: this.data.phone,
-          idcard: this.data.idcard,
-          realname: this.data.realname,
-          bankcard: this.data.bankcard,
+          IDcard: this.data.IDcard,
+          realName: this.data.realName,
+          creditCard: this.data.creditCard,
           captcha: this.data.code,
           bankname: this.data.bankname
         }).then(result => {
@@ -113,8 +113,8 @@
               Toast(data.info);
               if(data.errCode == 0){
                 setTimeout(function () {
-                  _this.$router.push({path: '/person'});
-                },3000)
+                  _this.$router.push({path: '/',query:{next:'mine'}});
+                },1000)
               }
             })
           }
@@ -180,11 +180,11 @@
         getMessage: field => "请输入正确的手机号码", //错误提示
         validate: value => value.length === 11  // 验证条件
       });
-      Validator.extend('bankcard', {
+      Validator.extend('creditCard', {
         getMessage: field => "请输入正确的银行卡号", //错误提示
         validate: value => /([\d]{4})([\d]{4})([\d]{4})([\d]{4})([\d]{0,})?/.test(value)  // 验证条件
       });
-      Validator.extend('idcard', {
+      Validator.extend('IDcard', {
         getMessage: field => "请输入正确的身份证号", //错误提示
         validate: value => /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/.test(value)  // 验证条件
       });
@@ -195,9 +195,9 @@
 
       this.validator.attach({name: 'vertifyCode', rules: 'required', alias: '手机验证码'});
       this.validator.attach({name: 'phone', rules: 'required|phone|decimal', alias: '银行预留手机号'}); //phone添加验证规则
-      this.validator.attach({name: 'bankcard', rules: 'required|bankcard', alias: '银行卡号'}); //pwd添加验证规则
-      this.validator.attach({name: 'realname', rules: 'required', alias: '姓名'}); //pwds添加验证规则
-      this.validator.attach({name: 'idcard', rules: 'required|idcard', alias: '身份证号'});
+      this.validator.attach({name: 'creditCard', rules: 'required|creditCard', alias: '银行卡号'}); //pwd添加验证规则
+      this.validator.attach({name: 'realName', rules: 'required', alias: '姓名'}); //pwds添加验证规则
+      this.validator.attach({name: 'IDcard', rules: 'required|IDcard', alias: '身份证号'});
       this.validator.attach({name: 'bankname', rules: 'required', alias: '银行卡开户行'});
       this.validator.attach({name: 'captcha', rules: 'required|captcha', alias: '图形验证码'});
 

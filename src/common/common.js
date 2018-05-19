@@ -1,7 +1,8 @@
 ﻿// import { zh_CN } from '@/common/zh_CN.js'
 // api接口地址
+export const apiUrl = 'http://hmd.yuyuanjx.cn:3000';
+// export const apiUrl = 'http://47.106.178.11:3000';
 // export const apiUrl = 'http://hmd.jtcun.cn:3000';
-export const apiUrl = 'http://hmd.jtcun.cn:3000';
 export const fileUrl = apiUrl+'/uploads/';
 //前台地址
 export const comUrl = 'http://hmd.jtcun.cn/register';

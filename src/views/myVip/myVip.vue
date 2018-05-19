@@ -15,7 +15,7 @@
           <span class="vipType" style="background: #56abf2"></span><span style="margin-right: 20px">({{member.type2}})</span>
           <span class="vipType" style="background: #5a5a5a;"></span><span style="margin-right: 20px">({{member.type3}})</span>
         </div>
-        <div style="display:block;margin-top:-10px">有效代售单量：{{orderCount}}</div>
+        <div style="display:block;margin-top:-0px">有效代售单量：{{orderCount}}</div>
       </div>
       <div class="list_box">
         <div class="first_vip">
